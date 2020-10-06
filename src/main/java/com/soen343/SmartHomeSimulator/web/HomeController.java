@@ -56,7 +56,7 @@ class HomeController {
 
         // check to see if user already exists
         Optional<User> user = userRepository.findById(userId);
-        home.setUser(user.orElse(new User(userId, details.get("name").toString(), details.get("type").toString())));
+        home.setUser(user.orElse(new User(userId, details.get("name").toString())));
 
         Home result = homeRepository.save(home);
         return ResponseEntity.created(new URI("/api/home/" + result.getId()))

@@ -5,8 +5,8 @@ spring:
         registration:
           okta:
             client-id: 0oa735w4TghsNU2D45d5
-            client-secret: {clientSecret}
+            clieng-secret: 00pAGJnLygLJ3nPYp0fcmE4hTueVWCTK6mksL-FKW5
             scope: openid, email, profile
         provider:
           okta:
-            issuer-uri: http://localhost:8080/login/oauth2/code/okta
+            issuer-uri: https://dev-741410.okta.com/oauth2/default
