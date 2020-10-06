@@ -1,0 +1,12 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          okta:
+            client-id: 0oa735w4TghsNU2D45d5
+            client-secret: {clientSecret}
+            scope: openid, email, profile
+        provider:
+          okta:
+            issuer-uri: http://localhost:8080/login/oauth2/code/okta

@@ -1,12 +1,11 @@
 package com.soen343.SmartHomeSimulator;
 
 import com.soen343.SmartHomeSimulator.model.Home;
-import com.soen343.SmartHomeSimulator.model.HomeRepository;
+import com.soen343.SmartHomeSimulator.model.repository.HomeRepository;
 import com.soen343.SmartHomeSimulator.model.Room;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.util.Collections;
 import java.util.stream.Stream;
 
