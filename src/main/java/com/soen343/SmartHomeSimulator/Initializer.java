@@ -1,8 +1,10 @@
 package com.soen343.SmartHomeSimulator;
 
 import com.soen343.SmartHomeSimulator.model.Home;
+import com.soen343.SmartHomeSimulator.model.SimulationUser;
 import com.soen343.SmartHomeSimulator.model.repository.HomeRepository;
 import com.soen343.SmartHomeSimulator.model.Room;
+import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +15,11 @@ import java.util.stream.Stream;
 class Initializer implements CommandLineRunner {
 
     private final HomeRepository repository;
+    private final SimulationUserRepository simulationUserRepository;
 
-    public Initializer(HomeRepository repository) {
+    public Initializer(HomeRepository repository, SimulationUserRepository simulationUserRepository) {
         this.repository = repository;
+        this.simulationUserRepository = simulationUserRepository;
     }
 
     @Override
@@ -33,6 +37,11 @@ class Initializer implements CommandLineRunner {
         mainHome.setRooms(Collections.singleton(livingRoom));
         repository.save(mainHome);
 
+        simulationUserRepository.save(SimulationUser.builder().name("Zubair").privilege("Parent").build());
+        simulationUserRepository.save(SimulationUser.builder().name("Nouj").privilege("Child").build());
+        simulationUserRepository.save(SimulationUser.builder().name("Yas").privilege("Child").build());
+
         repository.findAll().forEach(System.out::println);
+        simulationUserRepository.findAll().forEach(System.out::println);
     }
 }
