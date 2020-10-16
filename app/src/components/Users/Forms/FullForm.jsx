@@ -75,12 +75,12 @@ class SimulationForm extends Component {
     }
 
     onSubmit(event) {
-        this.setState({success: 'Done!'})
+        this.setState({success: 'Simulation parameters changed.'})
         sessionStorage.setItem('temperature', event.temperature)
         sessionStorage.setItem('date', event.date)
         sessionStorage.setItem('time', event.time)
 
-        ExecuteService.postSimulation(event)
+        ExecuteService.updateSimulation(event)
             .then(response => console.log(response))
             .catch(error => console.log(error))
     }

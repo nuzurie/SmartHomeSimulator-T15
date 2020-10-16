@@ -23,6 +23,10 @@ class ExecuteService {
         return axios.get(`/api/user/${id}`)
     }
 
+    updateSimulation(simulation){
+        return axios.put(`/api/simulation`, simulation)
+    }
+
 }
 
 export default new ExecuteService()
