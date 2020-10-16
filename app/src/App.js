@@ -10,6 +10,7 @@ import {CookiesProvider} from 'react-cookie';
 
 import './App.css';
 import UserList from "./components/Users/UserList";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 class App extends Component {
     render() {
@@ -22,6 +23,7 @@ class App extends Component {
                         <Route path='/home/:id' exact={true} component={HomeEdit}/>
                         <Route path={'/users'} exact={true} component={UserList}/>
                         <Route path={'/user/:id'} exact={true} component={UpdateUserFrom}/>
+                        <Route path={'/dashboard'} exact={true} component={Dashboard}/>
                     </Switch>
                 </Router>
             </CookiesProvider>
