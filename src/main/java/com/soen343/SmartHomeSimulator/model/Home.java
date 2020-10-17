@@ -12,7 +12,6 @@ import java.util.Set;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "home")
 public class Home {
 
     @Id

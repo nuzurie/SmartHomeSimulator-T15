@@ -30,6 +30,6 @@ public class Simulation {
     private Home home;
 
     @OneToMany
-    private Set<SimulationUser> simulationUser;
+    private Set<SimulationUser> simulationUsers;
 
 }

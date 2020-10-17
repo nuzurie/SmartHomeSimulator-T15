@@ -52,18 +52,47 @@ class Initializer implements CommandLineRunner {
                 .lights(lights)
                 .build();
 
-        mainHome.setRooms(Collections.singleton(livingRoom));
-        repository.save(mainHome);
+        Set<Room.DoorWindow> windows2 = new HashSet<>();
+        windows2.add(Room.DoorWindow.builder().open(false).blocked(false).build());
 
-        simulationUserRepository.save(SimulationUser.builder().name("Zubair").privilege("Parent").build());
-        simulationUserRepository.save(SimulationUser.builder().name("Nouj").privilege("Child").build());
-        simulationUserRepository.save(SimulationUser.builder().name("Yas").privilege("Child").build());
+        Set<Room.DoorWindow> door2 = new HashSet<>();
+        door.add(Room.DoorWindow.builder().open(true).blocked(false).build());
+
+        SimulationUser user1 = SimulationUser.builder().name("User1").privilege("Parent").build();
+        SimulationUser user2 = SimulationUser.builder().name("User2").privilege("Child").build();
+        SimulationUser user3 = SimulationUser.builder().name("User3").privilege("Child").build();
+        SimulationUser user4 = SimulationUser.builder().name("Squatter").privilege("Stranger").build();
+        simulationUserRepository.save(user1);
+        simulationUserRepository.save(user2);
+        simulationUserRepository.save(user3);
+        simulationUserRepository.save(user4);
+
+        Set<SimulationUser> simulationUsers = new HashSet<>();
+        simulationUsers.add(user1);
+        simulationUsers.add(user2);
+
+        System.out.println("INITIALIZER FILE!");
+
+        Room livingRoom2 = Room.builder().name("Bed Room")
+                .size("12x18")
+                .window(windows2)
+                .door(door2)
+                .simulationUsers(simulationUsers)
+//                .lights(lights)
+                .build();
+
+        Set<Room> rooms = new HashSet<Room>();
+        rooms.add(livingRoom);
+        rooms.add(livingRoom2);
+        mainHome.setRooms(rooms);
+
+        repository.save(mainHome);
 
         repository.findAll().forEach(System.out::println);
         simulationUserRepository.findAll().forEach(System.out::println);
 
 
-        Set<SimulationUser> simulationUsers = new HashSet<>(simulationUserRepository.findAll());
+//        Set<SimulationUser> simulationUsers = new HashSet<>(simulationUserRepository.findAll());
 
         Simulation simulation = Simulation.builder()
                 .name("1")
@@ -71,7 +100,7 @@ class Initializer implements CommandLineRunner {
                 .home(mainHome)
                 .time("03:00")
                 .temperature(22.5)
-                .simulationUser(simulationUsers)
+//                .simulationUsers(simulationUsers)
                 .build();
 
         System.out.println(simulationRepository.save(simulation));
