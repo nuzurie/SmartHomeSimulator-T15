@@ -23,6 +23,8 @@ import Chart from "./chart";
 import Deposits from "./Desposits";
 
 import SimulationForm from "../Users/Forms/FullForm";
+import UserList from "../Users/UserList";
+import RoomList from "../Rooms/RoomList";
 
 
 
@@ -208,7 +210,7 @@ export default function Dashboard() {
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={fixedHeightPaper}>I
-                <Chart />
+                <RoomList/>
               </Paper>
             </Grid>
             {/* Recent Deposits */}
@@ -220,7 +222,10 @@ export default function Dashboard() {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                {contentDiv==='SHS' &&<SimulationForm />}
+                {contentDiv==='SHS' &&
+                <div className={"container"}>
+                  <SimulationForm />
+                </div>}
                 {contentDiv==='SHC' &&<div>Hello from SHC Module</div>}
                 {contentDiv==='SHH' &&<div>Hello from SHH Module</div>}
                 {/*{contentDiv==='SHC' &&<Orders />}*/}

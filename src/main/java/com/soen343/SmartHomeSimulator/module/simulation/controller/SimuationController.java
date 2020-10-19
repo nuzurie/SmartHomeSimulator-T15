@@ -30,8 +30,8 @@ public class SimuationController {
     @PutMapping("/simulation")
     public ResponseEntity<Simulation> updateSimulation(@Valid @RequestBody Simulation simulation){
         log.info("Create this simulation {}", simulation);
-        Simulation currentSimulation = simulationRepository.findById("1").get();
-        simulation.setName("1");
+        Simulation currentSimulation = simulationRepository.findById((long)1);
+        simulation.setName((long)1);
         simulation.setHome(currentSimulation.getHome());
         simulation.setSimulationUsers(currentSimulation.getSimulationUsers());
         Simulation createdSimulation = simulationRepository.save(simulation);
@@ -43,7 +43,7 @@ public class SimuationController {
     @PutMapping("/simulation/user-rooms")
     public ResponseEntity<Simulation> updateUserRooms(@Valid @RequestBody Simulation simulation){
 
-        Simulation currentSimulation = simulationRepository.findById("1").get();
+        Simulation currentSimulation = simulationRepository.findById((long)1);
         log.info("Before saving the simulation is {}", simulationRepository.findAll());
         currentSimulation.setHome(simulation.getHome());
         currentSimulation.setSimulationUsers(simulation.getSimulationUsers());
@@ -59,9 +59,9 @@ public class SimuationController {
 
     @GetMapping("/simulation")
     public ResponseEntity<Simulation> getSimulation() {
-        Simulation simulation = simulationRepository.findById("1").get();
+        Simulation simulation = simulationRepository.findById((long)1);
         if (simulation == null){
-            simulation = simulationRepository.findById("2").get();
+            simulation = simulationRepository.findById((long)1);
         }
         log.info("After getting the simulation is {}", simulationRepository.findAll());
         return ResponseEntity.ok().body(simulation);
@@ -80,8 +80,8 @@ public class SimuationController {
     }
 
     @DeleteMapping("/simulation")
-    public ResponseEntity deleteSimulation() {
-        simulationRepository.deleteAll();
+    public ResponseEntity deleteSimulation(Simulation simulation) {
+        simulationRepository.deleteById(simulation.getId());
         System.out.println(simulationRepository.findAll());
         return ResponseEntity.ok(HttpStatus.OK);
     }

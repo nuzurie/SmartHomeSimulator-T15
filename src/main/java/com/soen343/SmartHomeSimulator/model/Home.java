@@ -1,36 +1,45 @@
 package com.soen343.SmartHomeSimulator.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
-@Entity
+@AllArgsConstructor
+//@Entity
+@Builder
 public class Home {
 
-    @Id
-    @GeneratedValue
-    private Long id;
-    @NonNull
+    private long classId = 0;
+//    @Id
+//    @GeneratedValue
+    private long id;
     private String name;
-    private String address;
     private int temperature;
-    private String stateOrProvince;
-    private String country;
-    private String postalCode;
 
-    @ManyToOne(cascade=CascadeType.PERSIST)
-    private User user;
+//    @ManyToOne(cascade=CascadeType.PERSIST)
+//    private User user;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    private Set<Room> rooms;
+//    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @Builder.Default
+    private Set<Room> rooms = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    private Set<Sensor> sensors;
+//    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+//    private Set<Sensor> sensors;
+
+    public void setId() {
+        this.id = ++classId;
+    }
+
+    public void deleteUser(SimulationUser simulationUser){
+        Set<Room> rooms = this.getRooms();
+        for (Room room:
+             rooms) {
+            room.deleteUser(simulationUser);
+        }
+    }
+
 }

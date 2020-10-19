@@ -27,12 +27,12 @@ class HomeController {
 
     private final Logger log = LoggerFactory.getLogger(HomeController.class);
     private HomeRepository homeRepository;
-    private UserRepository userRepository;
+    //private UserRepository userRepository;
 
 
-    public HomeController(HomeRepository homeRepository, UserRepository userRepository) {
+    public HomeController(HomeRepository homeRepository) {
         this.homeRepository = homeRepository;
-        this.userRepository = userRepository;
+        //this.userRepository = userRepository;
     }
 
     @GetMapping("/homes")
@@ -42,9 +42,13 @@ class HomeController {
 
     @GetMapping("/home/{id}")
     ResponseEntity<?> getHome(@PathVariable Long id) {
-        Optional<Home> home = homeRepository.findById(id);
-        return home.map(response -> ResponseEntity.ok().body(response))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Home home = homeRepository.findById(id);
+        if (home!=null){
+            return ResponseEntity.ok().body(home);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/home")
@@ -55,8 +59,8 @@ class HomeController {
         String userId = details.get("sub").toString();
 
         // check to see if user already exists
-        Optional<User> user = userRepository.findById(userId);
-        home.setUser(user.orElse(new User(userId, details.get("name").toString())));
+//        Optional<User> user = userRepository.findById(userId);
+//        home.setUser(user.orElse(new User(userId, details.get("name").toString())));
 
         Home result = homeRepository.save(home);
         return ResponseEntity.created(new URI("/api/home/" + result.getId()))
