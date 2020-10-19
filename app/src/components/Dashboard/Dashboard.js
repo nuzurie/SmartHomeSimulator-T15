@@ -17,7 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import { mainListItems, secondaryListItems } from './listItems.jsx';
 import Chart from "./chart";
 import Deposits from "./Desposits";
@@ -25,6 +25,8 @@ import Deposits from "./Desposits";
 import SimulationForm from "../Users/Forms/FullForm";
 import UserList from "../Users/UserList";
 import RoomList from "../Rooms/RoomList";
+import {Link as RouterLink} from 'react-router-dom'
+
 
 
 
@@ -179,11 +181,11 @@ export default function Dashboard() {
             <button className={"btn btn-outline-info btn-sm"} onClick={showSHH}>SHH</button>
             <button className={"ml-4 btn btn-success btn-sm"} onClick={handleUpdateUser}>Update Sidebar!</button>
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <RouterLink to={'/'}>
+            <IconButton color="inherit">
+                <PowerSettingsNewIcon/>
+            </IconButton>
+          </RouterLink>
         </Toolbar>
       </AppBar>
       <Drawer
