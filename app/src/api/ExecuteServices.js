@@ -27,6 +27,19 @@ class ExecuteService {
         return axios.put(`/api/simulation`, simulation)
     }
 
+    updateUserRooms(simulation){
+
+        // axios.delete(`/api/simulation`)
+        //     .then(response => console.log(response))
+        //     .catch(error => console.log(error))
+        return axios.put(`/api/simulation/user-rooms`, simulation)
+    }
+
+    getSimulation(){
+        return axios.get(`/api/simulation`)
+    }
+
+
 }
 
 export default new ExecuteService()

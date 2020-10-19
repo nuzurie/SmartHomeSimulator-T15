@@ -11,10 +11,10 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+//@Entity
 public class User {
 
-    @Id
+//    @Id
     private String id;
     private String name;
 }

@@ -11,19 +11,19 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
+//@Entity
 public class Sensor {
 
-    @Id
-    @GeneratedValue
+//    @Id
+//    @GeneratedValue
     private Long id;
     private String name;
     private String type;
     private String value;
 
-    @ManyToOne(cascade=CascadeType.PERSIST)
+//    @ManyToOne(cascade=CascadeType.PERSIST)
     private Room room;
 
-    @ManyToOne(cascade=CascadeType.PERSIST)
+//    @ManyToOne(cascade=CascadeType.PERSIST)
     private Home home;
 }

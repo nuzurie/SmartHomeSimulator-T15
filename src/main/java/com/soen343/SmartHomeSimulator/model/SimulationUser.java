@@ -14,13 +14,19 @@ import javax.persistence.GenerationType;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+//@Entity
 public class SimulationUser {
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Id
+
+    public static long classId = 0;
+//    @Id
+//    @GeneratedValue
     public long id;
     public String name;
     public String privilege;
+
+    public void setId() {
+        this.id = ++classId;
+    }
 
 }
