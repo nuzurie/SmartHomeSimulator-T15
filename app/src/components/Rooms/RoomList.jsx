@@ -20,6 +20,7 @@ export default class RoomList extends Component {
         this.userDifference = this.userDifference.bind(this)
         this.addUser = this.addUser.bind(this)
         this.blockWindow = this.blockWindow.bind(this)
+        this.openWindow = this.openWindow.bind(this)
 
     }
 
@@ -65,6 +66,16 @@ export default class RoomList extends Component {
 
     blockWindow(roomIndex, windowIndex) {
         (this.state.simulation.home.rooms[roomIndex].window[windowIndex].blocked = !this.state.simulation.home.rooms[roomIndex].window[windowIndex].blocked)
+        console.log(this.state.simulation)
+        ExecuteService.updateUserRooms(this.state.simulation)
+            .then(() => {
+                this.refreshSimulation()
+            })
+            .catch(error => console.log(error))
+    }
+
+    openWindow(roomIndex, windowIndex) {
+        (this.state.simulation.home.rooms[roomIndex].window[windowIndex].open = !this.state.simulation.home.rooms[roomIndex].window[windowIndex].open)
         console.log(this.state.simulation)
         ExecuteService.updateUserRooms(this.state.simulation)
             .then(() => {
@@ -125,13 +136,17 @@ export default class RoomList extends Component {
                                                                    arrow={false}>
                                                                 {room.window.map((window, windowIndex) => (
                                                                     <div className={"menu-item"}>
+                                                                        #{window.id}
                                                                         <button
                                                                             onClick={() => this.blockWindow(roomIndex, windowIndex)}>
                                                                             {window.blocked ? "Unblock?" : "Block?"}
                                                                         </button>
                                                                         {!window.blocked &&
                                                                         <button>
-                                                                            {window.open ? "Close?" : " Open?"}
+                                                                            <button
+                                                                                onClick={() => this.openWindow(roomIndex, windowIndex)}>
+                                                                                {window.open ? "Close?" : "Open?"}
+                                                                            </button>
                                                                         </button>}
                                                                     </div>
                                                                 ))}
