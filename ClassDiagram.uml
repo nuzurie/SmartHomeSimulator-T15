@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.soen343.SmartHomeSimulator.model.Home</OriginalElement>
+  <nodes>
+    <node x="2004.5" y="0.0">com.soen343.SmartHomeSimulator.model.SimulationUser</node>
+    <node x="1997.5" y="517.0">com.soen343.SmartHomeSimulator.model.SimulationUser.SimulationUserBuilder</node>
+    <node x="0.0" y="2371.0">com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository</node>
+    <node x="2301.0" y="2371.0">com.soen343.SmartHomeSimulator.web.HomeController</node>
+    <node x="119.5" y="649.0">com.soen343.SmartHomeSimulator.model.Room</node>
+    <node x="0.5" y="2057.0">com.soen343.SmartHomeSimulator.model.Room.DoorWindow.DoorWindowBuilder</node>
+    <node x="970.5" y="0.0">com.soen343.SmartHomeSimulator.module.simulation.model.Simulation</node>
+    <node x="0.0" y="2604.0">com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepositoryImpl</node>
+    <node x="1107.0" y="2371.0">com.soen343.SmartHomeSimulator.module.simulation.controller.SimuationController</node>
+    <node x="618.0" y="2604.0">com.soen343.SmartHomeSimulator.model.repository.RoomRepositoryImpl</node>
+    <node x="333.0" y="0.0">com.soen343.SmartHomeSimulator.model.Home</node>
+    <node x="674.5" y="2079.0">com.soen343.SmartHomeSimulator.model.Room.Lights.LightsBuilder</node>
+    <node x="0.0" y="1540.0">com.soen343.SmartHomeSimulator.model.Room.DoorWindow</node>
+    <node x="1664.5" y="671.0">com.soen343.SmartHomeSimulator.model.Sensor.SensorBuilder</node>
+    <node x="303.0" y="1518.0">com.soen343.SmartHomeSimulator.model.Room.RoomBuilder</node>
+    <node x="338.0" y="2604.0">com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepositoryImpl</node>
+    <node x="2328.5" y="277.0">com.soen343.SmartHomeSimulator.model.repository.HomeRepositoryImpl</node>
+    <node x="618.0" y="2371.0">com.soen343.SmartHomeSimulator.model.repository.RoomRepository</node>
+    <node x="691.0" y="1573.0">com.soen343.SmartHomeSimulator.model.Room.Lights</node>
+    <node x="855.0" y="2371.0">com.soen343.SmartHomeSimulator.model.User</node>
+    <node x="0.0" y="2790.0">com.soen343.SmartHomeSimulator.web.UserController</node>
+    <node x="2328.5" y="0.0">com.soen343.SmartHomeSimulator.model.repository.HomeRepository</node>
+    <node x="1061.5" y="803.0">com.soen343.SmartHomeSimulator.module.simulation.model.Simulation.SimulationBuilder</node>
+    <node x="338.0" y="2371.0">com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository</node>
+    <node x="1594.5" y="0.0">com.soen343.SmartHomeSimulator.model.Sensor</node>
+    <node x="1743.0" y="2371.0">com.soen343.SmartHomeSimulator.web.SimulationUserController</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.soen343.SmartHomeSimulator.model.Room.RoomBuilder" target="com.soen343.SmartHomeSimulator.model.Room">
+      <point x="0.0" y="-244.5" />
+      <point x="0.0" y="409.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.model.Room.DoorWindow" target="com.soen343.SmartHomeSimulator.model.Room">
+      <point x="0.0" y="-222.5" />
+      <point x="141.5" y="1493.0" />
+      <point x="242.0" y="1493.0" />
+      <point x="-245.0" y="409.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepositoryImpl" target="com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository">
+      <point x="0.0" y="-70.5" />
+      <point x="0.0" y="91.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.model.Sensor.SensorBuilder" target="com.soen343.SmartHomeSimulator.model.Sensor">
+      <point x="0.0" y="-200.5" />
+      <point x="0.0" y="310.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepositoryImpl" target="com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository">
+      <point x="0.0" y="-70.5" />
+      <point x="0.0" y="91.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.model.Room.Lights.LightsBuilder" target="com.soen343.SmartHomeSimulator.model.Room.Lights">
+      <point x="0.0" y="-112.5" />
+      <point x="0.0" y="189.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.model.Room" target="com.soen343.SmartHomeSimulator.model.Home">
+      <point x="0.0" y="-409.5" />
+      <point x="0.0" y="299.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.model.Room.Lights" target="com.soen343.SmartHomeSimulator.model.Room">
+      <point x="0.0" y="-189.5" />
+      <point x="800.0" y="1493.0" />
+      <point x="732.0" y="1493.0" />
+      <point x="245.0" y="409.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.module.simulation.model.Simulation.SimulationBuilder" target="com.soen343.SmartHomeSimulator.module.simulation.model.Simulation">
+      <point x="0.0" y="-222.5" />
+      <point x="0.0" y="376.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.model.Room.DoorWindow.DoorWindowBuilder" target="com.soen343.SmartHomeSimulator.model.Room.DoorWindow">
+      <point x="0.0" y="-134.5" />
+      <point x="0.0" y="222.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.model.SimulationUser.SimulationUserBuilder" target="com.soen343.SmartHomeSimulator.model.SimulationUser">
+      <point x="0.0" y="-134.5" />
+      <point x="0.0" y="233.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.model.repository.RoomRepositoryImpl" target="com.soen343.SmartHomeSimulator.model.repository.RoomRepository">
+      <point x="0.0" y="-70.5" />
+      <point x="0.0" y="91.5" />
+    </edge>
+    <edge source="com.soen343.SmartHomeSimulator.model.repository.HomeRepositoryImpl" target="com.soen343.SmartHomeSimulator.model.repository.HomeRepository">
+      <point x="0.0" y="-92.5" />
+      <point x="0.0" y="113.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.25840514294759587" x="676.5072486621298" y="1199.4435556164526" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

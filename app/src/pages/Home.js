@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import '../App.css';
 import NavigationBar from '../components/NavigationBar';
-import { Link } from 'react-router-dom';
 import { Button, Container } from 'reactstrap';
 import { withCookies } from 'react-cookie';
+import startLogo from '../static/media/start.png'
 
 class Home extends Component {
 
@@ -19,6 +19,11 @@ class Home extends Component {
         this.state.csrfToken = cookies.get('XSRF-TOKEN');
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
+        this.goToDashboard = this.goToDashboard.bind(this)
+    }
+
+    goToDashboard(){
+        this.props.history.push('/house-layout')
     }
 
     async componentDidMount() {
@@ -50,14 +55,16 @@ class Home extends Component {
 
     render() {
         const message = this.state.user ?
-            <h2>Welcome, {this.state.user.name}!</h2> :
-            <p>Please log in to manage your JUG Tour.</p>;
+            <h2>Welcome to the SmartHomeSimulator!</h2> :
+            <h2>Please login first!</h2>
 
         const button = this.state.isAuthenticated ?
             <div>
-                <Button color="link"><Link to="/homes">Manage JUG Tour</Link></Button>
-                <br/>
-                <Button color="link" onClick={this.logout}>Logout</Button>
+                {/*<Button color="link"><Link to="/homes">Manage JUG Tour</Link></Button>*/}
+                {/*<br/>*/}
+                {/*<Button color="link" onClick={this.logout}>Logout</Button>*/}
+                <button><img src={startLogo} alt="start_button" onClick={this.goToDashboard} /></button>
+
             </div> :
             <Button color="primary" onClick={this.login}>Login</Button>;
 
