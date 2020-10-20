@@ -12,6 +12,7 @@ import './App.css';
 import UserList from "./components/Users/UserList";
 import Dashboard from "./components/Dashboard/Dashboard";
 import RoomList from "./components/Rooms/RoomList";
+import HouseLayout from "./components/HouseLayoutUpload";
 
 class App extends Component {
     render() {
@@ -20,6 +21,7 @@ class App extends Component {
                 <Router>
                     <Switch>
                         <Route path='/' exact={true} component={Home}/>
+                        <Route path={'/house-layout'} exact={true} component={HouseLayout}/>
                         <Route path='/homes' exact={true} component={HomeList}/>
                         <Route path='/home/:id' exact={true} component={HomeEdit}/>
                         <Route path={'/users'} exact={true} component={UserList}/>

@@ -87,9 +87,50 @@ class Initializer implements CommandLineRunner {
 //                .lights(lights)
                 .build();
 
+        //Third room
+
+        Set<Room.DoorWindow> door3 = new HashSet<>();
+        door3.add(Room.DoorWindow.builder().open(false).blocked(false).build());
+
+        Set<Room.DoorWindow> window3 = new HashSet<>();
+        window3.add(Room.DoorWindow.builder().open(false).blocked(false).build());
+        window3.add(Room.DoorWindow.builder().open(true).blocked(false).build());
+
+        Set<Room.Lights> lights3 = new HashSet<>();
+        lights3.add(Room.Lights.builder().turnedOn(true).build());
+
+        Room room3 = Room.builder().name("Bed Room")
+                .size("12x18")
+                .window(window3)
+                .door(door3)
+                .lights(lights3)
+                .build();
+
+        //Fourth Room
+
+        Set<Room.DoorWindow> door4 = new HashSet<>();
+        door4.add(Room.DoorWindow.builder().open(false).blocked(false).build());
+
+        Set<Room.DoorWindow> window4 = new HashSet<>();
+        window4.add(Room.DoorWindow.builder().open(false).blocked(false).build());
+
+        Set<Room.Lights> lights4 = new HashSet<>();
+        lights4.add(Room.Lights.builder().turnedOn(true).build());
+        lights4.add(Room.Lights.builder().turnedOn(false).build());
+
+        Room room4 = Room.builder().name("Garage")
+                .size("12x18")
+                .window(window4)
+                .door(door4)
+                .lights(lights4)
+                .build();
+
         Set<Room> rooms = new HashSet<>();
         rooms.add(livingRoom);
         rooms.add(livingRoom2);
+        rooms.add(room3);
+        rooms.add(room4);
+
         mainHome.setRooms(rooms);
 
         repository.save(mainHome);
