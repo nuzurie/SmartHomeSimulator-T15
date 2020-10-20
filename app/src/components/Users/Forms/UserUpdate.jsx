@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import ExecuteService from "../../../api/ExecuteServices";import UserForm from "./UserForm";
+import ExecuteService from "../../../api/ExecuteServices";
 
 export default class UserUpdate extends Component {
     constructor(props) {

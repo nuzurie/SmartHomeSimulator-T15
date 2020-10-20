@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
 import NavigationBar from '../components/NavigationBar';
-import { Link } from 'react-router-dom';
 import { Button, Container } from 'reactstrap';
 import { withCookies } from 'react-cookie';
 import startLogo from '../static/media/start.png'

@@ -77,6 +77,10 @@ class UserList extends Component {
     }
 
     loginUser(user){
+        ExecuteService.loginSimulationUser(user)
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
+
         sessionStorage.setItem('authenticated', user.id)
         sessionStorage.setItem('authenticatedName', user.name)
     }
