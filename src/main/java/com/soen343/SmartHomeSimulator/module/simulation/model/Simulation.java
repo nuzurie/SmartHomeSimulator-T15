@@ -33,14 +33,17 @@ public class Simulation {
 //    @OneToMany
     private Set<SimulationUser> simulationUsers = new HashSet<>();
 
+    private SimulationUser loggedInUser;
+
     @Autowired
-    public Simulation(Long name, double temperature, String date, String time, Home home, Set<SimulationUser> simulationUsers) {
+    public Simulation(Long name, double temperature, String date, String time, Home home, Set<SimulationUser> simulationUsers, SimulationUser loggedInUser) {
         this.name = name;
         this.temperature = temperature;
         this.date = date;
         this.time = time;
         this.home = home;
         this.simulationUsers = simulationUsers;
+        this.loggedInUser = loggedInUser;
     }
 
     public long getId(){

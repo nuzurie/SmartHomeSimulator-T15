@@ -10,7 +10,6 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -19,11 +18,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import { mainListItems, secondaryListItems } from './listItems.jsx';
-import Chart from "./chart";
 import Deposits from "./Desposits";
 
 import SimulationForm from "../Users/Forms/FullForm";
-import UserList from "../Users/UserList";
 import RoomList from "../Rooms/RoomList";
 import {Link as RouterLink} from 'react-router-dom'
 
@@ -35,8 +32,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit">
+        SmartHomeSimulation
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -211,7 +208,7 @@ export default function Dashboard() {
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>I
+              <Paper className={fixedHeightPaper}>
                 <RoomList/>
               </Paper>
             </Grid>

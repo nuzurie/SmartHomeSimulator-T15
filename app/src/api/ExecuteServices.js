@@ -1,4 +1,3 @@
-import React from 'react';
 import axios from 'axios';
 
 class ExecuteService {
@@ -40,6 +39,9 @@ class ExecuteService {
     }
 
 
+    loginSimulationUser(user) {
+        return axios.put(`/api/simulation/loginUser/${user.id}`)
+    }
 }
 
 export default new ExecuteService()

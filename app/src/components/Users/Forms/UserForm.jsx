@@ -49,10 +49,10 @@ class UserForm extends Component {
                                             {/*<fieldset>*/}
                                             <label>Privileges</label>
                                             <Field className={"form-control"} name={"privilege"} as={"select"}>
-                                                <option value="parent">Parent</option>
-                                                <option value="child">Child</option>
-                                                <option value="guest">Guest</option>
-                                                <option value="stranger">Stranger</option>
+                                                <option value="Parent">Parent</option>
+                                                <option value="Child">Child</option>
+                                                <option value="Guest">Guest</option>
+                                                <option value="Stranger">Stranger</option>
                                             </Field>
                                             <button className="btn btn-primary" type="submit">Add</button>
                                         </fieldset>
