@@ -3,9 +3,7 @@ package com.soen343.SmartHomeSimulator.module.simulation.model;
 import com.soen343.SmartHomeSimulator.model.Home;
 import com.soen343.SmartHomeSimulator.model.SimulationUser;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
@@ -14,6 +12,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 //@AllArgsConstructor
+@Getter
+@Setter
 @Builder(toBuilder = true)
 //@Entity
 public class Simulation {
