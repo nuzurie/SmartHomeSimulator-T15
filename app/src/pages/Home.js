@@ -23,7 +23,7 @@ class Home extends Component {
     }
 
     goToDashboard(){
-        this.props.history.push('/Dashboard')
+        this.props.history.push('/house-layout')
     }
 
     async componentDidMount() {

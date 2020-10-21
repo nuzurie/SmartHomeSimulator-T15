@@ -1,0 +1,166 @@
+{
+  "name": 1,
+  "temperature": 22.5,
+  "date": "2020-01-01",
+  "time": "03:00",
+  "home": {
+    "classId": 1,
+    "id": 1,
+    "name": "Main Home",
+    "temperature": 25,
+    "rooms": [
+      {
+        "id": 6,
+        "name": "Bed Room",
+        "size": "12x18",
+        "temperature": 22.5,
+        "window": [
+          {
+            "id": 8,
+            "open": true,
+            "blocked": false
+          },
+          {
+            "id": 7,
+            "open": false,
+            "blocked": false
+          }
+        ],
+        "door": [
+          {
+            "id": 6,
+            "open": false,
+            "blocked": false
+          }
+        ],
+        "lights": [
+          {
+            "id": 2,
+            "turnedOn": true
+          }
+        ],
+        "simulationUsers": []
+      },
+      {
+        "id": 2,
+        "name": "Living Room",
+        "size": "12x24",
+        "temperature": 22.5,
+        "window": [
+          {
+            "id": 2,
+            "open": true,
+            "blocked": false
+          },
+          {
+            "id": 1,
+            "open": false,
+            "blocked": false
+          }
+        ],
+        "door": [
+          {
+            "id": 3,
+            "open": false,
+            "blocked": false
+          }
+        ],
+        "lights": [
+          {
+            "id": 1,
+            "turnedOn": true
+          }
+        ],
+        "simulationUsers": [
+          {
+            "id": 2,
+            "name": "User2",
+            "privilege": "Child"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Bed Room",
+        "size": "12x18",
+        "temperature": 22.5,
+        "window": [
+          {
+            "id": 4,
+            "open": true,
+            "blocked": false
+          }
+        ],
+        "door": [
+          {
+            "id": 5,
+            "open": true,
+            "blocked": false
+          }
+        ],
+        "lights": [],
+        "simulationUsers": [
+          {
+            "id": 1,
+            "name": "User1",
+            "privilege": "Parent"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "name": "Garage",
+        "size": "12x18",
+        "temperature": 22.5,
+        "window": [
+          {
+            "id": 10,
+            "open": false,
+            "blocked": false
+          }
+        ],
+        "door": [
+          {
+            "id": 9,
+            "open": false,
+            "blocked": false
+          }
+        ],
+        "lights": [
+          {
+            "id": 4,
+            "turnedOn": false
+          },
+          {
+            "id": 3,
+            "turnedOn": true
+          }
+        ],
+        "simulationUsers": []
+      }
+    ]
+  },
+  "simulationUsers": [
+    {
+      "id": 1,
+      "name": "User1",
+      "privilege": "Parent"
+    },
+    {
+      "id": 4,
+      "name": "Squatter2",
+      "privilege": "Stranger"
+    },
+    {
+      "id": 3,
+      "name": "User3",
+      "privilege": "Child"
+    }
+  ],
+  "loggedInUser": {
+    "id": 2,
+    "name": "User2",
+    "privilege": "Child"
+  },
+  "id": 1
+}

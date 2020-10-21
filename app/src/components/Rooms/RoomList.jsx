@@ -91,6 +91,7 @@ export default class RoomList extends Component {
                     simulation: response.data,
                     rooms: response.data.home.rooms,
                 })
+                console.log(response.data)
             })
             .catch(error => console.log(error))
     }
@@ -127,8 +128,13 @@ export default class RoomList extends Component {
                                                     <div>
                                                         <div className={"header"}>Modify Windows State</div>
                                                         <div className={"content"}>
-                                                            To be able to block the windows, you must be have the parent
-                                                            privilege.
+                                                            The windows in this room are:
+                                                            {room.window.map((window) =>
+                                                                <div>
+                                                                    Window #{window.id}, which is {window.blocked? "blocked ":"unblocked "}
+                                                                    and {window.open ? "opened." : "closed."}
+                                                                </div>)
+                                                            }
                                                             <Popup trigger={<div className="menu-item"> Window </div>}
                                                                    position="top left" on="hover" closeOnDocumentClick
                                                                    mouseLeaveDelay={300} mouseEnterDelay={0}
@@ -142,11 +148,8 @@ export default class RoomList extends Component {
                                                                             {window.blocked ? "Unblock?" : "Block?"}
                                                                         </button>
                                                                         {!window.blocked &&
-                                                                        <button>
-                                                                            <button
-                                                                                onClick={() => this.openWindow(roomIndex, windowIndex)}>
+                                                                        <button onClick={() => this.openWindow(roomIndex, windowIndex)}>
                                                                                 {window.open ? "Close?" : "Open?"}
-                                                                            </button>
                                                                         </button>}
                                                                     </div>
                                                                 ))}
