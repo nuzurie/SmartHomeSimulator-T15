@@ -65,7 +65,7 @@ export default class RoomList extends Component {
     }
 
     blockWindow(roomIndex, windowIndex) {
-        (this.state.simulation.home.rooms[roomIndex].window[windowIndex].blocked = !this.state.simulation.home.rooms[roomIndex].window[windowIndex].blocked)
+        (this.state.simulation.home.rooms[roomIndex].windows[windowIndex].blocked = !this.state.simulation.home.rooms[roomIndex].windows[windowIndex].blocked)
         console.log(this.state.simulation)
         ExecuteService.updateUserRooms(this.state.simulation)
             .then(() => {
@@ -75,7 +75,7 @@ export default class RoomList extends Component {
     }
 
     openWindow(roomIndex, windowIndex) {
-        (this.state.simulation.home.rooms[roomIndex].window[windowIndex].open = !this.state.simulation.home.rooms[roomIndex].window[windowIndex].open)
+        (this.state.simulation.home.rooms[roomIndex].windows[windowIndex].open = !this.state.simulation.home.rooms[roomIndex].windows[windowIndex].open)
         console.log(this.state.simulation)
         ExecuteService.updateUserRooms(this.state.simulation)
             .then(() => {
@@ -122,14 +122,14 @@ export default class RoomList extends Component {
                                         <td>{(room.simulationUsers.some(user => user.id === (this.state.simulation.loggedInUser.id)) || this.state.simulation.loggedInUser.privilege === 'Parent') ?
                                             <Popup
                                                 trigger={(<button
-                                                    className={"btb btn-sm btn-dark"}>{room.window.length}</button>)}
+                                                    className={"btb btn-sm btn-dark"}>{room.windows.length}</button>)}
                                                 position="right center" closeOnDocumentClick modal nested>
                                                 {
                                                     <div>
                                                         <div className={"header"}>Modify Windows State</div>
                                                         <div className={"content"}>
                                                             The windows in this room are:
-                                                            {room.window.map((window) =>
+                                                            {room.windows.map((window) =>
                                                                 <div>
                                                                     Window #{window.id}, which is {window.blocked? "blocked ":"unblocked "}
                                                                     and {window.open ? "opened." : "closed."}
@@ -140,7 +140,7 @@ export default class RoomList extends Component {
                                                                    mouseLeaveDelay={300} mouseEnterDelay={0}
                                                                    contentStyle={{padding: '0px', border: 'none'}}
                                                                    arrow={false}>
-                                                                {room.window.map((window, windowIndex) => (
+                                                                {room.windows.map((window, windowIndex) => (
                                                                     <div className={"menu-item"}>
                                                                         #{window.id}
                                                                         <button
@@ -157,8 +157,8 @@ export default class RoomList extends Component {
                                                         </div>
                                                     </div>}
                                             </Popup>
-                                            : <div>{room.window.length}</div>}</td>
-                                        <td>{room.door.length}</td>
+                                            : <div>{room.windows.length}</div>}</td>
+                                        <td>{room.doors.length}</td>
                                         <td>{room.lights.length}</td>
                                         <td>
                                             <Popup trigger={(

@@ -17,15 +17,13 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
-import { mainListItems, secondaryListItems } from './listItems.jsx';
+import mainListItems from './listItems.jsx';
 import Deposits from "./Desposits";
 
 import SimulationForm from "../Users/Forms/FullForm";
 import RoomList from "../Rooms/RoomList";
 import {Link as RouterLink} from 'react-router-dom'
-
-
-
+import SecondaryListItems from "./listItems";
 
 
 function Copyright() {
@@ -126,6 +124,7 @@ export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [contentDiv, setContentDiv] = React.useState('SHS')
+  // const [simulation, setSimulation] = React.useState()
   const [changeLogin, setLogin] = React.useState([
     sessionStorage.getItem('authenticatedName'),
     sessionStorage.getItem('temperature'),
@@ -198,9 +197,9 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems(changeLogin)}</List>
-        <Divider />
-        <List>{secondaryListItems()}</List>
+        {/*<List>{mainListItems(changeLogin)}</List>*/}
+
+        <List><SecondaryListItems/></List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

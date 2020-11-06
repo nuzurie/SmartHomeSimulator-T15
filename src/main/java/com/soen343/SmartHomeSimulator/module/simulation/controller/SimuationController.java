@@ -31,17 +31,17 @@ public class SimuationController {
         this.simulationUserRepository = simulationUserRepository;
     }
 
+    //to change the simulation parameters: date, time, temp
     @PutMapping("/simulation")
     public ResponseEntity<Simulation> updateSimulation(@Valid @RequestBody Simulation simulation){
         log.info("Create this simulation {}", simulation);
-        Simulation currentSimulation = simulationRepository.findById((long)1);
-        simulation.setName(1);
-        simulation.setHome(currentSimulation.getHome());
-        simulation.setSimulationUsers(currentSimulation.getSimulationUsers());
-        Simulation createdSimulation = simulationRepository.save(simulation);
 
-        System.out.println(createdSimulation);
-        return ResponseEntity.ok().body(createdSimulation);
+        Simulation currentSimulation = simulationRepository.findById((long)1);
+        currentSimulation.setDate(simulation.getDate());
+        currentSimulation.setTime(simulation.getTime());
+        currentSimulation.setTemperature(simulation.getTemperature());
+
+        return ResponseEntity.ok().body(currentSimulation);
     }
 
     @PutMapping("/simulation/user-rooms")
@@ -55,9 +55,7 @@ public class SimuationController {
 
         System.out.println("Received sim " + simulation);
         log.info("The received simulation has rooms:", simulation.getHome().getRooms() );
-//        Simulation createdSimulation = simulationRepository.save(simulation);
 
-        //log.info("The saving simulation is {}", createdSimulation);
         log.info("After saving the simulation is {}", simulationRepository.findAll());
         return ResponseEntity.ok().body(currentSimulation);
     }
@@ -69,6 +67,7 @@ public class SimuationController {
             simulation = simulationRepository.findById((long)1);
         }
         log.info("After getting the simulation is {}", simulationRepository.findAll());
+        System.out.println(simulation);
         return ResponseEntity.ok().body(simulation);
     }
 
