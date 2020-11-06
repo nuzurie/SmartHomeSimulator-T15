@@ -4,6 +4,7 @@ import com.soen343.SmartHomeSimulator.model.*;
 import com.soen343.SmartHomeSimulator.model.repository.HomeRepository;
 import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
 import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepositoryImpl;
+import com.soen343.SmartHomeSimulator.module.security.controller.Security;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,6 +121,7 @@ class Initializer implements CommandLineRunner {
 
         mainHome.setRooms(rooms);
 
+
         repository.save(mainHome);
 
         Set<SimulationUser> simulationUsers2 = new HashSet<>(simulationUserRepository.findAll());
@@ -132,6 +134,8 @@ class Initializer implements CommandLineRunner {
                 .time("03:00")
                 .temperature(22.5)
                 .simulationUsers(simulationUsers2)
+                .lightsAutoMode(true)
+                .observer(Security.builder().name("1").build())
                 .build();
 
         System.out.println(simulationRepository.save(simulation));

@@ -46,6 +46,14 @@ class ExecuteService {
     loadUsers(){
         return axios.get('/api/users/load')
     }
+
+    toggleAutoMode(){
+        return axios.put('/api/simulation/autoMode')
+    }
+
+    toggleAwayMode(){
+        return axios.put('/api/security/awayMode')
+    }
 }
 
 export default new ExecuteService()

@@ -24,6 +24,8 @@ import SimulationForm from "../Users/Forms/FullForm";
 import RoomList from "../Rooms/RoomList";
 import {Link as RouterLink} from 'react-router-dom'
 import SecondaryListItems from "./listItems";
+import ExecuteServices from "../../api/ExecuteServices";
+import AwayModeButton from "../Security/AwayModeButton";
 
 
 function Copyright() {
@@ -155,7 +157,11 @@ export default function Dashboard() {
   const showSHH = () => {
     setContentDiv('SHH')
   }
-
+  const test = () => {
+    ExecuteServices.toggleAwayMode()
+        .then(response => console.log(response))
+        .catch(response => console.log(response))
+  }
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -225,7 +231,7 @@ export default function Dashboard() {
                   <SimulationForm />
                 </div>}
                 {contentDiv==='SHC' &&<div>Hello from SHC Module</div>}
-                {contentDiv==='SHH' &&<div>Hello from SHH Module</div>}
+                {contentDiv==='SHH' &&<div><AwayModeButton/></div>}tar
                 {/*{contentDiv==='SHC' &&<Orders />}*/}
               </Paper>
             </Grid>

@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Home {
+public class Home{
 
     private long classId = 0;
     private long id;
@@ -41,5 +41,4 @@ public class Home {
             room.deleteUser(simulationUser);
         }
     }
-
 }

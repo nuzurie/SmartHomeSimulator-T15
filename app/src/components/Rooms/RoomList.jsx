@@ -24,6 +24,7 @@ export default class RoomList extends Component {
         this.switchOutsideLight = this.switchOutsideLight.bind(this)
         this.lockDoor = this.lockDoor.bind(this)
         this.openDoor = this.openDoor.bind(this)
+        this.toggleAutoMode = this.toggleAutoMode.bind(this)
 
     }
 
@@ -39,6 +40,7 @@ export default class RoomList extends Component {
                 }).length == 0;
             }
         }
+
         let simulationUsers = this.state.simulation.simulationUsers;
         return simulationUsers.filter(comparer(roomUsers))
     }
@@ -51,7 +53,9 @@ export default class RoomList extends Component {
             .then(response => {
                 this.refreshSimulation()
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                console.log(error)
+                this.refreshSimulation();})
     }
 
     addUser(roomIndex, user) {
@@ -63,8 +67,10 @@ export default class RoomList extends Component {
             .then(() => {
                 this.refreshSimulation()
             })
-            .catch(error => console.log(error))
-
+            .catch(response=> {
+                alert("Intruder Alert!");
+                this.refreshSimulation();
+            })
     }
 
     blockWindow(roomIndex, windowIndex) {
@@ -85,11 +91,10 @@ export default class RoomList extends Component {
             .catch(error => console.log(error))
     }
 
-    openOutsideDoor(door){
-        if (door === "entrance"){
+    openOutsideDoor(door) {
+        if (door === "entrance") {
             this.state.simulation.home.entranceDoor.open = !this.state.simulation.home.entranceDoor.open
-        }
-        else{
+        } else {
             this.state.simulation.home.backyardDoor.open = !this.state.simulation.home.backyardDoor.open
         }
 
@@ -100,11 +105,10 @@ export default class RoomList extends Component {
             .catch(error => console.log(error))
     }
 
-    lockOutsideDoor(door){
-        if (door === "entrance"){
+    lockOutsideDoor(door) {
+        if (door === "entrance") {
             this.state.simulation.home.entranceDoor.locked = !this.state.simulation.home.entranceDoor.locked
-        }
-        else{
+        } else {
             this.state.simulation.home.backyardDoor.locked = !this.state.simulation.home.backyardDoor.locked
         }
 
@@ -115,7 +119,7 @@ export default class RoomList extends Component {
             .catch(error => console.log(error))
     }
 
-    lockDoor(roomIndex, doorIndex){
+    lockDoor(roomIndex, doorIndex) {
         (this.state.simulation.home.rooms[roomIndex].doors[doorIndex].locked = !this.state.simulation.home.rooms[roomIndex].doors[doorIndex].locked)
         ExecuteService.updateSimulationDetails(this.state.simulation)
             .then(() => {
@@ -124,7 +128,7 @@ export default class RoomList extends Component {
             .catch(error => console.log(error))
     }
 
-    openDoor(roomIndex, doorIndex){
+    openDoor(roomIndex, doorIndex) {
         (this.state.simulation.home.rooms[roomIndex].doors[doorIndex].open = !this.state.simulation.home.rooms[roomIndex].doors[doorIndex].open)
         ExecuteService.updateSimulationDetails(this.state.simulation)
             .then(() => {
@@ -133,11 +137,10 @@ export default class RoomList extends Component {
             .catch(error => console.log(error))
     }
 
-    switchOutsideLight(light){
-        if (light === "entrance"){
+    switchOutsideLight(light) {
+        if (light === "entrance") {
             this.state.simulation.home.entranceLight.turnedOn = !this.state.simulation.home.entranceLight.turnedOn
-        }
-        else{
+        } else {
             this.state.simulation.home.backyardLight.turnedOn = !this.state.simulation.home.backyardLight.turnedOn
         }
 
@@ -148,7 +151,7 @@ export default class RoomList extends Component {
             .catch(error => console.log(error))
     }
 
-    switchRoomLight(roomIndex){
+    switchRoomLight(roomIndex) {
         this.state.simulation.home.rooms[roomIndex].lights[0].turnedOn = !this.state.simulation.home.rooms[roomIndex].lights[0].turnedOn
 
         ExecuteService.updateSimulationDetails(this.state.simulation)
@@ -167,6 +170,17 @@ export default class RoomList extends Component {
                 })
             })
             .catch(error => console.log(error))
+
+
+    }
+
+    toggleAutoMode() {
+        console.log("eere")
+        ExecuteService.toggleAutoMode()
+            .then(() => {
+                this.refreshSimulation()
+            })
+            .catch(error => console.log(error))
     }
 
     render() {
@@ -182,7 +196,13 @@ export default class RoomList extends Component {
                                     <th scope={"col"}>Temperature</th>
                                     <th scope={"col"}>Window</th>
                                     <th scope={"col"}>Door</th>
-                                    <th scope={"col"}>Light</th>
+                                    <th scope={"col"}>
+                                                {this.state.simulation.lightsAutoMode ?
+                                                    <button className={"btn-sm btn-success"}
+                                                            onClick={() => this.toggleAutoMode()}>Lights</button> :
+                                                    <button className={"btn-sm btn-danger"}
+                                                            onClick={() => this.toggleAutoMode()}>Lights</button>}
+                                    </th>
                                     <th scope={"col"}>Users</th>
                                     {/*<th scope={"col"}>Sensors</th>*/}
                                 </tr>
@@ -204,7 +224,8 @@ export default class RoomList extends Component {
                                                             The windows in this room are:
                                                             {room.windows.map((window) =>
                                                                 <div>
-                                                                    Window #{window.id}, which is {window.blocked? "blocked ":"unblocked "}
+                                                                    Window #{window.id}, which
+                                                                    is {window.blocked ? "blocked " : "unblocked "}
                                                                     and {window.open ? "opened." : "closed."}
                                                                 </div>)
                                                             }
@@ -221,8 +242,9 @@ export default class RoomList extends Component {
                                                                             {window.blocked ? "Unblock?" : "Block?"}
                                                                         </button>
                                                                         {!window.blocked &&
-                                                                        <button onClick={() => this.openWindow(roomIndex, windowIndex)}>
-                                                                                {window.open ? "Close?" : "Open?"}
+                                                                        <button
+                                                                            onClick={() => this.openWindow(roomIndex, windowIndex)}>
+                                                                            {window.open ? "Close?" : "Open?"}
                                                                         </button>}
                                                                     </div>
                                                                 ))}
@@ -243,7 +265,8 @@ export default class RoomList extends Component {
                                                             The doors in this room are:
                                                             {room.doors.map((door) =>
                                                                 <div>
-                                                                    Door #{door.id}, which is {door.locked? "locked ":"unlocked "}
+                                                                    Door #{door.id}, which
+                                                                    is {door.locked ? "locked " : "unlocked "}
                                                                     and {door.open ? "opened." : "closed."}
                                                                 </div>)
                                                             }
@@ -260,7 +283,8 @@ export default class RoomList extends Component {
                                                                             {door.locked ? "Unlock?" : "Lock?"}
                                                                         </button>
                                                                         {!door.locked &&
-                                                                        <button onClick={() => this.openDoor(roomIndex, doorIndex)}>
+                                                                        <button
+                                                                            onClick={() => this.openDoor(roomIndex, doorIndex)}>
                                                                             {door.open ? "Close?" : "Open?"}
                                                                         </button>}
                                                                     </div>
@@ -336,16 +360,16 @@ export default class RoomList extends Component {
                                                mouseLeaveDelay={300} mouseEnterDelay={0}
                                                contentStyle={{padding: '0px', border: 'none'}}
                                                arrow={false}>
-                                                <div className={"menu-item"}>
-                                                    <button
-                                                        onClick={() => this.lockOutsideDoor("entrance")}>
-                                                        {this.state.simulation.home.entranceDoor.locked ? "Unlock?" : "Lock?"}
-                                                    </button>
-                                                    {!this.state.simulation.home.entranceDoor.locked &&
-                                                    <button onClick={() => this.openOutsideDoor("entrance")}>
-                                                        {this.state.simulation.home.entranceDoor.open ? "Close?" : "Open?"}
-                                                    </button>}
-                                                </div>
+                                            <div className={"menu-item"}>
+                                                <button
+                                                    onClick={() => this.lockOutsideDoor("entrance")}>
+                                                    {this.state.simulation.home.entranceDoor.locked ? "Unlock?" : "Lock?"}
+                                                </button>
+                                                {!this.state.simulation.home.entranceDoor.locked &&
+                                                <button onClick={() => this.openOutsideDoor("entrance")}>
+                                                    {this.state.simulation.home.entranceDoor.open ? "Close?" : "Open?"}
+                                                </button>}
+                                            </div>
                                         </Popup>
                                     </td>
                                     <td scope={"col"}>
