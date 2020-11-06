@@ -40,7 +40,7 @@ export default class SecondaryListItems extends Component {
                         <ListItemIcon>
                             <PeopleIcon/>
                         </ListItemIcon>
-                        {console.log(this.state.simulation)}
+                        {console.log(this.state.simulation.loggedInUser)}
                         {/*IS THIS UNDEFINED OR OBJECT??*/}
                         <ListItemText primary={`Name = ${this.state.simulation.loggedInUser}`}/>
                     </ListItem>

@@ -54,7 +54,8 @@ class Initializer implements CommandLineRunner {
 
         livingRoom.add(w);
         livingRoom.add(Light.builder().turnedOn(true).build());
-        livingRoom.add(new Door());
+        livingRoom.add(Door.builder().open(false).locked(false).build());
+        livingRoom.add(Door.builder().open(false).locked(false).build());
 
 
 
@@ -83,8 +84,9 @@ class Initializer implements CommandLineRunner {
                 .windows(windows2)
                 .doors(door2)
                 .simulationUsers(simulationUsers)
-//                .lights(lights)
                 .build();
+
+        livingRoom2.add(Light.builder().turnedOn(false).build());
 
         //Third room
 
@@ -108,6 +110,7 @@ class Initializer implements CommandLineRunner {
         room4.add(Door.builder().open(false).locked(false).build());
         room4.add(Window.builder().open(false).blocked(false).build());
         room4.add(Light.builder().turnedOn(false).build());
+        room4.add(Door.builder().open(false).locked(false).build());
 
         List<Room> rooms = new LinkedList<>();
         rooms.add(livingRoom);

@@ -19,6 +19,11 @@ export default class RoomList extends Component {
         this.addUser = this.addUser.bind(this)
         this.blockWindow = this.blockWindow.bind(this)
         this.openWindow = this.openWindow.bind(this)
+        this.openOutsideDoor = this.openOutsideDoor.bind(this)
+        this.lockOutsideDoor = this.lockOutsideDoor.bind(this)
+        this.switchOutsideLight = this.switchOutsideLight.bind(this)
+        this.lockDoor = this.lockDoor.bind(this)
+        this.openDoor = this.openDoor.bind(this)
 
     }
 
@@ -64,7 +69,6 @@ export default class RoomList extends Component {
 
     blockWindow(roomIndex, windowIndex) {
         (this.state.simulation.home.rooms[roomIndex].windows[windowIndex].blocked = !this.state.simulation.home.rooms[roomIndex].windows[windowIndex].blocked)
-        console.log(this.state.simulation)
         ExecuteService.updateSimulationDetails(this.state.simulation)
             .then(() => {
                 this.refreshSimulation()
@@ -74,7 +78,79 @@ export default class RoomList extends Component {
 
     openWindow(roomIndex, windowIndex) {
         (this.state.simulation.home.rooms[roomIndex].windows[windowIndex].open = !this.state.simulation.home.rooms[roomIndex].windows[windowIndex].open)
-        console.log(this.state.simulation)
+        ExecuteService.updateSimulationDetails(this.state.simulation)
+            .then(() => {
+                this.refreshSimulation()
+            })
+            .catch(error => console.log(error))
+    }
+
+    openOutsideDoor(door){
+        if (door === "entrance"){
+            this.state.simulation.home.entranceDoor.open = !this.state.simulation.home.entranceDoor.open
+        }
+        else{
+            this.state.simulation.home.backyardDoor.open = !this.state.simulation.home.backyardDoor.open
+        }
+
+        ExecuteService.updateSimulationDetails(this.state.simulation)
+            .then(() => {
+                this.refreshSimulation()
+            })
+            .catch(error => console.log(error))
+    }
+
+    lockOutsideDoor(door){
+        if (door === "entrance"){
+            this.state.simulation.home.entranceDoor.locked = !this.state.simulation.home.entranceDoor.locked
+        }
+        else{
+            this.state.simulation.home.backyardDoor.locked = !this.state.simulation.home.backyardDoor.locked
+        }
+
+        ExecuteService.updateSimulationDetails(this.state.simulation)
+            .then(() => {
+                this.refreshSimulation()
+            })
+            .catch(error => console.log(error))
+    }
+
+    lockDoor(roomIndex, doorIndex){
+        (this.state.simulation.home.rooms[roomIndex].doors[doorIndex].locked = !this.state.simulation.home.rooms[roomIndex].doors[doorIndex].locked)
+        ExecuteService.updateSimulationDetails(this.state.simulation)
+            .then(() => {
+                this.refreshSimulation()
+            })
+            .catch(error => console.log(error))
+    }
+
+    openDoor(roomIndex, doorIndex){
+        (this.state.simulation.home.rooms[roomIndex].doors[doorIndex].open = !this.state.simulation.home.rooms[roomIndex].doors[doorIndex].open)
+        ExecuteService.updateSimulationDetails(this.state.simulation)
+            .then(() => {
+                this.refreshSimulation()
+            })
+            .catch(error => console.log(error))
+    }
+
+    switchOutsideLight(light){
+        if (light === "entrance"){
+            this.state.simulation.home.entranceLight.turnedOn = !this.state.simulation.home.entranceLight.turnedOn
+        }
+        else{
+            this.state.simulation.home.backyardLight.turnedOn = !this.state.simulation.home.backyardLight.turnedOn
+        }
+
+        ExecuteService.updateSimulationDetails(this.state.simulation)
+            .then(() => {
+                this.refreshSimulation()
+            })
+            .catch(error => console.log(error))
+    }
+
+    switchRoomLight(roomIndex){
+        this.state.simulation.home.rooms[roomIndex].lights[0].turnedOn = !this.state.simulation.home.rooms[roomIndex].lights[0].turnedOn
+
         ExecuteService.updateSimulationDetails(this.state.simulation)
             .then(() => {
                 this.refreshSimulation()
@@ -89,7 +165,6 @@ export default class RoomList extends Component {
                     simulation: response.data,
                     rooms: response.data.home.rooms,
                 })
-                console.log(response.data)
             })
             .catch(error => console.log(error))
     }
@@ -156,8 +231,59 @@ export default class RoomList extends Component {
                                                     </div>}
                                             </Popup>
                                             : <div>{room.windows.length}</div>}</td>
-                                        <td>{room.doors.length}</td>
-                                        <td>{room.lights.length}</td>
+                                        <td>{(room.simulationUsers.some(user => user.id === (this.state.simulation.loggedInUser.id)) || this.state.simulation.loggedInUser.privilege === 'Parent') ?
+                                            <Popup
+                                                trigger={(<button
+                                                    className={"btb btn-sm btn-dark"}>{room.doors.length}</button>)}
+                                                position="right center" closeOnDocumentClick modal nested>
+                                                {
+                                                    <div>
+                                                        <div className={"header"}>Modify Door State</div>
+                                                        <div className={"content"}>
+                                                            The doors in this room are:
+                                                            {room.doors.map((door) =>
+                                                                <div>
+                                                                    Door #{door.id}, which is {door.locked? "locked ":"unlocked "}
+                                                                    and {door.open ? "opened." : "closed."}
+                                                                </div>)
+                                                            }
+                                                            <Popup trigger={<div className="menu-item"> Door </div>}
+                                                                   position="top left" on="hover" closeOnDocumentClick
+                                                                   mouseLeaveDelay={300} mouseEnterDelay={0}
+                                                                   contentStyle={{padding: '0px', border: 'none'}}
+                                                                   arrow={false}>
+                                                                {room.doors.map((door, doorIndex) => (
+                                                                    <div className={"menu-item"}>
+                                                                        #{door.id}
+                                                                        <button
+                                                                            onClick={() => this.lockDoor(roomIndex, doorIndex)}>
+                                                                            {door.locked ? "Unlock?" : "Lock?"}
+                                                                        </button>
+                                                                        {!door.locked &&
+                                                                        <button onClick={() => this.openDoor(roomIndex, doorIndex)}>
+                                                                            {door.open ? "Close?" : "Open?"}
+                                                                        </button>}
+                                                                    </div>
+                                                                ))}
+                                                            </Popup>
+                                                        </div>
+                                                    </div>}
+                                            </Popup>
+                                            : <div>{room.doors.length}</div>}</td>
+                                        <td>
+                                            <Popup trigger={<div className="menu-item"> 1 </div>}
+                                                   position="top left" on="hover" closeOnDocumentClick
+                                                   mouseLeaveDelay={300} mouseEnterDelay={0}
+                                                   contentStyle={{padding: '0px', border: 'none'}}
+                                                   arrow={false}>
+                                                <div className={"menu-item"}>
+                                                    <button
+                                                        onClick={() => this.switchRoomLight(roomIndex)}>
+                                                        {room.lights[0].turnedOn ? "Switch Off?" : "Switch On?"}
+                                                    </button>
+                                                </div>
+                                            </Popup>
+                                        </td>
                                         <td>
                                             <Popup trigger={(
                                                 <button
@@ -197,17 +323,90 @@ export default class RoomList extends Component {
                                                 </div>
                                             </Popup>
                                         </td>
-
                                         {/*<td>{room.sensors.length}</td>*/}
                                     </tr>
                                 )}
+                                <tr>
+                                    <th scope={"col"}>Entrance</th>
+                                    <th scope={"col"}></th>
+                                    <td scope={"col"}></td>
+                                    <td scope={"col"}>
+                                        <Popup trigger={<div className="menu-item"> 1 </div>}
+                                               position="top left" on="hover" closeOnDocumentClick
+                                               mouseLeaveDelay={300} mouseEnterDelay={0}
+                                               contentStyle={{padding: '0px', border: 'none'}}
+                                               arrow={false}>
+                                                <div className={"menu-item"}>
+                                                    <button
+                                                        onClick={() => this.lockOutsideDoor("entrance")}>
+                                                        {this.state.simulation.home.entranceDoor.locked ? "Unlock?" : "Lock?"}
+                                                    </button>
+                                                    {!this.state.simulation.home.entranceDoor.locked &&
+                                                    <button onClick={() => this.openOutsideDoor("entrance")}>
+                                                        {this.state.simulation.home.entranceDoor.open ? "Close?" : "Open?"}
+                                                    </button>}
+                                                </div>
+                                        </Popup>
+                                    </td>
+                                    <td scope={"col"}>
+                                        <Popup trigger={<div className="menu-item"> 1 </div>}
+                                               position="top left" on="hover" closeOnDocumentClick
+                                               mouseLeaveDelay={300} mouseEnterDelay={0}
+                                               contentStyle={{padding: '0px', border: 'none'}}
+                                               arrow={false}>
+                                            <div className={"menu-item"}>
+                                                <button
+                                                    onClick={() => this.switchOutsideLight("entrance")}>
+                                                    {this.state.simulation.home.entranceLight.turnedOn ? "Switch Off?" : "Switch On?"}
+                                                </button>
+                                            </div>
+                                        </Popup>
+                                    </td>
+                                    <td scope={"col"}></td>
+                                </tr>
+                                <tr>
+                                    <th scope={"col"}>Backyard</th>
+                                    <th scope={"col"}></th>
+                                    <td scope={"col"}></td>
+                                    <td scope={"col"}>
+                                        <Popup trigger={<div className="menu-item"> 1 </div>}
+                                               position="top left" on="hover" closeOnDocumentClick
+                                               mouseLeaveDelay={300} mouseEnterDelay={0}
+                                               contentStyle={{padding: '0px', border: 'none'}}
+                                               arrow={false}>
+                                            <div className={"menu-item"}>
+                                                <button
+                                                    onClick={() => this.lockOutsideDoor("backyard")}>
+                                                    {this.state.simulation.home.backyardDoor.locked ? "Unlock?" : "Lock?"}
+                                                </button>
+                                                {!this.state.simulation.home.backyardDoor.locked &&
+                                                <button onClick={() => this.openOutsideDoor("backyard")}>
+                                                    {this.state.simulation.home.backyardDoor.open ? "Close?" : "Open?"}
+                                                </button>}
+                                            </div>
+                                        </Popup>
+                                    </td>
+                                    <td scope={"col"}>
+                                        <Popup trigger={<div className="menu-item"> 1 </div>}
+                                               position="top left" on="hover" closeOnDocumentClick
+                                               mouseLeaveDelay={300} mouseEnterDelay={0}
+                                               contentStyle={{padding: '0px', border: 'none'}}
+                                               arrow={false}>
+                                            <div className={"menu-item"}>
+                                                <button
+                                                    onClick={() => this.switchOutsideLight("backyard")}>
+                                                    {this.state.simulation.home.backyardLight.turnedOn ? "Switch Off?" : "Switch On?"}
+                                                </button>
+                                            </div>
+                                        </Popup>
+                                    </td>
+                                    <td scope={"col"}></td>
+                                </tr>
                                 </tbody>
                             </table>)
                     )
                     : <div><h3>Please login to the simulation as one of the users first!</h3></div>}
             </div>
         )
-
     }
-
 }

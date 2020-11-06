@@ -92,8 +92,6 @@ class UserList extends Component {
             .then(response => this.handleSuccessfulResponse(response))
             .catch(error => this.handleError(error))
     }
-
-
 }
 
 export default UserList;
