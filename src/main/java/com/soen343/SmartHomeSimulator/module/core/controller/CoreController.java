@@ -25,7 +25,7 @@ public class CoreController {
         this.simulationUserRepository = simulationUserRepository;
     }
 
-    @PutMapping("/simulation/user-rooms")
+    @PutMapping("/simulation/update")
     public ResponseEntity<Simulation> updateUserRooms(@Valid @RequestBody Simulation simulation){
         //We aren't changing the rooms and home in respective repositories yet.
         //It is not yet required, but if required later, this change MUST be made.

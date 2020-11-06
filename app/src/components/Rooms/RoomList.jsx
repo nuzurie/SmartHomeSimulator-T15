@@ -44,7 +44,7 @@ export default class RoomList extends Component {
         let removedUser = this.state.rooms[room].simulationUsers.splice(user, 1)
         this.state.simulation.simulationUsers.push(removedUser[0])
 
-        ExecuteService.updateUserRooms(this.state.simulation)
+        ExecuteService.updateSimulationDetails(this.state.simulation)
             .then(response => {
                 this.refreshSimulation()
             })
@@ -56,7 +56,7 @@ export default class RoomList extends Component {
         this.state.simulation.simulationUsers.splice(userIndex, 1)
         this.state.simulation.home.rooms[roomIndex].simulationUsers.push(user)
 
-        ExecuteService.updateUserRooms(this.state.simulation)
+        ExecuteService.updateSimulationDetails(this.state.simulation)
             .then(() => {
                 this.refreshSimulation()
             })
@@ -67,7 +67,7 @@ export default class RoomList extends Component {
     blockWindow(roomIndex, windowIndex) {
         (this.state.simulation.home.rooms[roomIndex].windows[windowIndex].blocked = !this.state.simulation.home.rooms[roomIndex].windows[windowIndex].blocked)
         console.log(this.state.simulation)
-        ExecuteService.updateUserRooms(this.state.simulation)
+        ExecuteService.updateSimulationDetails(this.state.simulation)
             .then(() => {
                 this.refreshSimulation()
             })
@@ -77,7 +77,7 @@ export default class RoomList extends Component {
     openWindow(roomIndex, windowIndex) {
         (this.state.simulation.home.rooms[roomIndex].windows[windowIndex].open = !this.state.simulation.home.rooms[roomIndex].windows[windowIndex].open)
         console.log(this.state.simulation)
-        ExecuteService.updateUserRooms(this.state.simulation)
+        ExecuteService.updateSimulationDetails(this.state.simulation)
             .then(() => {
                 this.refreshSimulation()
             })
@@ -211,4 +211,5 @@ export default class RoomList extends Component {
         )
 
     }
+    
 }

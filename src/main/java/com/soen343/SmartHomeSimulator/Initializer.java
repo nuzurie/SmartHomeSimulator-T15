@@ -70,8 +70,6 @@ class Initializer implements CommandLineRunner {
         simulationUserRepository.save(user5);
 
         List<SimulationUser> simulationUsers = new LinkedList<>();
-        simulationUsers.add(user1);
-        simulationUsers.add(user2);
 
 
         List<Window> windows2 = new LinkedList<>();
@@ -110,7 +108,6 @@ class Initializer implements CommandLineRunner {
         room4.add(Door.builder().open(false).locked(false).build());
         room4.add(Window.builder().open(false).blocked(false).build());
         room4.add(Light.builder().turnedOn(false).build());
-        room4.add(Light.builder().turnedOn(true).build());
 
         List<Room> rooms = new LinkedList<>();
         rooms.add(livingRoom);

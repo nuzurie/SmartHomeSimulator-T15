@@ -79,7 +79,7 @@ class SimulationForm extends Component {
         sessionStorage.setItem('date', event.date)
         sessionStorage.setItem('time', event.time)
 
-        ExecuteService.updateSimulation(event)
+        ExecuteService.updateSimulationContext(event)
             .then(response => console.log(response))
             .catch(error => console.log(error))
     }

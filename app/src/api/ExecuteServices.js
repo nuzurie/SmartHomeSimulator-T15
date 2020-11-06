@@ -22,16 +22,12 @@ class ExecuteService {
         return axios.get(`/api/user/${id}`)
     }
 
-    updateSimulation(simulation){
+    updateSimulationContext(simulation){
         return axios.put(`/api/simulation`, simulation)
     }
 
-    updateUserRooms(simulation){
-
-        // axios.delete(`/api/simulation`)
-        //     .then(response => console.log(response))
-        //     .catch(error => console.log(error))
-        return axios.put(`/api/simulation/user-rooms`, simulation)
+    updateSimulationDetails(simulation){
+        return axios.put(`/api/simulation/update`, simulation)
     }
 
     getSimulation(){
