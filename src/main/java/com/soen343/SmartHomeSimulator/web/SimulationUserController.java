@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -33,15 +35,14 @@ public class SimulationUserController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity getUser(@PathVariable Long id){
+    public ResponseEntity getUser(@PathVariable Long id) {
         SimulationUser user = simulationUserRepository.findById(id);
         log.info("The user with id {}", user);
         simulationUserRepository.findAll().forEach(System.out::println);
 
-        if (user!=null){
+        if (user != null) {
             return ResponseEntity.ok().body(user);
-        }
-        else
+        } else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 //        return user.map(response -> ResponseEntity.ok().body(response))
@@ -80,6 +81,56 @@ public class SimulationUserController {
         simulation.deleteUser(simulationUser);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/users/save")
+    public ResponseEntity saveUsers() {
+        Set<SimulationUser> simulationUsers = simulationUserRepository.findAll();
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(new FileOutputStream("users.txt"));
+            for (SimulationUser user : simulationUsers
+            ) {
+                oos.writeObject(user);
+            }
+            oos.close();
+        } catch (IOException e) {
+            log.info(e.getMessage());
+        }
+
+        loadUsers();
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/users/load")
+    public ResponseEntity loadUsers() {
+        ObjectInputStream ois = null;
+        Set<SimulationUser> users = new HashSet<>();
+        SimulationUser a = SimulationUser.builder().name("Sunny").privilege("Parent").build();
+        try {
+            ois = new ObjectInputStream(new FileInputStream("users.txt"));
+            while (true){
+                SimulationUser user = (SimulationUser) ois.readObject();
+                users.add(user);
+            }
+        }
+        catch (EOFException e){
+            log.info("Reached end of file.");
+        }
+        catch (IOException e){
+            log.info(e.getMessage());
+        }
+        catch (ClassNotFoundException e){
+            log.info(e.getMessage());
+        }
+
+        users.forEach(user -> {
+            SimulationUser created_user = simulationUserRepository.save(user);
+            simulationRepository.findById(Long.valueOf(1)).getSimulationUsers().add(created_user);
+        });
+
+        return ResponseEntity.ok(users);
     }
 
 

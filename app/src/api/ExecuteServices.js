@@ -38,6 +38,14 @@ class ExecuteService {
     loginSimulationUser(user) {
         return axios.put(`/api/simulation/loginUser/${user.id}`)
     }
+
+    saveUsers(){
+        return axios.get('/api/users/save')
+    }
+
+    loadUsers(){
+        return axios.get('/api/users/load')
+    }
 }
 
 export default new ExecuteService()

@@ -5,22 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.GenerationType;
+import java.io.Serializable;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@Entity
-public class SimulationUser {
+public class SimulationUser implements Serializable {
 
 
     public static long classId = 0;
-//    @Id
-//    @GeneratedValue
     public long id;
     public String name;
     public String privilege;
