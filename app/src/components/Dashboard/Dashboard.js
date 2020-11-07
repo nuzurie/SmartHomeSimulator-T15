@@ -26,6 +26,7 @@ import {Link as RouterLink} from 'react-router-dom'
 import SecondaryListItems from "./listItems";
 import ExecuteServices from "../../api/ExecuteServices";
 import AwayModeButton from "../Security/AwayModeButton";
+import TimeMultiplierForm from "../Forms/TimeMultiplier";
 
 
 function Copyright() {
@@ -230,7 +231,7 @@ export default function Dashboard() {
                 <div className={"container"}>
                   <SimulationForm />
                 </div>}
-                {contentDiv==='SHC' &&<div>Hello from SHC Module</div>}
+                {contentDiv==='SHC' &&<div><TimeMultiplierForm/></div>}
                 {contentDiv==='SHH' &&<div><AwayModeButton/></div>}tar
                 {/*{contentDiv==='SHC' &&<Orders />}*/}
               </Paper>

@@ -77,4 +77,14 @@ public class CoreController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("simulation/time-multiplier/{multiplier_s}")
+    public ResponseEntity setTimeMultiplier(@PathVariable String multiplier_s){
+        double multiplier = Double.valueOf(multiplier_s);
+        log.info("The multiplier is: ", Double.valueOf(multiplier_s));
+        Simulation simulation = simulationRepository.findById((long)1);
+        simulation.setTimeMultiplier(multiplier);
+
+        return ResponseEntity.ok().build();
+    }
+
 }

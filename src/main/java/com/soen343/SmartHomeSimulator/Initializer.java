@@ -136,8 +136,10 @@ class Initializer implements CommandLineRunner {
                 .simulationUsers(simulationUsers2)
                 .lightsAutoMode(true)
                 .observer(Security.builder().name("1").build())
+                .timeMultiplier(10)
                 .build();
 
         System.out.println(simulationRepository.save(simulation));
+        simulation.parseDate();
     }
 }

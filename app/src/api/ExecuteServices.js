@@ -54,6 +54,10 @@ class ExecuteService {
     toggleAwayMode(){
         return axios.put('/api/security/awayMode')
     }
+
+    setTimeMultiplier(multiplier){
+        return axios.put(`/api/simulation/time-multiplier/${multiplier}`)
+    }
 }
 
 export default new ExecuteService()
