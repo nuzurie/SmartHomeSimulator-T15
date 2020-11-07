@@ -58,6 +58,10 @@ class ExecuteService {
     setTimeMultiplier(multiplier){
         return axios.put(`/api/simulation/time-multiplier/${multiplier}`)
     }
+
+    callAuthoritiesTimer(timer){
+        return axios.put(`/api/simulation/call-timer//${timer}`)
+    }
 }
 
 export default new ExecuteService()

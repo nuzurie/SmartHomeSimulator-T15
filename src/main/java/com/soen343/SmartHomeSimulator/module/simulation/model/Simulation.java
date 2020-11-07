@@ -32,11 +32,12 @@ public class Simulation implements Subject {
     private boolean awayMode;
     private Observer observer;
     private double timeMultiplier;
+    private double callAuthoritiesTimer;
     private LocalDateTime dateTime;
 
 
     @Autowired
-    public Simulation(Long name, double temperature, boolean lightsAutoMode, String date, String time, Home home, Set<SimulationUser> simulationUsers, SimulationUser loggedInUser, boolean awayMode, Observer observer, double timeMultiplier, LocalDateTime dateTime) {
+    public Simulation(Long name, double temperature, boolean lightsAutoMode, String date, String time, Home home, Set<SimulationUser> simulationUsers, SimulationUser loggedInUser, boolean awayMode, Observer observer,double callAuthoritiesTimer, double timeMultiplier, LocalDateTime dateTime) {
         this.name = name;
         this.temperature = temperature;
         this.date = date;
@@ -45,6 +46,7 @@ public class Simulation implements Subject {
         this.lightsAutoMode = lightsAutoMode;
         this.simulationUsers = simulationUsers;
         this.loggedInUser = loggedInUser;
+        this.callAuthoritiesTimer = callAuthoritiesTimer;
         this.awayMode = awayMode;
         this.timeMultiplier = timeMultiplier;
         this.dateTime = dateTime;

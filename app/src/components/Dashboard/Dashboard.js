@@ -27,6 +27,7 @@ import SecondaryListItems from "./listItems";
 import ExecuteServices from "../../api/ExecuteServices";
 import AwayModeButton from "../Security/AwayModeButton";
 import TimeMultiplierForm from "../Forms/TimeMultiplier";
+import CallAuthoritiesForm from "../Forms/CallAuthoritiesForm";
 
 
 function Copyright() {
@@ -156,7 +157,7 @@ export default function Dashboard() {
     setContentDiv('SHC')
   }
   const showSHH = () => {
-    setContentDiv('SHH')
+    setContentDiv('SHP')
   }
   const test = () => {
     ExecuteServices.toggleAwayMode()
@@ -231,8 +232,14 @@ export default function Dashboard() {
                 <div className={"container"}>
                   <SimulationForm />
                 </div>}
-                {contentDiv==='SHC' &&<div><TimeMultiplierForm/></div>}
-                {contentDiv==='SHH' &&<div><AwayModeButton/></div>}tar
+                {contentDiv==='SHC' &&
+                <div>
+                  <TimeMultiplierForm/>
+                </div>}
+                {contentDiv==='SHP' &&<div>
+                  <AwayModeButton/>
+                  <CallAuthoritiesForm/>
+                </div>}tar
                 {/*{contentDiv==='SHC' &&<Orders />}*/}
               </Paper>
             </Grid>
