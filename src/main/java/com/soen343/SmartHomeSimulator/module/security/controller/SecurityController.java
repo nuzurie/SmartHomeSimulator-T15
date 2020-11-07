@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.concurrent.ForkJoinPool;
 
 @Slf4j
 @RestController
@@ -44,13 +46,31 @@ public class SecurityController {
 
     @PutMapping("simulation/call-timer/{timer}")
     public ResponseEntity callAuthoritiesTimer(@PathVariable String timer) {
+        System.out.println(timer);
         double callTimer = Double.valueOf(timer);
-        log.info("The multiplier is: ", Double.valueOf(callTimer));
         Simulation simulation = simulationRepository.findById((long) 1);
         simulation.setCallAuthoritiesTimer(callTimer);
 
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("simulation/callAuthorities")
+    public DeferredResult<ResponseEntity<?>> callAuthorities() {
+        final DeferredResult <ResponseEntity < ? >> out = new DeferredResult <>((long)100000);
+
+        ForkJoinPool.commonPool().submit(() -> {
+            Simulation simulation = simulationRepository.findById((long) 1);
+            double timer = simulation.getCallAuthoritiesTimer();
+            double multiplier = simulation.getTimeMultiplier();
+            timer = timer*60*1000/multiplier;
+            try {
+                Thread.sleep(Math.round(timer));
+            } catch (InterruptedException e) {
+            }
+            out.setResult(ResponseEntity.ok().build());
+        });
+
+        return out;
+    }
 
 }

@@ -31,8 +31,10 @@ public class Simulation implements Subject {
     private SimulationUser loggedInUser;
     private boolean awayMode;
     private Observer observer;
-    private double timeMultiplier;
-    private double callAuthoritiesTimer;
+    @Builder.Default
+    private double timeMultiplier = 1;
+    @Builder.Default
+    private double callAuthoritiesTimer=1;
     private LocalDateTime dateTime;
 
 

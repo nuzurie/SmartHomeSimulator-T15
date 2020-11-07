@@ -11,7 +11,6 @@ export default class CallAuthoritiesForm extends Component {
             timer: 0,
             success: null
         }
-
         this.handleChange = this.handleChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
     }
@@ -21,7 +20,7 @@ export default class CallAuthoritiesForm extends Component {
 
         return (
             <div className={"container"}>
-                <h3>Set Multiplier</h3>
+                <h3>Set Timer to call authorities.</h3>
                 <div className="container">
                     <Formik
                         initialValues={{timer}}

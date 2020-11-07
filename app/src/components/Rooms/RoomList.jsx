@@ -25,6 +25,7 @@ export default class RoomList extends Component {
         this.lockDoor = this.lockDoor.bind(this)
         this.openDoor = this.openDoor.bind(this)
         this.toggleAutoMode = this.toggleAutoMode.bind(this)
+        this.callAuthorities = this.callAuthorities.bind(this)
 
     }
 
@@ -69,8 +70,15 @@ export default class RoomList extends Component {
             })
             .catch(response=> {
                 alert("Intruder Alert!");
+                this.callAuthorities()
                 this.refreshSimulation();
             })
+    }
+
+    callAuthorities(){
+        ExecuteService.callAuthorities()
+            .then(response=>alert("The authorities have been called."))
+            .catch(error => console.log(error))
     }
 
     blockWindow(roomIndex, windowIndex) {

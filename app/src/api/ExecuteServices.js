@@ -60,7 +60,11 @@ class ExecuteService {
     }
 
     callAuthoritiesTimer(timer){
-        return axios.put(`/api/simulation/call-timer//${timer}`)
+        return axios.put(`/api/simulation/call-timer/${timer}`)
+    }
+
+    callAuthorities(){
+        return axios.get('/api/simulation/callAuthorities')
     }
 }
 

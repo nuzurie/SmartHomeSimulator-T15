@@ -156,7 +156,7 @@ export default function Dashboard() {
   const showSHC = () => {
     setContentDiv('SHC')
   }
-  const showSHH = () => {
+  const showSHP = () => {
     setContentDiv('SHP')
   }
   const test = () => {
@@ -182,7 +182,7 @@ export default function Dashboard() {
             Smart Home Simulator
             <button className={"ml-4 btn btn-outline-info btn-sm"} onClick={showSHS}>SHS</button>
             <button className={"btn btn-outline-info btn-sm"} onClick={showSHC}>SHC</button>
-            <button className={"btn btn-outline-info btn-sm"} onClick={showSHH}>SHH</button>
+            <button className={"btn btn-outline-info btn-sm"} onClick={showSHP}>SHP</button>
             <button className={"ml-4 btn btn-success btn-sm"} onClick={handleUpdateUser}>Update Sidebar!</button>
           </Typography>
           <RouterLink to={'/'}>
@@ -239,7 +239,7 @@ export default function Dashboard() {
                 {contentDiv==='SHP' &&<div>
                   <AwayModeButton/>
                   <CallAuthoritiesForm/>
-                </div>}tar
+                </div>}
                 {/*{contentDiv==='SHC' &&<Orders />}*/}
               </Paper>
             </Grid>
