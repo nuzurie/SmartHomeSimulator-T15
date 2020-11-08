@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
@@ -34,12 +35,15 @@ public class Simulation implements Subject {
     @Builder.Default
     private double timeMultiplier = 1;
     @Builder.Default
-    private double callAuthoritiesTimer=1;
+    private double callAuthoritiesTimer = 1;
     private LocalDateTime dateTime;
 
+    private LocalTime lightsTimeStart;
+    private LocalTime lightsTimeEnd;
+    private List<Light> chosenFloodLights;
 
     @Autowired
-    public Simulation(Long name, double temperature, boolean lightsAutoMode, String date, String time, Home home, Set<SimulationUser> simulationUsers, SimulationUser loggedInUser, boolean awayMode, Observer observer,double callAuthoritiesTimer, double timeMultiplier, LocalDateTime dateTime) {
+    public Simulation(Long name, double temperature, boolean lightsAutoMode, String date, String time, Home home, Set<SimulationUser> simulationUsers, SimulationUser loggedInUser, boolean awayMode, Observer observer, double callAuthoritiesTimer, double timeMultiplier, LocalDateTime dateTime, LocalTime lightsTimeStart, LocalTime lightsTimeEnd, List<Light> lights) {
         this.name = name;
         this.temperature = temperature;
         this.date = date;
@@ -53,6 +57,9 @@ public class Simulation implements Subject {
         this.timeMultiplier = timeMultiplier;
         this.dateTime = dateTime;
         this.observer = observer;
+        this.lightsTimeStart = lightsTimeStart;
+        this.lightsTimeEnd = lightsTimeEnd;
+        this.chosenFloodLights = lights;
     }
 
     public long getId() {
@@ -75,7 +82,7 @@ public class Simulation implements Subject {
                     lights.forEach(Light::turnOn);
                 }
             });
-            //what about entrance lights and exit lights? set timer!
+            //Set timer for some lights
         }
     }
 
@@ -117,25 +124,45 @@ public class Simulation implements Subject {
         this.dateTime = LocalDateTime.parse(dateTimeString, formatter);
     }
 
-    public void increaseTime(){
+    public void increaseTime() {
         while (true) {
-            long s = Math.round(15*this.timeMultiplier);
-            try{
-                TimeUnit.SECONDS.sleep(15);}
-            catch (Exception e){
+            long s = Math.round(15 * this.timeMultiplier);
+            try {
+                TimeUnit.SECONDS.sleep(15);
+            } catch (Exception e) {
             }
             parseDate();
+//            setTimerLights();
             this.dateTime = this.dateTime.plusSeconds(s);
             updateDateTimeStrings();
         }
     }
 
-    public void updateDateTimeStrings(){
+    public void updateDateTimeStrings() {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         this.date = this.dateTime.format(formatter);
         formatter = DateTimeFormatter.ofPattern("HH:mm");
         this.time = this.dateTime.format(formatter);
     }
 
+    public void lightsTimeParse(String timeStart, String timeEnd) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        this.lightsTimeStart = LocalTime.parse(timeStart, formatter);
+        this.lightsTimeEnd = LocalTime.parse(timeEnd, formatter);
+        System.out.println(this.lightsTimeStart + " " + this.lightsTimeEnd);
+        setTimerLights();
+    }
 
+    //List<Light> lights
+    public void setTimerLights() {
+        Light a = this.home.getBackyardLight();
+        if (this.awayMode) {
+            if (this.lightsTimeEnd != null && this.lightsTimeStart != null) {
+                System.out.println(this.lightsTimeStart.compareTo(this.lightsTimeEnd));
+                System.out.println(this.lightsTimeEnd.compareTo(this.lightsTimeStart));
+                System.out.println(this.dateTime.getHour() + " " + this.dateTime.getMinute());
+            }
+        }
+    }
 }
+

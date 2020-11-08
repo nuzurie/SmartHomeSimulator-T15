@@ -98,6 +98,10 @@ class ExecuteService {
     removeUser(room, user){
         return axios.put(`/api/simulation/removeUsersFromRoom/${room.id}`, user)
     }
+
+    awayModeLights(times){
+        return axios.post('/api/simulation/awaymode-lights', times)
+    }
 }
 
 export default new ExecuteService()

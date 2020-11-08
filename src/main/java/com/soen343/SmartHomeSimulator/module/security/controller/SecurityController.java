@@ -1,5 +1,6 @@
 package com.soen343.SmartHomeSimulator.module.security.controller;
 
+import com.soen343.SmartHomeSimulator.module.security.model.AwayModeTime;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +72,14 @@ public class SecurityController {
         });
 
         return out;
+    }
+
+    @PostMapping("simulation/awaymode-lights")
+    public ResponseEntity<?> awayModeLights(@RequestBody AwayModeTime object){
+        System.out.println(object);
+        Simulation simulation = simulationRepository.findById((long) 1);
+        simulation.lightsTimeParse(object.getTime1(), object.getTime2());
+        return ResponseEntity.ok().build();
     }
 
 }

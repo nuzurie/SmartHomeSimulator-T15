@@ -1,17 +1,15 @@
 import React, {Component} from 'react';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
 import moment from 'moment';
-import UserList from "../UserList";
-import ExecuteService from "../../../api/ExecuteServices";
+import ExecuteServices from "../../api/ExecuteServices";
 
-class SimulationForm extends Component {
+export default class AwayModeLightsTimerForm extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            temperature: 25.0,
-            date: moment(new Date()).format('YYYY-MM-DD'),
-            time: moment(new Date()).format('HH-mm-ss'),
+            time1: moment(new Date()).format('HH-mm-ss'),
+            time2: moment(new Date()).format('HH-mm-ss'),
             success: null,
         }
 
@@ -21,7 +19,7 @@ class SimulationForm extends Component {
     }
 
     render() {
-        let {temperature, date, time} = this.state
+        let {time1, time2} = this.state
 
         return (
             <div>
@@ -29,7 +27,7 @@ class SimulationForm extends Component {
                     <h1>Set Simulation Parameters</h1>
                     <div className="container">
                         <Formik
-                            initialValues={{temperature, date, time}}
+                            initialValues={{time1, time2}}
                             onSubmit={this.onSubmit}
                             validateOnChange={false}
                             validateOnBlur={false}
@@ -44,25 +42,19 @@ class SimulationForm extends Component {
                                         <ErrorMessage name="name" component="div"
                                                       className="alert alert-warning"/>
                                         <fieldset className="form-group">
-                                            <label>Temperature (˚C)</label>
-                                            <Field className="form-control" type="number" name="temperature" />
-                                        </fieldset>
-                                        <fieldset className="form-group">
-                                            <label>Date (YYYY-MM-DD)</label>
-                                            <Field className="form-control" type="date" name="date" />
+                                            <label>Time (HH-MM AM/PM)</label>
+                                            <Field className="form-control" type="time" name="time1" />
                                         </fieldset>
                                         <fieldset className="form-group">
                                             <label>Time (HH-MM AM/PM)</label>
-                                            <Field className="form-control" type="time" name="time" />
+                                            <Field className="form-control" type="time" name="time2" />
                                         </fieldset>
-
                                         <button className="btn btn-primary" type="submit">Save</button>
                                     </Form>
                                 )
                             }
                         </Formik>
                     </div>
-                    <div className={"container"}><UserList/></div>
                 </div>
             </div>
         )
@@ -73,9 +65,13 @@ class SimulationForm extends Component {
     }
 
     onSubmit(event) {
-        ExecuteService.updateSimulationContext(event)
+        console.log(event)
+        ExecuteServices.awayModeLights(event)
             .then(response => console.log(response))
             .catch(error => console.log(error))
+        // ExecuteService.updateSimulationContext(event)
+        //     .then(response => console.log(response))
+        //     .catch(error => console.log(error))
     }
 
     validate(values) {
@@ -84,6 +80,3 @@ class SimulationForm extends Component {
 
 
 }
-
-
-export default SimulationForm;

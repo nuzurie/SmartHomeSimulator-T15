@@ -27,6 +27,7 @@ import AwayModeButton from "../Security/AwayModeButton";
 import TimeMultiplierForm from "../Forms/TimeMultiplier";
 import CallAuthoritiesForm from "../Forms/CallAuthoritiesForm";
 import CoreControlFrames from "../Core/Frames";
+import AwayModeLightsTimerForm from "../Forms/AwayModeLightsTimerForm";
 
 
 function Copyright() {
@@ -234,6 +235,7 @@ export default function Dashboard() {
                 {contentDiv==='SHP' &&<div>
                   <AwayModeButton/>
                   <CallAuthoritiesForm/>
+                  <AwayModeLightsTimerForm/>
                 </div>}
               </Paper>
             </Grid>
