@@ -17,15 +17,17 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
-import { mainListItems, secondaryListItems } from './listItems.jsx';
-import Deposits from "./Desposits";
 
 import SimulationForm from "../Users/Forms/FullForm";
 import RoomList from "../Rooms/RoomList";
 import {Link as RouterLink} from 'react-router-dom'
-
-
-
+import SecondaryListItems from "./listItems";
+import ExecuteServices from "../../api/ExecuteServices";
+import AwayModeButton from "../Security/AwayModeButton";
+import TimeMultiplierForm from "../Forms/TimeMultiplier";
+import CallAuthoritiesForm from "../Forms/CallAuthoritiesForm";
+import CoreControlFrames from "../Core/Frames";
+import AwayModeLightsTimerForm from "../Forms/AwayModeLightsTimerForm";
 
 
 function Copyright() {
@@ -126,18 +128,16 @@ export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [contentDiv, setContentDiv] = React.useState('SHS')
+  const [childRefresh, setChildRefresh] = React.useState(Math.random())
   const [changeLogin, setLogin] = React.useState([
     sessionStorage.getItem('authenticatedName'),
-    sessionStorage.getItem('temperature'),
-    sessionStorage.getItem('time'),
-    sessionStorage.getItem('date')
   ])
+  const changeParent = (number) => {
+    setChildRefresh(number)
+  }
   const handleUpdateUser = () => {
     setLogin([
       sessionStorage.getItem('authenticatedName'),
-      sessionStorage.getItem('temperature'),
-      sessionStorage.getItem('time'),
-      sessionStorage.getItem('date')
     ])
   }
   const handleDrawerOpen = () => {
@@ -153,10 +153,14 @@ export default function Dashboard() {
   const showSHC = () => {
     setContentDiv('SHC')
   }
-  const showSHH = () => {
-    setContentDiv('SHH')
+  const showSHP = () => {
+    setContentDiv('SHP')
   }
-
+  const test = () => {
+    ExecuteServices.toggleAwayMode()
+        .then(response => console.log(response))
+        .catch(response => console.log(response))
+  }
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -175,7 +179,7 @@ export default function Dashboard() {
             Smart Home Simulator
             <button className={"ml-4 btn btn-outline-info btn-sm"} onClick={showSHS}>SHS</button>
             <button className={"btn btn-outline-info btn-sm"} onClick={showSHC}>SHC</button>
-            <button className={"btn btn-outline-info btn-sm"} onClick={showSHH}>SHH</button>
+            <button className={"btn btn-outline-info btn-sm"} onClick={showSHP}>SHP</button>
             <button className={"ml-4 btn btn-success btn-sm"} onClick={handleUpdateUser}>Update Sidebar!</button>
           </Typography>
           <RouterLink to={'/'}>
@@ -198,9 +202,7 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems(changeLogin)}</List>
-        <Divider />
-        <List>{secondaryListItems()}</List>
+        <List><SecondaryListItems random = {childRefresh}/></List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
@@ -225,9 +227,16 @@ export default function Dashboard() {
                 <div className={"container"}>
                   <SimulationForm />
                 </div>}
-                {contentDiv==='SHC' &&<div>Hello from SHC Module</div>}
-                {contentDiv==='SHH' &&<div>Hello from SHH Module</div>}
-                {/*{contentDiv==='SHC' &&<Orders />}*/}
+                {contentDiv==='SHC' &&
+                <div>
+                  <CoreControlFrames controlParent = {changeParent}/>
+                  <TimeMultiplierForm/>
+                </div>}
+                {contentDiv==='SHP' &&<div>
+                  <AwayModeButton/>
+                  <CallAuthoritiesForm/>
+                  <AwayModeLightsTimerForm/>
+                </div>}
               </Paper>
             </Grid>
           </Grid>

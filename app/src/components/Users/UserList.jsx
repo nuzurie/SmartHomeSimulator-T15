@@ -53,6 +53,8 @@ class UserList extends Component {
                         </tbody>
                     </table>
                 </div>
+                <button className={"btn btn-sm btn-primary"} onClick={ExecuteService.saveUsers}>Save to file</button>
+                <button className={"ml-3 btn btn-sm btn-primary"} onClick={ExecuteService.loadUsers}>Load from file</button>
                 <UserForm/>
             </div>
         )
@@ -90,8 +92,6 @@ class UserList extends Component {
             .then(response => this.handleSuccessfulResponse(response))
             .catch(error => this.handleError(error))
     }
-
-
 }
 
 export default UserList;

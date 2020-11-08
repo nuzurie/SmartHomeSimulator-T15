@@ -10,3 +10,6 @@ spring:
         provider:
           okta:
             issuer-uri: https://dev-741410.okta.com/oauth2/default
+    mvc:
+      async:
+        request-timeout: 30000

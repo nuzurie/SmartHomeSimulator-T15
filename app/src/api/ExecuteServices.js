@@ -22,16 +22,12 @@ class ExecuteService {
         return axios.get(`/api/user/${id}`)
     }
 
-    updateSimulation(simulation){
+    updateSimulationContext(simulation){
         return axios.put(`/api/simulation`, simulation)
     }
 
-    updateUserRooms(simulation){
-
-        // axios.delete(`/api/simulation`)
-        //     .then(response => console.log(response))
-        //     .catch(error => console.log(error))
-        return axios.put(`/api/simulation/user-rooms`, simulation)
+    updateSimulationDetails(simulation){
+        // return axios.put(`/api/simulation/update`, simulation)
     }
 
     getSimulation(){
@@ -41,6 +37,70 @@ class ExecuteService {
 
     loginSimulationUser(user) {
         return axios.put(`/api/simulation/loginUser/${user.id}`)
+    }
+
+    saveUsers(){
+        return axios.get('/api/users/save')
+    }
+
+    loadUsers(){
+        return axios.get('/api/users/load')
+    }
+
+    toggleAutoMode(){
+        return axios.put('/api/simulation/autoMode')
+    }
+
+    toggleAwayMode(){
+        return axios.put('/api/security/awayMode')
+    }
+
+    setTimeMultiplier(multiplier){
+        return axios.put(`/api/simulation/time-multiplier/${multiplier}`)
+    }
+
+    callAuthoritiesTimer(timer){
+        return axios.put(`/api/simulation/call-timer/${timer}`)
+    }
+
+    callAuthorities(){
+        return axios.get('/api/simulation/callAuthorities')
+    }
+
+    getLightsForUsers(){
+        return axios.get('/api/simulation/rooms-for-user')
+    }
+
+    getWindowsForUsers(){
+        return axios.get('/api/simulation/windows-for-user')
+    }
+
+    getDoorsForUsers(){
+        return axios.get('/api/simulation/doors-for-user')
+    }
+
+    toggleLight(light){
+        return axios.put('/api/simulation/toggleLight', light)
+    }
+
+    toggleWindow(window, action){
+        return axios.put(`/api/simulation/toggleWindow/${action}`, window)
+    }
+
+    toggleDoor(door, action){
+        return axios.put(`/api/simulation/toggleDoor/${action}`, door)
+    }
+
+    placeUser(room, user){
+        return axios.put(`/api/simulation/addUserToRoom/${room.id}`, user)
+    }
+
+    removeUser(room, user){
+        return axios.put(`/api/simulation/removeUsersFromRoom/${room.id}`, user)
+    }
+
+    awayModeLights(times){
+        return axios.post('/api/simulation/awaymode-lights', times)
     }
 }
 

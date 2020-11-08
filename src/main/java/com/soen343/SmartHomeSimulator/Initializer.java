@@ -1,34 +1,32 @@
 package com.soen343.SmartHomeSimulator;
 
-import com.soen343.SmartHomeSimulator.model.Home;
-import com.soen343.SmartHomeSimulator.model.SimulationUser;
-import com.soen343.SmartHomeSimulator.model.repository.HomeRepository;
-import com.soen343.SmartHomeSimulator.model.Room;
-import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
-import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepositoryImpl;
+import com.soen343.SmartHomeSimulator.model.*;
+import com.soen343.SmartHomeSimulator.model.repository.*;
+import com.soen343.SmartHomeSimulator.module.security.controller.Security;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Stream;
+import java.util.*;
 
 @Component
 class Initializer implements CommandLineRunner {
 
     private final HomeRepository repository;
-    @Autowired
     private final SimulationUserRepository simulationUserRepository;
     private final SimulationRepository simulationRepository;
+    private final RepositoryService repositoryService;
+    private final RoomRepository roomRepository;
 
-    public Initializer(HomeRepository repository, SimulationUserRepositoryImpl simulationUserRepository, SimulationRepository simulationRepository) {
+    @Autowired
+    public Initializer(HomeRepository repository, SimulationUserRepositoryImpl simulationUserRepository, SimulationRepository simulationRepository, RepositoryService repositoryService, RoomRepository roomRepository) {
         this.repository = repository;
         this.simulationUserRepository = simulationUserRepository;
         this.simulationRepository = simulationRepository;
+        this.repositoryService = repositoryService;
+        this.roomRepository = roomRepository;
     }
 
     @Override
@@ -37,25 +35,25 @@ class Initializer implements CommandLineRunner {
 //                repository.save(new Home(name))
 //        );
 
-        Set<Room.DoorWindow> windows = new HashSet<>();
-        windows.add(Room.DoorWindow.builder().open(false).blocked(false).build());
-        windows.add(Room.DoorWindow.builder().open(true).blocked(false).build());
+        List<Window> windows = new LinkedList<>();
+        windows.add(new Window());
+        Window w = Window.builder().build();
+        w.setBlocked(true);
+        windows.add(w);
 
-        Set<Room.DoorWindow> door = new HashSet<>();
-        door.add(Room.DoorWindow.builder().open(false).blocked(false).build());
-
-        Set<Room.Lights> lights = new HashSet<>();
-        lights.add(Room.Lights.builder().turnedOn(true).build());
 
         Home mainHome = Home.builder().name("Main Home").build();
         mainHome.setId();
 
         Room livingRoom = Room.builder().name("Living Room")
                 .size("12x24")
-                .window(windows)
-                .door(door)
-                .lights(lights)
                 .build();
+
+        livingRoom.add(w);
+        livingRoom.add(Light.builder().turnedOn(true).build());
+        livingRoom.add(Door.builder().open(false).locked(false).build());
+        livingRoom.add(Door.builder().open(false).locked(false).build());
+
 
 
         SimulationUser user1 = SimulationUser.builder().name("User1").privilege("Parent").id(++SimulationUser.classId).build();
@@ -69,63 +67,49 @@ class Initializer implements CommandLineRunner {
         simulationUserRepository.save(user4);
         simulationUserRepository.save(user5);
 
-        Set<SimulationUser> simulationUsers = new HashSet<>();
-        simulationUsers.add(user1);
-        simulationUsers.add(user2);
+        List<SimulationUser> simulationUsers = new LinkedList<>();
 
-        Set<Room.DoorWindow> windows2 = new HashSet<>();
-        windows2.add(Room.DoorWindow.builder().open(false).blocked(false).build());
 
-        Set<Room.DoorWindow> door2 = new HashSet<>();
-        door2.add(Room.DoorWindow.builder().open(true).blocked(false).build());
+        List<Window> windows2 = new LinkedList<>();
+        windows2.add(Window.builder().open(false).blocked(false).build());
+
+        List<Door> door2 = new LinkedList<>();
+        door2.add(Door.builder().open(true).locked(false).build());
 
         Room livingRoom2 = Room.builder().name("Bed Room")
                 .size("12x18")
-                .window(windows2)
-                .door(door2)
                 .simulationUsers(simulationUsers)
-//                .lights(lights)
                 .build();
+
+        livingRoom2.add(Light.builder().turnedOn(false).build());
+        windows2.forEach(livingRoom2::add);
+        door2.forEach(livingRoom2::add);
 
         //Third room
 
-        Set<Room.DoorWindow> door3 = new HashSet<>();
-        door3.add(Room.DoorWindow.builder().open(false).blocked(false).build());
-
-        Set<Room.DoorWindow> window3 = new HashSet<>();
-        window3.add(Room.DoorWindow.builder().open(false).blocked(false).build());
-        window3.add(Room.DoorWindow.builder().open(true).blocked(false).build());
-
-        Set<Room.Lights> lights3 = new HashSet<>();
-        lights3.add(Room.Lights.builder().turnedOn(true).build());
+        List<Door> door3 = new LinkedList<>();
+        door3.add(Door.builder().open(false).locked(false).build());
 
         Room room3 = Room.builder().name("Bed Room")
                 .size("12x18")
-                .window(window3)
-                .door(door3)
-                .lights(lights3)
                 .build();
+
+        room3.add(Light.builder().turnedOn(true).build());
+        room3.add(Window.builder().open(false).blocked(false).build());
+        room3.add(Window.builder().open(true).blocked(false).build());
+        door3.forEach(room3::add);
 
         //Fourth Room
-
-        Set<Room.DoorWindow> door4 = new HashSet<>();
-        door4.add(Room.DoorWindow.builder().open(false).blocked(false).build());
-
-        Set<Room.DoorWindow> window4 = new HashSet<>();
-        window4.add(Room.DoorWindow.builder().open(false).blocked(false).build());
-
-        Set<Room.Lights> lights4 = new HashSet<>();
-        lights4.add(Room.Lights.builder().turnedOn(true).build());
-        lights4.add(Room.Lights.builder().turnedOn(false).build());
-
         Room room4 = Room.builder().name("Garage")
                 .size("12x18")
-                .window(window4)
-                .door(door4)
-                .lights(lights4)
                 .build();
 
-        Set<Room> rooms = new HashSet<>();
+        room4.add(Door.builder().open(false).locked(false).build());
+        room4.add(Window.builder().open(false).blocked(false).build());
+        room4.add(Light.builder().turnedOn(false).build());
+        room4.add(Door.builder().open(false).locked(false).build());
+
+        List<Room> rooms = new LinkedList<>();
         rooms.add(livingRoom);
         rooms.add(livingRoom2);
         rooms.add(room3);
@@ -133,11 +117,8 @@ class Initializer implements CommandLineRunner {
 
         mainHome.setRooms(rooms);
 
+
         repository.save(mainHome);
-
-        repository.findAll().forEach(System.out::println);
-        simulationUserRepository.findAll().forEach(System.out::println);
-
 
         Set<SimulationUser> simulationUsers2 = new HashSet<>(simulationUserRepository.findAll());
 
@@ -149,8 +130,18 @@ class Initializer implements CommandLineRunner {
                 .time("03:00")
                 .temperature(22.5)
                 .simulationUsers(simulationUsers2)
+                .lightsAutoMode(true)
+                .observer(Security.builder().name("1").build())
+                .timeMultiplier(10)
                 .build();
 
         System.out.println(simulationRepository.save(simulation));
+        this.repositoryService.saveLights();
+        this.repositoryService.saveWindows();
+        this.repositoryService.saveDoors();
+
+        rooms.forEach(roomRepository::save);
+
+        simulation.increaseTime();
     }
 }

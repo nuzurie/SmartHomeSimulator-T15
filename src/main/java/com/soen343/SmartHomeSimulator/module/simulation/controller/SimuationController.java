@@ -1,7 +1,5 @@
 package com.soen343.SmartHomeSimulator.module.simulation.controller;
 
-import com.soen343.SmartHomeSimulator.model.Home;
-import com.soen343.SmartHomeSimulator.model.SimulationUser;
 import com.soen343.SmartHomeSimulator.model.repository.HomeRepository;
 import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
@@ -13,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -31,34 +28,16 @@ public class SimuationController {
         this.simulationUserRepository = simulationUserRepository;
     }
 
+    //to change the simulation parameters: date, time, temp
     @PutMapping("/simulation")
     public ResponseEntity<Simulation> updateSimulation(@Valid @RequestBody Simulation simulation){
         log.info("Create this simulation {}", simulation);
+
         Simulation currentSimulation = simulationRepository.findById((long)1);
-        simulation.setName(1);
-        simulation.setHome(currentSimulation.getHome());
-        simulation.setSimulationUsers(currentSimulation.getSimulationUsers());
-        Simulation createdSimulation = simulationRepository.save(simulation);
+        currentSimulation.setDate(simulation.getDate());
+        currentSimulation.setTime(simulation.getTime());
+        currentSimulation.setTemperature(simulation.getTemperature());
 
-        System.out.println(createdSimulation);
-        return ResponseEntity.ok().body(createdSimulation);
-    }
-
-    @PutMapping("/simulation/user-rooms")
-    public ResponseEntity<Simulation> updateUserRooms(@Valid @RequestBody Simulation simulation){
-        //We aren't changing the rooms and home in respective repositories yet.
-        //It is not yet required, but if required later, this change MUST be made.
-        Simulation currentSimulation = simulationRepository.findById((long)1);
-        log.info("Before saving the simulation is {}", simulationRepository.findAll());
-        currentSimulation.setHome(simulation.getHome());
-        currentSimulation.setSimulationUsers(simulation.getSimulationUsers());
-
-        System.out.println("Received sim " + simulation);
-        log.info("The received simulation has rooms:", simulation.getHome().getRooms() );
-//        Simulation createdSimulation = simulationRepository.save(simulation);
-
-        //log.info("The saving simulation is {}", createdSimulation);
-        log.info("After saving the simulation is {}", simulationRepository.findAll());
         return ResponseEntity.ok().body(currentSimulation);
     }
 
@@ -69,19 +48,8 @@ public class SimuationController {
             simulation = simulationRepository.findById((long)1);
         }
         log.info("After getting the simulation is {}", simulationRepository.findAll());
+        System.out.println(simulation);
         return ResponseEntity.ok().body(simulation);
-    }
-
-    @PostMapping("/simulation/user-rooms")
-    public ResponseEntity<Simulation> postUserRooms(@Valid @RequestBody Simulation simulation){
-
-        log.info("Before saving the simulation is {}", simulationRepository.findAll());
-        System.out.println("Received sim " + simulation);
-        Simulation createdSimulation = simulationRepository.save(simulation);
-        System.out.println("ThSaving sin " + createdSimulation);
-
-        log.info("After saving the simulation is {}", simulationRepository.findAll());
-        return ResponseEntity.ok().body(createdSimulation);
     }
 
     @DeleteMapping("/simulation")
@@ -89,15 +57,6 @@ public class SimuationController {
         simulationRepository.deleteById(simulation.getId());
         System.out.println(simulationRepository.findAll());
         return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @PutMapping("simulation/loginUser/{id}")
-    public ResponseEntity<SimulationUser> updateLoginUser(@PathVariable long id){
-        SimulationUser newLoginUser = simulationUserRepository.findById(id);
-        Simulation simulation = simulationRepository.findById((long)1);
-        simulation.setLoggedInUser(newLoginUser);
-
-        return ResponseEntity.ok().body(newLoginUser);
     }
 
 }
