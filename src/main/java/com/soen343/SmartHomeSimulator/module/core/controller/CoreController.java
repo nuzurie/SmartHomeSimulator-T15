@@ -30,23 +30,6 @@ public class CoreController {
         this.repositoryService = repositoryService;
     }
 
-    @PutMapping("/simulation/update")
-    public ResponseEntity<?> updateUserRooms(@Valid @RequestBody Simulation simulation) {
-        //We aren't changing the rooms and home in respective repositories yet.
-        //It is not yet required, but if required later, this change MUST be made.
-        Simulation currentSimulation = simulationRepository.findById((long) 1);
-
-        currentSimulation.setHome(simulation.getHome());
-        currentSimulation.setSimulationUsers(simulation.getSimulationUsers());
-        currentSimulation.setAutoMode();
-
-        if (currentSimulation.notifyObserver() == -1) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Someone has intruded");
-        }
-
-        return ResponseEntity.ok().body(currentSimulation);
-    }
-
     @PutMapping("simulation/loginUser/{id}")
     public ResponseEntity<SimulationUser> updateLoginUser(@PathVariable long id) {
         SimulationUser newLoginUser = simulationUserRepository.findById(id);
@@ -131,19 +114,19 @@ public class CoreController {
     @PutMapping("simulation/addUserToRoom/{roomID}")
     public ResponseEntity<?> placeUser(@PathVariable Long roomID, @RequestBody SimulationUser simulationUser){
         repositoryService.addUser(roomID, simulationUser);
-
         Simulation currentSimulation = simulationRepository.findById((long) 1);
-
         if (currentSimulation.notifyObserver() == -1) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Someone has intruded");
         }
-
+        currentSimulation.setAutoMode();
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("simulation/removeUsersFromRoom/{roomID}")
     public ResponseEntity<?> removeUser(@PathVariable Long roomID, @RequestBody SimulationUser simulationUser){
+        Simulation currentSimulation = simulationRepository.findById((long) 1);
         repositoryService.removeUser(roomID, simulationUser);
+        currentSimulation.setAutoMode();
         return ResponseEntity.ok().build();
     }
 }

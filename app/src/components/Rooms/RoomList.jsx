@@ -97,7 +97,10 @@ export default class RoomList extends Component {
     placeUser(room, user){
         ExecuteService.placeUser(room, user)
             .then(() => this.refreshSimulation())
-            .catch(() => alert("Intruder Alert!"))
+            .catch(() => {
+                alert("Intruder Alert!")
+                this.refreshSimulation()
+            })
     }
 
     removeUser(room, user){

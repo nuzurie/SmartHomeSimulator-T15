@@ -33,7 +33,7 @@ export default class AwayMode extends Component {
                     alert("The following windows were blocked and can't be accessed: " + response.data)
                 this.refreshState()
             })
-            .catch(response => console.log(response))
+            .catch(()=>alert("Away Mode can't be set while people inside. Please evacuate first."))
     }
 
     render() {

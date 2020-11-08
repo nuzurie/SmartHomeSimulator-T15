@@ -8,9 +8,11 @@ export default class LightsFrame extends Component {
         super(props);
         this.state = {
             lights: [],
+            autoMode: false
         }
 
         this.toggleLight = this.toggleLight.bind(this)
+        this.toggleAutoMode = this.toggleAutoMode.bind(this)
         this.refresh = this.refresh.bind(this)
     }
 
@@ -20,7 +22,15 @@ export default class LightsFrame extends Component {
 
     toggleLight(light){
         ExecuteServices.toggleLight(light)
-            .then(this.refresh())
+            .then(() => this.refresh())
+            .catch(error => console.log(error))
+    }
+
+    toggleAutoMode() {
+        ExecuteServices.toggleAutoMode()
+            .then(() => {
+                this.refresh()
+            })
             .catch(error => console.log(error))
     }
 
@@ -33,6 +43,12 @@ export default class LightsFrame extends Component {
                 })
             })
             .catch(error => console.log(error))
+        ExecuteServices.getSimulation()
+            .then(response => {
+                this.setState({
+                    autoMode: response.data.lightsAutoMode
+                })
+            })
     }
 
     render() {
@@ -46,6 +62,7 @@ export default class LightsFrame extends Component {
                         </button>
                     </div>
                 )}
+                <button className={"btn btn-sm btn-primary"} onClick={this.toggleAutoMode}>{this.state.autoMode ? "Turn auto-mode off" : "Turn auto-mode on"}</button>
             </div>
         )
     }
