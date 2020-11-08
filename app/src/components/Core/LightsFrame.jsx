@@ -56,7 +56,7 @@ export default class LightsFrame extends Component {
             <div className={"container"}>
                 <h3>Lights</h3>
                 {this.state.lights.map(light =>
-                    <div className={"container"}><span className={"mr-5"}>Light {light.id} in {light.name} is currently {light.turnedOn ? "on." : "off."}</span>
+                    <div className={"container"}><span className={"mr-5"}>Light {light.id.toString()} in {light.name} is currently {light.turnedOn ? "on." : "off."}</span>
                         <button className={light.turnedOn ? "btn btn-outline-danger btn-sm mr-5 " : "btn btn-outline-success btn-sm mr-5"} onClick={()=>this.toggleLight(light)}>
                             {light.turnedOn ? "Turn off" : "Turn on"}
                         </button>
