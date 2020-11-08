@@ -75,6 +75,7 @@ public class Simulation implements Subject {
                     lights.forEach(Light::turnOn);
                 }
             });
+            //what about entrance lights and exit lights? set timer!
         }
     }
 
@@ -114,7 +115,6 @@ public class Simulation implements Subject {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String dateTimeString = this.date + " " + this.time;
         this.dateTime = LocalDateTime.parse(dateTimeString, formatter);
-        increaseTime();
     }
 
     public void increaseTime(){
@@ -124,6 +124,7 @@ public class Simulation implements Subject {
                 TimeUnit.SECONDS.sleep(15);}
             catch (Exception e){
             }
+            parseDate();
             this.dateTime = this.dateTime.plusSeconds(s);
             updateDateTimeStrings();
         }

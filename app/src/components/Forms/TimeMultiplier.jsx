@@ -21,7 +21,7 @@ class TimeMultiplierForm extends Component {
 
         return (
             <div className={"container"}>
-                <h3>Set Multiplier</h3>
+                <h3>Set Time Speed</h3>
                 <div className="container">
                     <Formik
                         initialValues={{multiplier}}
@@ -60,7 +60,7 @@ class TimeMultiplierForm extends Component {
 
     onSubmit(event) {
         this.setState({
-            success: `The multiplier is set to  ${event.multiplier}!`,
+            success: `The time now runs at ${event.multiplier}x speed.`,
         })
 
         ExecuteServices.setTimeMultiplier(event.multiplier)

@@ -17,8 +17,6 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
-import mainListItems from './listItems.jsx';
-import Deposits from "./Desposits";
 
 import SimulationForm from "../Users/Forms/FullForm";
 import RoomList from "../Rooms/RoomList";
@@ -28,6 +26,7 @@ import ExecuteServices from "../../api/ExecuteServices";
 import AwayModeButton from "../Security/AwayModeButton";
 import TimeMultiplierForm from "../Forms/TimeMultiplier";
 import CallAuthoritiesForm from "../Forms/CallAuthoritiesForm";
+import CoreControlFrames from "../Core/Frames";
 
 
 function Copyright() {
@@ -128,19 +127,16 @@ export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [contentDiv, setContentDiv] = React.useState('SHS')
-  // const [simulation, setSimulation] = React.useState()
+  const [childRefresh, setChildRefresh] = React.useState(Math.random())
   const [changeLogin, setLogin] = React.useState([
     sessionStorage.getItem('authenticatedName'),
-    sessionStorage.getItem('temperature'),
-    sessionStorage.getItem('time'),
-    sessionStorage.getItem('date')
   ])
+  const changeParent = (number) => {
+    setChildRefresh(number)
+  }
   const handleUpdateUser = () => {
     setLogin([
       sessionStorage.getItem('authenticatedName'),
-      sessionStorage.getItem('temperature'),
-      sessionStorage.getItem('time'),
-      sessionStorage.getItem('date')
     ])
   }
   const handleDrawerOpen = () => {
@@ -205,9 +201,7 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        {/*<List>{mainListItems(changeLogin)}</List>*/}
-
-        <List><SecondaryListItems/></List>
+        <List><SecondaryListItems random = {childRefresh}/></List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
@@ -234,13 +228,13 @@ export default function Dashboard() {
                 </div>}
                 {contentDiv==='SHC' &&
                 <div>
+                  <CoreControlFrames controlParent = {changeParent}/>
                   <TimeMultiplierForm/>
                 </div>}
                 {contentDiv==='SHP' &&<div>
                   <AwayModeButton/>
                   <CallAuthoritiesForm/>
                 </div>}
-                {/*{contentDiv==='SHC' &&<Orders />}*/}
               </Paper>
             </Grid>
           </Grid>

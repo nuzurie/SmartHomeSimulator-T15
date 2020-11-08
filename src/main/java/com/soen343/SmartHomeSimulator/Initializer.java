@@ -1,9 +1,7 @@
 package com.soen343.SmartHomeSimulator;
 
 import com.soen343.SmartHomeSimulator.model.*;
-import com.soen343.SmartHomeSimulator.model.repository.HomeRepository;
-import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
-import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepositoryImpl;
+import com.soen343.SmartHomeSimulator.model.repository.*;
 import com.soen343.SmartHomeSimulator.module.security.controller.Security;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
@@ -19,12 +17,16 @@ class Initializer implements CommandLineRunner {
     private final HomeRepository repository;
     private final SimulationUserRepository simulationUserRepository;
     private final SimulationRepository simulationRepository;
+    private final RepositoryService repositoryService;
+    private final RoomRepository roomRepository;
 
     @Autowired
-    public Initializer(HomeRepository repository, SimulationUserRepositoryImpl simulationUserRepository, SimulationRepository simulationRepository) {
+    public Initializer(HomeRepository repository, SimulationUserRepositoryImpl simulationUserRepository, SimulationRepository simulationRepository, RepositoryService repositoryService, RoomRepository roomRepository) {
         this.repository = repository;
         this.simulationUserRepository = simulationUserRepository;
         this.simulationRepository = simulationRepository;
+        this.repositoryService = repositoryService;
+        this.roomRepository = roomRepository;
     }
 
     @Override
@@ -38,12 +40,6 @@ class Initializer implements CommandLineRunner {
         Window w = Window.builder().build();
         w.setBlocked(true);
         windows.add(w);
-//        windows.add(new Door());
-
-//        Set<DoorWindow> door = new HashSet<>();
-//        door.
-
-        //Set<Room.Lights> lights = new HashSet<>();
 
 
         Home mainHome = Home.builder().name("Main Home").build();
@@ -82,12 +78,12 @@ class Initializer implements CommandLineRunner {
 
         Room livingRoom2 = Room.builder().name("Bed Room")
                 .size("12x18")
-                .windows(windows2)
-                .doors(door2)
                 .simulationUsers(simulationUsers)
                 .build();
 
         livingRoom2.add(Light.builder().turnedOn(false).build());
+        windows2.forEach(livingRoom2::add);
+        door2.forEach(livingRoom2::add);
 
         //Third room
 
@@ -96,12 +92,12 @@ class Initializer implements CommandLineRunner {
 
         Room room3 = Room.builder().name("Bed Room")
                 .size("12x18")
-                .doors(door3)
                 .build();
 
         room3.add(Light.builder().turnedOn(true).build());
         room3.add(Window.builder().open(false).blocked(false).build());
         room3.add(Window.builder().open(true).blocked(false).build());
+        door3.forEach(room3::add);
 
         //Fourth Room
         Room room4 = Room.builder().name("Garage")
@@ -140,6 +136,12 @@ class Initializer implements CommandLineRunner {
                 .build();
 
         System.out.println(simulationRepository.save(simulation));
-        simulation.parseDate();
+        this.repositoryService.saveLights();
+        this.repositoryService.saveWindows();
+        this.repositoryService.saveDoors();
+
+        rooms.forEach(roomRepository::save);
+
+        simulation.increaseTime();
     }
 }

@@ -2,9 +2,11 @@ package com.soen343.SmartHomeSimulator.model.repository;
 
 import com.soen343.SmartHomeSimulator.model.Room;
 import com.soen343.SmartHomeSimulator.model.Room;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 
 @Service
 public class RoomRepositoryImpl implements RoomRepository {
@@ -20,14 +22,19 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public Room save(Room room) {
+        Mapper mapper = new DozerBeanMapper();
         Room already_exists = findById(room.getId());
-        remove(already_exists);
-        this.roomSet.add(room);
+        if(already_exists!=null){
+            mapper.map(room, already_exists);
+        }
+        else{
+            roomSet.add(room);
+        }
         return this.findById(room.getId());
     }
 
     @Override
-    public Set<Room> findAll() {
+    public List<Room> findAll() {
         return roomSet;
     }
 

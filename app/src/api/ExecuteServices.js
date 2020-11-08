@@ -27,7 +27,7 @@ class ExecuteService {
     }
 
     updateSimulationDetails(simulation){
-        return axios.put(`/api/simulation/update`, simulation)
+        // return axios.put(`/api/simulation/update`, simulation)
     }
 
     getSimulation(){
@@ -65,6 +65,38 @@ class ExecuteService {
 
     callAuthorities(){
         return axios.get('/api/simulation/callAuthorities')
+    }
+
+    getLightsForUsers(){
+        return axios.get('/api/simulation/rooms-for-user')
+    }
+
+    getWindowsForUsers(){
+        return axios.get('/api/simulation/windows-for-user')
+    }
+
+    getDoorsForUsers(){
+        return axios.get('/api/simulation/doors-for-user')
+    }
+
+    toggleLight(light){
+        return axios.put('/api/simulation/toggleLight', light)
+    }
+
+    toggleWindow(window, action){
+        return axios.put(`/api/simulation/toggleWindow/${action}`, window)
+    }
+
+    toggleDoor(door, action){
+        return axios.put(`/api/simulation/toggleDoor/${action}`, door)
+    }
+
+    placeUser(room, user){
+        return axios.put(`/api/simulation/addUserToRoom/${room.id}`, user)
+    }
+
+    removeUser(room, user){
+        return axios.put(`/api/simulation/removeUsersFromRoom/${room.id}`, user)
     }
 }
 

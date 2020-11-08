@@ -22,13 +22,13 @@ public class Home{
     private List<Room> rooms = new LinkedList<>();
     //    private Set<Sensor> sensors;
     @Builder.Default
-    private Light backyardLight = new Light();
+    private Light backyardLight = Light.builder().name("Backyard").build();
     @Builder.Default
-    private Light entranceLight = new Light();
+    private Light entranceLight = Light.builder().name("Entrance").build();
     @Builder.Default
-    private Door backyardDoor = new Door();
+    private Door backyardDoor = Door.builder().name("Backyard").build();
     @Builder.Default
-    private Door entranceDoor = new Door();
+    private Door entranceDoor = Door.builder().name("Entrance").build();
 
     public void setId() {
         this.id = ++classId;

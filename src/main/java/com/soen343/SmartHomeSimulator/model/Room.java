@@ -51,7 +51,7 @@ public class Room {
 
     // == METHODS ==
 
-    public <T> void add(T t) {
+    public <T extends setName> void add(T t) {
         List list = null;
 
         if (t instanceof Door)
@@ -69,6 +69,11 @@ public class Room {
         if (list.contains(t))
             return;
         //otherwise add
-        list.add(t);
+        if (t instanceof SimulationUser)
+            list.add(t);
+        else{
+            t.setName(this.name);
+            list.add(t);
+        }
     }
 }

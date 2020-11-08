@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Window{
+public class Window implements setName{
 
     private static long classId = 0;
     @Builder.Default
@@ -15,6 +15,7 @@ public class Window{
     private long id = ++classId;
     private boolean open;
     private boolean blocked;
+    private String name;
 
     public void blockWindow(){
         this.blocked = true;

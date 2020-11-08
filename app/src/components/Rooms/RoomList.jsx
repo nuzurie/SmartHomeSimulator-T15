@@ -13,19 +13,13 @@ export default class RoomList extends Component {
             rooms: []
         }
 
-        this.removeUser = this.removeUser.bind(this)
         this.refreshSimulation = this.refreshSimulation.bind(this)
         this.userDifference = this.userDifference.bind(this)
         this.addUser = this.addUser.bind(this)
-        this.blockWindow = this.blockWindow.bind(this)
-        this.openWindow = this.openWindow.bind(this)
-        this.openOutsideDoor = this.openOutsideDoor.bind(this)
-        this.lockOutsideDoor = this.lockOutsideDoor.bind(this)
-        this.switchOutsideLight = this.switchOutsideLight.bind(this)
-        this.lockDoor = this.lockDoor.bind(this)
-        this.openDoor = this.openDoor.bind(this)
+        this.removeUser = this.removeUser.bind(this)
         this.toggleAutoMode = this.toggleAutoMode.bind(this)
         this.callAuthorities = this.callAuthorities.bind(this)
+        this.toggleDoor = this.toggleDoor.bind(this)
 
     }
 
@@ -41,23 +35,10 @@ export default class RoomList extends Component {
                 }).length == 0;
             }
         }
-
         let simulationUsers = this.state.simulation.simulationUsers;
         return simulationUsers.filter(comparer(roomUsers))
     }
 
-    removeUser(room, user) {
-        let removedUser = this.state.rooms[room].simulationUsers.splice(user, 1)
-        this.state.simulation.simulationUsers.push(removedUser[0])
-
-        ExecuteService.updateSimulationDetails(this.state.simulation)
-            .then(response => {
-                this.refreshSimulation()
-            })
-            .catch(error => {
-                console.log(error)
-                this.refreshSimulation();})
-    }
 
     addUser(roomIndex, user) {
         let userIndex = this.state.simulation.simulationUsers.indexOf(user)
@@ -77,93 +58,52 @@ export default class RoomList extends Component {
 
     callAuthorities(){
         ExecuteService.callAuthorities()
-            .then(response=>alert("The authorities have been called."))
+            .then(()=>alert("The authorities have been called."))
             .catch(error => console.log(error))
     }
 
-    blockWindow(roomIndex, windowIndex) {
-        (this.state.simulation.home.rooms[roomIndex].windows[windowIndex].blocked = !this.state.simulation.home.rooms[roomIndex].windows[windowIndex].blocked)
-        ExecuteService.updateSimulationDetails(this.state.simulation)
+    toggleDoor(door, action){
+        ExecuteService.toggleDoor(door, action)
             .then(() => {
                 this.refreshSimulation()
             })
             .catch(error => console.log(error))
     }
 
-    openWindow(roomIndex, windowIndex) {
-        (this.state.simulation.home.rooms[roomIndex].windows[windowIndex].open = !this.state.simulation.home.rooms[roomIndex].windows[windowIndex].open)
-        ExecuteService.updateSimulationDetails(this.state.simulation)
+    toggleWindow(window, action){
+        ExecuteService.toggleWindow(window, action)
             .then(() => {
                 this.refreshSimulation()
             })
             .catch(error => console.log(error))
     }
 
-    openOutsideDoor(door) {
-        if (door === "entrance") {
-            this.state.simulation.home.entranceDoor.open = !this.state.simulation.home.entranceDoor.open
-        } else {
-            this.state.simulation.home.backyardDoor.open = !this.state.simulation.home.backyardDoor.open
-        }
-
-        ExecuteService.updateSimulationDetails(this.state.simulation)
+    switchRoomLight(light) {
+        ExecuteService.toggleLight(light)
             .then(() => {
                 this.refreshSimulation()
             })
             .catch(error => console.log(error))
     }
 
-    lockOutsideDoor(door) {
-        if (door === "entrance") {
-            this.state.simulation.home.entranceDoor.locked = !this.state.simulation.home.entranceDoor.locked
-        } else {
-            this.state.simulation.home.backyardDoor.locked = !this.state.simulation.home.backyardDoor.locked
-        }
-
-        ExecuteService.updateSimulationDetails(this.state.simulation)
+    toggleAutoMode() {
+        ExecuteService.toggleAutoMode()
             .then(() => {
                 this.refreshSimulation()
             })
             .catch(error => console.log(error))
     }
 
-    lockDoor(roomIndex, doorIndex) {
-        (this.state.simulation.home.rooms[roomIndex].doors[doorIndex].locked = !this.state.simulation.home.rooms[roomIndex].doors[doorIndex].locked)
-        ExecuteService.updateSimulationDetails(this.state.simulation)
-            .then(() => {
-                this.refreshSimulation()
-            })
-            .catch(error => console.log(error))
+    placeUser(room, user){
+        ExecuteService.placeUser(room, user)
+            .then(() => this.refreshSimulation())
+            .catch(() => alert("Intruder Alert!"))
     }
 
-    openDoor(roomIndex, doorIndex) {
-        (this.state.simulation.home.rooms[roomIndex].doors[doorIndex].open = !this.state.simulation.home.rooms[roomIndex].doors[doorIndex].open)
-        ExecuteService.updateSimulationDetails(this.state.simulation)
-            .then(() => {
-                this.refreshSimulation()
-            })
-            .catch(error => console.log(error))
-    }
-
-    switchOutsideLight(light) {
-        if (light === "entrance") {
-            this.state.simulation.home.entranceLight.turnedOn = !this.state.simulation.home.entranceLight.turnedOn
-        } else {
-            this.state.simulation.home.backyardLight.turnedOn = !this.state.simulation.home.backyardLight.turnedOn
-        }
-
-        ExecuteService.updateSimulationDetails(this.state.simulation)
-            .then(() => {
-                this.refreshSimulation()
-            })
-            .catch(error => console.log(error))
-    }
-
-    switchRoomLight(roomIndex) {
-        this.state.simulation.home.rooms[roomIndex].lights[0].turnedOn = !this.state.simulation.home.rooms[roomIndex].lights[0].turnedOn
-
-        ExecuteService.updateSimulationDetails(this.state.simulation)
-            .then(() => {
+    removeUser(room, user){
+        ExecuteService.removeUser(room, user)
+            .then(response => {
+                console.log(response)
                 this.refreshSimulation()
             })
             .catch(error => console.log(error))
@@ -180,15 +120,6 @@ export default class RoomList extends Component {
             .catch(error => console.log(error))
 
 
-    }
-
-    toggleAutoMode() {
-        console.log("eere")
-        ExecuteService.toggleAutoMode()
-            .then(() => {
-                this.refreshSimulation()
-            })
-            .catch(error => console.log(error))
     }
 
     render() {
@@ -246,12 +177,12 @@ export default class RoomList extends Component {
                                                                     <div className={"menu-item"}>
                                                                         #{window.id}
                                                                         <button
-                                                                            onClick={() => this.blockWindow(roomIndex, windowIndex)}>
+                                                                            onClick={() => this.toggleWindow(window, "block")}>
                                                                             {window.blocked ? "Unblock?" : "Block?"}
                                                                         </button>
                                                                         {!window.blocked &&
                                                                         <button
-                                                                            onClick={() => this.openWindow(roomIndex, windowIndex)}>
+                                                                            onClick={() => this.toggleWindow(window, "open")}>
                                                                             {window.open ? "Close?" : "Open?"}
                                                                         </button>}
                                                                     </div>
@@ -287,12 +218,12 @@ export default class RoomList extends Component {
                                                                     <div className={"menu-item"}>
                                                                         #{door.id}
                                                                         <button
-                                                                            onClick={() => this.lockDoor(roomIndex, doorIndex)}>
+                                                                            onClick={() => this.toggleDoor(door, "lock")}>
                                                                             {door.locked ? "Unlock?" : "Lock?"}
                                                                         </button>
                                                                         {!door.locked &&
                                                                         <button
-                                                                            onClick={() => this.openDoor(roomIndex, doorIndex)}>
+                                                                            onClick={() => this.toggleDoor(door, "open")}>
                                                                             {door.open ? "Close?" : "Open?"}
                                                                         </button>}
                                                                     </div>
@@ -310,7 +241,7 @@ export default class RoomList extends Component {
                                                    arrow={false}>
                                                 <div className={"menu-item"}>
                                                     <button
-                                                        onClick={() => this.switchRoomLight(roomIndex)}>
+                                                        onClick={() => this.switchRoomLight(room.lights[0])}>
                                                         {room.lights[0].turnedOn ? "Switch Off?" : "Switch On?"}
                                                     </button>
                                                 </div>
@@ -335,7 +266,7 @@ export default class RoomList extends Component {
                                                             {room.simulationUsers.map((user, userIndex) =>
                                                                 <div className={"menu-item"}>
                                                                     <button
-                                                                        onClick={() => this.removeUser(roomIndex, userIndex)}>{user.name}</button>
+                                                                        onClick={() => this.removeUser(room, user)}>{user.name}</button>
                                                                 </div>
                                                             )}
                                                         </Popup>
@@ -347,7 +278,7 @@ export default class RoomList extends Component {
                                                             {this.userDifference(room.simulationUsers).map((user, userIndex) =>
                                                                 <div className={"menu-item"}>
                                                                     <button
-                                                                        onClick={() => this.addUser(roomIndex, user)}>{user.name}</button>
+                                                                        onClick={() => this.placeUser(room, user)}>{user.name}</button>
                                                                 </div>
                                                             )}
                                                         </Popup>
@@ -370,11 +301,11 @@ export default class RoomList extends Component {
                                                arrow={false}>
                                             <div className={"menu-item"}>
                                                 <button
-                                                    onClick={() => this.lockOutsideDoor("entrance")}>
+                                                    onClick={() => this.toggleDoor(this.state.simulation.home.entranceDoor, "lock")}>
                                                     {this.state.simulation.home.entranceDoor.locked ? "Unlock?" : "Lock?"}
                                                 </button>
                                                 {!this.state.simulation.home.entranceDoor.locked &&
-                                                <button onClick={() => this.openOutsideDoor("entrance")}>
+                                                <button onClick={() => this.toggleDoor(this.state.simulation.home.entranceDoor, "open")}>
                                                     {this.state.simulation.home.entranceDoor.open ? "Close?" : "Open?"}
                                                 </button>}
                                             </div>
@@ -388,7 +319,7 @@ export default class RoomList extends Component {
                                                arrow={false}>
                                             <div className={"menu-item"}>
                                                 <button
-                                                    onClick={() => this.switchOutsideLight("entrance")}>
+                                                    onClick={() => this.switchRoomLight(this.state.simulation.home.entranceLight)}>
                                                     {this.state.simulation.home.entranceLight.turnedOn ? "Switch Off?" : "Switch On?"}
                                                 </button>
                                             </div>
@@ -408,11 +339,11 @@ export default class RoomList extends Component {
                                                arrow={false}>
                                             <div className={"menu-item"}>
                                                 <button
-                                                    onClick={() => this.lockOutsideDoor("backyard")}>
+                                                    onClick={() => this.toggleDoor(this.state.simulation.home.backyardDoor, "lock")}>
                                                     {this.state.simulation.home.backyardDoor.locked ? "Unlock?" : "Lock?"}
                                                 </button>
                                                 {!this.state.simulation.home.backyardDoor.locked &&
-                                                <button onClick={() => this.openOutsideDoor("backyard")}>
+                                                <button onClick={() => this.toggleDoor(this.state.simulation.home.backyardDoor, "open")}>
                                                     {this.state.simulation.home.backyardDoor.open ? "Close?" : "Open?"}
                                                 </button>}
                                             </div>
@@ -426,7 +357,7 @@ export default class RoomList extends Component {
                                                arrow={false}>
                                             <div className={"menu-item"}>
                                                 <button
-                                                    onClick={() => this.switchOutsideLight("backyard")}>
+                                                    onClick={() => this.switchRoomLight(this.state.simulation.home.backyardLight)}>
                                                     {this.state.simulation.home.backyardLight.turnedOn ? "Switch Off?" : "Switch On?"}
                                                 </button>
                                             </div>

@@ -42,8 +42,8 @@ public class SimulationRepositoryImpl implements SimulationRepository{
 
     @Override
     public Simulation deleteById(Long id) {
-        Simulation user = this.findById(id);
-        return remove(user);
+        Simulation simulation = this.findById(id);
+        return remove(simulation);
     }
 }
 

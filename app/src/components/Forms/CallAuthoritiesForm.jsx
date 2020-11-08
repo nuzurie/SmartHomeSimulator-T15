@@ -61,7 +61,6 @@ export default class CallAuthoritiesForm extends Component {
         this.setState({
             success: `Authorities will be called after ${event.timer}!`,
         })
-
         ExecuteServices.callAuthoritiesTimer(event.timer)
             .then(response => console.log(response))
             .catch(error => console.log(error))

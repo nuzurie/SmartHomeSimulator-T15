@@ -41,7 +41,6 @@ public class SimuationController {
         return ResponseEntity.ok().body(currentSimulation);
     }
 
-
     @GetMapping("/simulation")
     public ResponseEntity<Simulation> getSimulation() {
         Simulation simulation = simulationRepository.findById((long)1);

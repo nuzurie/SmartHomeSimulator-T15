@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Door{
+public class Door implements setName{
 
     private static long classId = 0;
     @Builder.Default
@@ -15,6 +15,7 @@ public class Door{
     private long id = ++classId;
     private boolean open;
     private boolean locked;
+    private String name;
 
     public void lockDoor(){
         this.locked = true;

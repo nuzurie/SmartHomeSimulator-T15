@@ -16,7 +16,8 @@ export default class SecondaryListItems extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            simulation: []
+            simulation: [],
+            random: this.props.random
         }
     }
 
@@ -40,7 +41,6 @@ export default class SecondaryListItems extends Component {
                         <ListItemIcon>
                             <PeopleIcon/>
                         </ListItemIcon>
-                        {console.log(this.state.simulation.loggedInUser)}
                         {/*IS THIS UNDEFINED OR OBJECT??*/}
                         <ListItemText primary={`Name = ${this.state.simulation.loggedInUser}`}/>
                     </ListItem>

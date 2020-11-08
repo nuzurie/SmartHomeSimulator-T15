@@ -18,7 +18,7 @@ export default class AwayMode extends Component {
         this.refreshState()
     }
 
-    refreshState(){
+    refreshState() {
         ExecuteService.getSimulation()
             .then(response => this.setState({
                 simulation: response.data
@@ -26,10 +26,10 @@ export default class AwayMode extends Component {
             .catch(reason => console.log(reason))
     }
 
-    toggleAwayMode(){
+    toggleAwayMode() {
         ExecuteService.toggleAwayMode()
             .then(response => {
-                if (response.data.length>0)
+                if (response.data.length > 0)
                     alert("The following windows were blocked and can't be accessed: " + response.data)
                 this.refreshState()
             })
@@ -38,7 +38,10 @@ export default class AwayMode extends Component {
 
     render() {
         return (
-            <button className={"btn btn-primary"} onClick={()=>this.toggleAwayMode()}>{this.state.simulation.awayMode ? "Turn Off Away Mode" : "Turn On Away Mode"}</button>
+            <div className={"container"}>
+                <button className={"btn btn-primary"}
+                        onClick={() => this.toggleAwayMode()}>{this.state.simulation.awayMode ? "Turn Off Away Mode" : "Turn On Away Mode"}</button>
+            </div>
         )
     }
 }
