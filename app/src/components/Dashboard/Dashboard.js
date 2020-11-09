@@ -28,6 +28,8 @@ import CallAuthoritiesForm from "../Forms/CallAuthoritiesForm";
 import CoreControlFrames from "../Core/Frames";
 import AwayModeLightsTimerForm from "../Forms/AwayModeLightsTimerForm";
 import LightsAwayMode from "../Forms/LightsAwayMode";
+import HouseLayout from "../HouseLayoutUpload";
+import HouseLayoutUI from "../Rooms/HouseLayout";
 
 
 function Copyright() {
@@ -221,7 +223,7 @@ export default function Dashboard() {
                         {/* Chart */}
                         <Grid item xs={12} md={8} lg={9}>
                             <Paper className={fixedHeightPaper}>
-                                <RoomList/>
+                                <HouseLayoutUI/>
                             </Paper>
                         </Grid>
                         {/* Recent Deposits */}
@@ -239,6 +241,7 @@ export default function Dashboard() {
                                 </div>}
                                 {contentDiv === 'SHC' &&
                                 <div>
+                                    <RoomList/>
                                     <CoreControlFrames controlParent={changeParent}/>
                                     <TimeMultiplierForm/>
                                 </div>}
