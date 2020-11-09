@@ -40,7 +40,7 @@ public class Simulation implements Subject {
 
     private LocalTime lightsTimeStart;
     private LocalTime lightsTimeEnd;
-    private List<Light> chosenFloodLights;
+    private List<Light> chosenAwayModeLights;
 
     @Autowired
     public Simulation(Long name, double temperature, boolean lightsAutoMode, String date, String time, Home home, Set<SimulationUser> simulationUsers, SimulationUser loggedInUser, boolean awayMode, Observer observer, double callAuthoritiesTimer, double timeMultiplier, LocalDateTime dateTime, LocalTime lightsTimeStart, LocalTime lightsTimeEnd, List<Light> lights) {
@@ -59,7 +59,7 @@ public class Simulation implements Subject {
         this.observer = observer;
         this.lightsTimeStart = lightsTimeStart;
         this.lightsTimeEnd = lightsTimeEnd;
-        this.chosenFloodLights = lights;
+        this.chosenAwayModeLights = lights;
     }
 
     public long getId() {

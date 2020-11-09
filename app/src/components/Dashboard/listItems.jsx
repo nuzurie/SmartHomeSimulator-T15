@@ -41,8 +41,10 @@ export default class SecondaryListItems extends Component {
                         <ListItemIcon>
                             <PeopleIcon/>
                         </ListItemIcon>
-                        {/*IS THIS UNDEFINED OR OBJECT??*/}
-                        <ListItemText primary={`Name = ${this.state.simulation.loggedInUser}`}/>
+                        <div>
+                        <ListItemText primary={`Name = ${this.state.simulation.loggedInUser ? this.state.simulation.loggedInUser.name : "No user"}`}/>
+                            <p><u>{this.state.simulation.loggedInUser ? this.state.simulation.loggedInUser.privilege : "No user"}</u></p>
+                        </div>
                     </ListItem>
                 </div>
                 <Divider/>

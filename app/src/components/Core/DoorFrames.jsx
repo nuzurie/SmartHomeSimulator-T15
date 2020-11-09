@@ -42,7 +42,7 @@ export default class DoorFrame extends Component {
             <div className={"container"}>
                 <h3>Doors</h3>
                 {this.state.doors.map(door =>
-                    <div className={"container"}><span className={"mr-5"}>Door {door.id} in {door.name} is currently {door.open ? "open" : "closed"} and {door.locked ? "locked." : "unlocked."}</span>
+                    <div className={"container"}><span className={"mr-5"}>Door {door.id.toString()} in {door.name} is currently {door.open ? "open" : "closed"} and {door.locked ? "locked." : "unlocked."}</span>
                         <button className={door.open ? "btn btn-outline-danger btn-sm mr-5 " : "btn btn-outline-success btn-sm mr-5"} onClick={()=>this.toggleDoor(door, "open")}>
                             {door.open ? "Close" : "Open"}
                         </button>

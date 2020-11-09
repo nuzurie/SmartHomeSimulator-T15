@@ -38,6 +38,8 @@ public class RepositoryService {
         Simulation simulation = simulationRepository.findById((long) 1);
         Home home = simulation.getHome();
         SimulationUser user = simulation.getLoggedInUser();
+        if (user.getPrivilege().equalsIgnoreCase("stranger"))
+            return new LinkedList<Light>();
         List<Room> rooms = home.getRooms();
 
         if (user.getPrivilege().equalsIgnoreCase("parent")) {
@@ -84,6 +86,8 @@ public class RepositoryService {
         Simulation simulation = simulationRepository.findById((long) 1);
         Home home = simulation.getHome();
         SimulationUser user = simulation.getLoggedInUser();
+        if (user.getPrivilege().equalsIgnoreCase("stranger"))
+            return new LinkedList<Window>();
         List<Room> rooms = home.getRooms();
 
         if (user.getPrivilege().equalsIgnoreCase("parent")) {
@@ -116,6 +120,8 @@ public class RepositoryService {
         Simulation simulation = simulationRepository.findById((long) 1);
         Home home = simulation.getHome();
         SimulationUser user = simulation.getLoggedInUser();
+        if (user.getPrivilege().equalsIgnoreCase("stranger"))
+            return new LinkedList<Door>();
         List<Room> rooms = home.getRooms();
 
         if (user.getPrivilege().equalsIgnoreCase("parent")) {
@@ -189,5 +195,20 @@ public class RepositoryService {
         }
         if (simulationUser != null)
             simulation.getSimulationUsers().add(simulationUser);
+    }
+
+    public List<Light> getLightsById(long[] id){
+        List<Light> lightList = new LinkedList<>();
+//        System.out.println(lightRepository);
+//        System.out.println(id);
+        for (long i: id
+             ) {
+            Light light = lightRepository.findById(i);
+            if (light!=null){
+                lightList.add(light);
+            }
+        }
+
+        return lightList;
     }
 }

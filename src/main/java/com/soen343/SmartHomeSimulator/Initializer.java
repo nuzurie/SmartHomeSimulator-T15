@@ -59,13 +59,11 @@ class Initializer implements CommandLineRunner {
         SimulationUser user1 = SimulationUser.builder().name("User1").privilege("Parent").id(++SimulationUser.classId).build();
         SimulationUser user2 = SimulationUser.builder().name("User2").privilege("Child").id(++SimulationUser.classId).build();
         SimulationUser user3 = SimulationUser.builder().name("User3").privilege("Child").id(++SimulationUser.classId).build();
-        SimulationUser user4 = SimulationUser.builder().name("Squatter").privilege("Stranger").id(++SimulationUser.classId).build();
-        SimulationUser user5 = SimulationUser.builder().name("Squatter2").privilege("Stranger").id(user4.getId()).build();
+        SimulationUser user4 = SimulationUser.builder().name("User4").privilege("Guest").id(++SimulationUser.classId).build();
         simulationUserRepository.save(user1);
         simulationUserRepository.save(user2);
         simulationUserRepository.save(user3);
         simulationUserRepository.save(user4);
-        simulationUserRepository.save(user5);
 
         List<SimulationUser> simulationUsers = new LinkedList<>();
 
