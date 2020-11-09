@@ -1,5 +1,7 @@
 package com.soen343.SmartHomeSimulator.module.security.controller;
 
+import com.soen343.SmartHomeSimulator.model.Light;
+import com.soen343.SmartHomeSimulator.module.security.model.AwayModeLights;
 import com.soen343.SmartHomeSimulator.module.security.model.AwayModeTime;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
@@ -12,6 +14,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
 @Slf4j
@@ -21,6 +24,7 @@ public class SecurityController {
 
     SimulationRepository simulationRepository;
     Security security;
+
 
     @Autowired
     public SecurityController(SimulationRepository simulationRepository, Security security) {
@@ -74,12 +78,14 @@ public class SecurityController {
         return out;
     }
 
-    @PostMapping("simulation/awaymode-lights")
-    public ResponseEntity<?> awayModeLights(@RequestBody AwayModeTime object){
+    @PostMapping("simulation/awaymode-lights-time")
+    public ResponseEntity<?> awayModeLightsTimes(@RequestBody AwayModeTime object){
         System.out.println(object);
         Simulation simulation = simulationRepository.findById((long) 1);
         simulation.lightsTimeParse(object.getTime1(), object.getTime2());
         return ResponseEntity.ok().build();
     }
+
+
 
 }

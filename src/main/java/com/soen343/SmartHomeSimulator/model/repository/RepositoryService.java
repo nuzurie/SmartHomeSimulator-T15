@@ -190,4 +190,19 @@ public class RepositoryService {
         if (simulationUser != null)
             simulation.getSimulationUsers().add(simulationUser);
     }
+
+    public List<Light> getLightsById(long[] id){
+        List<Light> lightList = new LinkedList<>();
+//        System.out.println(lightRepository);
+//        System.out.println(id);
+        for (long i: id
+             ) {
+            Light light = lightRepository.findById(i);
+            if (light!=null){
+                lightList.add(light);
+            }
+        }
+
+        return lightList;
+    }
 }

@@ -24,7 +24,7 @@ export default class AwayModeLightsTimerForm extends Component {
         return (
             <div>
                 <div className={"container"}>
-                    <h1>Set Simulation Parameters</h1>
+                    <h3>Set times for lights on during away mode.</h3>
                     <div className="container">
                         <Formik
                             initialValues={{time1, time2}}
@@ -66,7 +66,7 @@ export default class AwayModeLightsTimerForm extends Component {
 
     onSubmit(event) {
         console.log(event)
-        ExecuteServices.awayModeLights(event)
+        ExecuteServices.awayModeLightsTimes(event)
             .then(response => console.log(response))
             .catch(error => console.log(error))
         // ExecuteService.updateSimulationContext(event)

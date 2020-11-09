@@ -3,6 +3,7 @@ package com.soen343.SmartHomeSimulator.module.core.controller;
 import com.soen343.SmartHomeSimulator.model.*;
 import com.soen343.SmartHomeSimulator.model.repository.RepositoryService;
 import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
+import com.soen343.SmartHomeSimulator.module.security.model.AwayModeLights;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
 
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -127,6 +129,15 @@ public class CoreController {
         Simulation currentSimulation = simulationRepository.findById((long) 1);
         repositoryService.removeUser(roomID, simulationUser);
         currentSimulation.setAutoMode();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("simulation/awaymode-lights")
+    public ResponseEntity<?> awayModeLights(@RequestBody AwayModeLights lights){
+        System.out.println(lights);
+        Simulation simulation = simulationRepository.findById((long) 1);
+        List<Light> lightList = repositoryService.getLightsById(lights.getChecked());
+        simulation.setChosenAwayModeLights(lightList);
         return ResponseEntity.ok().build();
     }
 }
