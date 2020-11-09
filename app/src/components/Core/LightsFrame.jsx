@@ -62,7 +62,8 @@ export default class LightsFrame extends Component {
                         </button>
                     </div>
                 )}
-                <button className={"btn btn-sm btn-primary"} onClick={this.toggleAutoMode}>{this.state.autoMode ? "Turn auto-mode off" : "Turn auto-mode on"}</button>
+                <button className={"btn btn-sm btn-primary"}
+                        onClick={this.toggleAutoMode}>{this.state.autoMode ? "Turn auto-mode off" : "Turn auto-mode on"}</button>
             </div>
         )
     }

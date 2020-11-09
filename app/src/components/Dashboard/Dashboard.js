@@ -24,12 +24,9 @@ import SecondaryListItems from "./listItems";
 import ExecuteServices from "../../api/ExecuteServices";
 import AwayModeButton from "../Security/AwayModeButton";
 import TimeMultiplierForm from "../Forms/TimeMultiplier";
-import CallAuthoritiesForm from "../Forms/CallAuthoritiesForm";
 import CoreControlFrames from "../Core/Frames";
-import AwayModeLightsTimerForm from "../Forms/AwayModeLightsTimerForm";
-import LightsAwayMode from "../Forms/LightsAwayMode";
-import HouseLayout from "../HouseLayoutUpload";
 import HouseLayoutUI from "../Rooms/HouseLayout";
+import UserPermission from "../Users/UserPermissions";
 
 
 function Copyright() {
@@ -238,6 +235,7 @@ export default function Dashboard() {
                                 {contentDiv === 'SHS' &&
                                 <div className={"container"}>
                                     <SimulationForm/>
+                                    <UserPermission/>
                                 </div>}
                                 {contentDiv === 'SHC' &&
                                 <div>

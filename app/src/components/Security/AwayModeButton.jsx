@@ -41,16 +41,16 @@ export default class AwayMode extends Component {
     render() {
         return (
             <>
-                {this.state.simulation.loggedInUser ? this.state.simulation.loggedInUser.privilege == 'parent' || this.state.simulation.loggedInUser.privilege == 'parent' &&
+                {this.state.simulation.loggedInUser ? (this.state.simulation.loggedInUser.privilege == 'Parent' || this.state.simulation.loggedInUser.privilege == 'parent') &&
                     <div className={"container"}>
                         <button className={"btn btn-primary"}
                                 onClick={() => this.toggleAwayMode()}>{this.state.simulation.awayMode ? "Turn Off Away Mode" : "Turn On Away Mode"}</button>
                     </div>
                     : <div><h4>Only parents have permission to access security settings.</h4></div>}
-                {this.state.simulation.loggedInUser ? this.state.simulation.loggedInUser.privilege == 'parent' || this.state.simulation.loggedInUser.privilege == 'parent' &&
+                {this.state.simulation.loggedInUser ? (this.state.simulation.loggedInUser.privilege == 'Parent' || this.state.simulation.loggedInUser.privilege == 'parent') &&
                     <AwayModeLightsTimerForm/>
                     : <div></div>}
-                {this.state.simulation.loggedInUser ? this.state.simulation.loggedInUser.privilege == 'parent' || this.state.simulation.loggedInUser.privilege == 'parent' &&
+                {this.state.simulation.loggedInUser ? (this.state.simulation.loggedInUser.privilege == 'Parent' || this.state.simulation.loggedInUser.privilege == 'parent') &&
                     <LightsAwayMode/>
                     : <div></div>}
             </>

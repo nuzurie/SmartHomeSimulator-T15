@@ -169,7 +169,7 @@ export default class HouseLayoutUI extends Component {
                                                 <span className={"mr-2"}><FontAwesomeIcon  icon={faUser}></FontAwesomeIcon></span>
                                             )}
                                         </td>
-                                        
+
                                     </tr>
                                 )}
                                 <tr>
