@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
+/**
+ * The Room object.
+ */
 @Data
 @NoArgsConstructor
 @Builder
@@ -29,6 +32,11 @@ public class Room {
     @Autowired
     private SimulationUserRepository simulationUserRepository;
 
+    /**
+     * Delete user.
+     *
+     * @param simulationUser the simulation user
+     */
     public void deleteUser(SimulationUser simulationUser) {
         this.simulationUsers.remove(simulationUser);
     }
@@ -36,6 +44,19 @@ public class Room {
 
     // == CONSTRUCTORS ==
 
+    /**
+     * Instantiates a new Room.
+     *
+     * @param id                       the id
+     * @param name                     the name
+     * @param size                     the size
+     * @param temperature              the temperature
+     * @param windows                  the windows
+     * @param doors                    the doors
+     * @param lights                   the lights
+     * @param simulationUsers          the simulation users
+     * @param simulationUserRepository the simulation user repository
+     */
     @Autowired
     public Room(Long id, String name, String size, double temperature, List<Window> windows, List<Door> doors, List<Light> lights, List<SimulationUser> simulationUsers, SimulationUserRepository simulationUserRepository) {
         this.id = ++classId;
@@ -51,6 +72,12 @@ public class Room {
 
     // == METHODS ==
 
+    /**
+     * Add an object to the Room.
+     *
+     * @param <T> the type parameter
+     * @param t   the t
+     */
     public <T extends setName> void add(T t) {
         List list = null;
 

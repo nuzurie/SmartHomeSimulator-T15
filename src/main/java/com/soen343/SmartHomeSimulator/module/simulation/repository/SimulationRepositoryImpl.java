@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+/**
+ * The Simulation repository.
+ */
 @Service
 public class SimulationRepositoryImpl implements SimulationRepository{
     @Override

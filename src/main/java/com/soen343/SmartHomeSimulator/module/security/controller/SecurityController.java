@@ -17,21 +17,41 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
+/**
+ * The Security controller.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api")
 public class SecurityController {
 
+    /**
+     * The Simulation repository.
+     */
     SimulationRepository simulationRepository;
+    /**
+     * The Security.
+     */
     Security security;
 
 
+    /**
+     * Instantiates a new Security controller.
+     *
+     * @param simulationRepository the simulation repository
+     * @param security             the security
+     */
     @Autowired
     public SecurityController(SimulationRepository simulationRepository, Security security) {
         this.simulationRepository = simulationRepository;
         this.security = security;
     }
 
+    /**
+     * Toggle away mode response entity.
+     *
+     * @return the response entity
+     */
     @PutMapping("/security/awayMode")
     public ResponseEntity<?> toggleAwayMode(){
         log.info("in toggleAwayMode");
@@ -49,6 +69,12 @@ public class SecurityController {
         return ResponseEntity.ok().body(messages);
     }
 
+    /**
+     * Call authorities timer response entity.
+     *
+     * @param timer the timer
+     * @return the response entity
+     */
     @PutMapping("simulation/call-timer/{timer}")
     public ResponseEntity callAuthoritiesTimer(@PathVariable String timer) {
         System.out.println(timer);
@@ -59,6 +85,11 @@ public class SecurityController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Call authorities deferred result.
+     *
+     * @return the deferred result
+     */
     @GetMapping("simulation/callAuthorities")
     public DeferredResult<ResponseEntity<?>> callAuthorities() {
         final DeferredResult <ResponseEntity < ? >> out = new DeferredResult <>((long)100000);
@@ -78,6 +109,12 @@ public class SecurityController {
         return out;
     }
 
+    /**
+     * Away mode lights times response entity.
+     *
+     * @param object the object
+     * @return the response entity
+     */
     @PostMapping("simulation/awaymode-lights-time")
     public ResponseEntity<?> awayModeLightsTimes(@RequestBody AwayModeTime object){
         System.out.println(object);
@@ -85,7 +122,4 @@ public class SecurityController {
         simulation.lightsTimeParse(object.getTime1(), object.getTime2());
         return ResponseEntity.ok().build();
     }
-
-
-
 }

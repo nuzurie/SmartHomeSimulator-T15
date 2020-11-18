@@ -8,6 +8,9 @@ import lombok.NonNull;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+/**
+ * The User object.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +18,12 @@ import javax.persistence.Id;
 public class User {
 
 //    @Id
+    /**
+     * The Id.
+     */
     private String id;
+    /**
+     * The user's name.
+     */
     private String name;
 }

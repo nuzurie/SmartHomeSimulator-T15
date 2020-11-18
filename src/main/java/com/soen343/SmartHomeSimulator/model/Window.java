@@ -2,6 +2,9 @@ package com.soen343.SmartHomeSimulator.model;
 
 import lombok.*;
 
+/**
+ * The Window object.
+ */
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,16 +20,30 @@ public class Window implements setName{
     private boolean blocked;
     private String name;
 
+    /**
+     * Block window.
+     */
     public void blockWindow(){
         this.blocked = true;
     }
+
+    /**
+     * Un block window.
+     */
     public void unBlockWindow(){
         this.blocked = false;
     }
 
+    /**
+     * Open window.
+     */
     public void openWindow(){
         this.open = true;
     }
+
+    /**
+     * Close window.
+     */
     public void closeWindow(){
         this.open = false;
     }

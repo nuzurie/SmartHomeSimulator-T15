@@ -13,6 +13,9 @@ import org.springframework.security.web.savedrequest.SimpleSavedRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The Security configuration.
+ */
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -36,6 +39,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //        http.headers().frameOptions().disable();
     }
 
+    /**
+     * Referer request cache request cache.
+     *
+     * @return the request cache
+     */
     @Bean
     public RequestCache refererRequestCache() {
         return new HttpSessionRequestCache() {

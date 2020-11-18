@@ -6,15 +6,21 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The Implementation of the Light repository.
+ */
 @Service
 public class LightRepositoryImpl implements LightRepository{
 
-    List<Light> linkedList = new LinkedList<>();
+    /**
+     * The Lights list.
+     */
+    List<Light> lightsList = new LinkedList<>();
 
     @Override
     public Light findById(Long id) {
         for (Light light:
-                this.linkedList) {
+                this.lightsList) {
             if (light.getId()==id)
                 return light;
         }
@@ -28,19 +34,19 @@ public class LightRepositoryImpl implements LightRepository{
             already_exists.setTurnedOn(light.isTurnedOn());
         }
         else{
-            linkedList.add(light);
+            lightsList.add(light);
         }
         return this.findById(light.getId());
     }
 
     @Override
     public List<Light> findAll() {
-        return linkedList;
+        return lightsList;
     }
 
     @Override
     public Light remove(Light light) {
-        Boolean removed = this.linkedList.remove(light);
+        Boolean removed = this.lightsList.remove(light);
         if (removed)
             return light;
         else

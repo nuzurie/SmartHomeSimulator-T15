@@ -2,6 +2,9 @@ package com.soen343.SmartHomeSimulator.model;
 
 import lombok.*;
 
+/**
+ * The Door object.
+ */
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,16 +20,30 @@ public class Door implements setName{
     private boolean locked;
     private String name;
 
+    /**
+     * Lock door.
+     */
     public void lockDoor(){
         this.locked = true;
     }
+
+    /**
+     * Unlock door.
+     */
     public void unlockDoor(){
         this.locked = false;
     }
 
+    /**
+     * Open door.
+     */
     public void openDoor(){
         this.open = true;
     }
+
+    /**
+     * Close door.
+     */
     public void closeDoor(){
         this.open = false;
     }
