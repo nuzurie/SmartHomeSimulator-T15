@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * The Core controller.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -25,6 +28,13 @@ public class CoreController {
     private SimulationUserRepository simulationUserRepository;
     private RepositoryService repositoryService;
 
+    /**
+     * Instantiates a new Core controller.
+     *
+     * @param simulationRepository     the simulation repository
+     * @param simulationUserRepository the simulation user repository
+     * @param repositoryService        the repository service
+     */
     @Autowired
     public CoreController(SimulationRepository simulationRepository, SimulationUserRepository simulationUserRepository, RepositoryService repositoryService) {
         this.simulationRepository = simulationRepository;
@@ -32,6 +42,12 @@ public class CoreController {
         this.repositoryService = repositoryService;
     }
 
+    /**
+     * Update logged user response entity.
+     *
+     * @param id the id
+     * @return the response entity
+     */
     @PutMapping("simulation/loginUser/{id}")
     public ResponseEntity<SimulationUser> updateLoginUser(@PathVariable long id) {
         SimulationUser newLoginUser = simulationUserRepository.findById(id);
@@ -41,6 +57,11 @@ public class CoreController {
         return ResponseEntity.ok().body(newLoginUser);
     }
 
+    /**
+     * Toggle auto mode response entity.
+     *
+     * @return the response entity
+     */
     @PutMapping("simulation/autoMode")
     public ResponseEntity<?> toggleAutoMode() {
 
@@ -51,6 +72,12 @@ public class CoreController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Sets time multiplier.
+     *
+     * @param multipliers the multipliers
+     * @return the time multiplier
+     */
     @PutMapping("simulation/time-multiplier/{multipliers}")
     public ResponseEntity setTimeMultiplier(@PathVariable String multipliers) {
         double multiplier = Double.valueOf(multipliers);
@@ -62,21 +89,42 @@ public class CoreController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Get lights for user response entity.
+     *
+     * @return the response entity
+     */
     @GetMapping("simulation/rooms-for-user")
     public ResponseEntity<?> getLightsForUser(){
         return ResponseEntity.ok().body(repositoryService.getLightsForUser());
     }
 
+    /**
+     * Get windows for user response entity.
+     *
+     * @return the response entity
+     */
     @GetMapping("simulation/windows-for-user")
     public ResponseEntity<?> getWindowsForUser(){
         return ResponseEntity.ok().body(repositoryService.getWindowsForUser());
     }
 
+    /**
+     * Get doors for user response entity.
+     *
+     * @return the response entity
+     */
     @GetMapping("simulation/doors-for-user")
     public ResponseEntity<?> getDoorsForUser(){
         return ResponseEntity.ok().body(repositoryService.getDoorsForUser());
     }
 
+    /**
+     * Toggle light response entity.
+     *
+     * @param light the light
+     * @return the response entity
+     */
     @PutMapping("simulation/toggleLight")
     public ResponseEntity<?> toggleLight(@Valid @RequestBody Light light){
         light.setTurnedOn(!light.isTurnedOn());
@@ -85,6 +133,13 @@ public class CoreController {
         return ResponseEntity.ok().body(newLight);
     }
 
+    /**
+     * Toggle window response entity.
+     *
+     * @param window the window
+     * @param action the action
+     * @return the response entity
+     */
     @PutMapping("simulation/toggleWindow/{action}")
     public ResponseEntity<?> toggleWindow(@Valid @RequestBody Window window, @PathVariable String action){
         if (action.equalsIgnoreCase("block"))
@@ -100,6 +155,13 @@ public class CoreController {
         return ResponseEntity.ok().body(newWindow);
     }
 
+    /**
+     * Toggle door response entity.
+     *
+     * @param door   the door
+     * @param action the action
+     * @return the response entity
+     */
     @PutMapping("simulation/toggleDoor/{action}")
     public ResponseEntity<?> toggleDoor(@Valid @RequestBody Door door, @PathVariable String action){
         if (action.equalsIgnoreCase("lock"))
@@ -113,6 +175,13 @@ public class CoreController {
         return ResponseEntity.ok().body(newDoor);
     }
 
+    /**
+     * Place user response entity.
+     *
+     * @param roomID         the room id
+     * @param simulationUser the simulation user
+     * @return the response entity
+     */
     @PutMapping("simulation/addUserToRoom/{roomID}")
     public ResponseEntity<?> placeUser(@PathVariable Long roomID, @RequestBody SimulationUser simulationUser){
         repositoryService.addUser(roomID, simulationUser);
@@ -124,6 +193,13 @@ public class CoreController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Remove user response entity.
+     *
+     * @param roomID         the room id
+     * @param simulationUser the simulation user
+     * @return the response entity
+     */
     @PutMapping("simulation/removeUsersFromRoom/{roomID}")
     public ResponseEntity<?> removeUser(@PathVariable Long roomID, @RequestBody SimulationUser simulationUser){
         Simulation currentSimulation = simulationRepository.findById((long) 1);
@@ -132,6 +208,12 @@ public class CoreController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Away mode lights response entity.
+     *
+     * @param lights the lights
+     * @return the response entity
+     */
     @PostMapping("simulation/awaymode-lights")
     public ResponseEntity<?> awayModeLights(@RequestBody AwayModeLights lights){
         System.out.println(lights);

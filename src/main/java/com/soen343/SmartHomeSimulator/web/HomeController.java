@@ -20,6 +20,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The Home Controller.
+ */
 @RestController
 @RequestMapping("/api")
 
@@ -30,16 +33,33 @@ class HomeController {
     //private UserRepository userRepository;
 
 
+    /**
+     * Instantiates a new Home Controller.
+     *
+     * @param homeRepository the home repository
+     */
     public HomeController(HomeRepository homeRepository) {
         this.homeRepository = homeRepository;
         //this.userRepository = userRepository;
     }
 
+    /**
+     * Collection of Homes.
+     *
+     * @param principal the principal
+     * @return the collection
+     */
     @GetMapping("/homes")
-    Collection<Home> groups(Principal principal) {
+    Collection<Home> homes(Principal principal) {
         return homeRepository.findAllByUserId(principal.getName());
     }
 
+    /**
+     * Gets home.
+     *
+     * @param id the id
+     * @return the home
+     */
     @GetMapping("/home/{id}")
     ResponseEntity<?> getHome(@PathVariable Long id) {
         Home home = homeRepository.findById(id);
@@ -51,9 +71,17 @@ class HomeController {
 //        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * Create group response entity.
+     *
+     * @param home      the home
+     * @param principal the principal
+     * @return the response entity
+     * @throws URISyntaxException the uri syntax exception
+     */
     @PostMapping("/home")
-    ResponseEntity<Home> createGroup(@Valid @RequestBody Home home,
-                                      @AuthenticationPrincipal OAuth2User principal) throws URISyntaxException {
+    ResponseEntity<Home> createHome(@Valid @RequestBody Home home,
+                                    @AuthenticationPrincipal OAuth2User principal) throws URISyntaxException {
         log.info("Request to create home: {}", home);
         Map<String, Object> details = principal.getAttributes();
         String userId = details.get("sub").toString();
@@ -68,6 +96,12 @@ class HomeController {
     }
 
 
+    /**
+     * Update home response entity.
+     *
+     * @param home the home
+     * @return the response entity
+     */
     @PutMapping("/home/{id}")
     ResponseEntity<Home> updateHome(@Valid @RequestBody Home home) {
         log.info("Request to update home: {}", home);
@@ -75,6 +109,12 @@ class HomeController {
         return ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Delete home response entity.
+     *
+     * @param id the id
+     * @return the response entity
+     */
     @DeleteMapping("/home/{id}")
     public ResponseEntity<?> deleteHome(@PathVariable Long id) {
         log.info("Request to delete home: {}", id);

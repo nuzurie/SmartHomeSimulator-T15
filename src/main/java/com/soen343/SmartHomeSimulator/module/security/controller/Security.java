@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Security object.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,6 +36,12 @@ public class Security implements Observer {
         return 0;
     }
 
+    /**
+     * Away mode protocol array list.
+     *
+     * @param home the home
+     * @return the array list
+     */
     public ArrayList<Long> awayModeProtocol(Home home){
         home.getBackyardDoor().setOpen(false);
         home.getBackyardDoor().setLocked(true);

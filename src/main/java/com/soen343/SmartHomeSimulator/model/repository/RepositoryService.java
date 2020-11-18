@@ -14,17 +14,44 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * The Repository service Object.
+ */
 @Getter
 @Setter
 @Service
 @NoArgsConstructor
 public class RepositoryService {
+    /**
+     * The Simulation repository.
+     */
     SimulationRepository simulationRepository;
+    /**
+     * The Light repository.
+     */
     LightRepository lightRepository;
+    /**
+     * The Window repository.
+     */
     WindowRepository windowRepository;
+    /**
+     * The Door repository.
+     */
     DoorRepository doorRepository;
+    /**
+     * The Room repository.
+     */
     RoomRepository roomRepository;
 
+    /**
+     * Instantiates a new Repository service.
+     *
+     * @param simulationRepository the simulation repository
+     * @param lightRepository      the light repository
+     * @param windowRepository     the window repository
+     * @param doorRepository       the door repository
+     * @param roomRepository       the room repository
+     */
     @Autowired
     public RepositoryService(SimulationRepository simulationRepository, LightRepository lightRepository, WindowRepository windowRepository, DoorRepository doorRepository, RoomRepository roomRepository) {
         this.simulationRepository = simulationRepository;
@@ -34,6 +61,11 @@ public class RepositoryService {
         this.roomRepository = roomRepository;
     }
 
+    /**
+     * Gets lights for user.
+     *
+     * @return the lights for user
+     */
     public List<Light> getLightsForUser() {
         Simulation simulation = simulationRepository.findById((long) 1);
         Home home = simulation.getHome();
@@ -55,6 +87,9 @@ public class RepositoryService {
         }
     }
 
+    /**
+     * Save lights.
+     */
     public void saveLights() {
         Home home = simulationRepository.findById((long) 1).getHome();
         List<Room> rooms = home.getRooms();
@@ -70,18 +105,41 @@ public class RepositoryService {
         lights.forEach(lightRepository::save);
     }
 
+    /**
+     * Save light.
+     *
+     * @param light the light
+     * @return the light
+     */
     public Light saveLight(Light light) {
         return this.lightRepository.save(light);
     }
 
+    /**
+     * Save window.
+     *
+     * @param window the window
+     * @return the window
+     */
     public Window saveWindow(Window window) {
         return this.windowRepository.save(window);
     }
 
+    /**
+     * Save door.
+     *
+     * @param door the door
+     * @return the door
+     */
     public Door saveDoor(Door door) {
         return this.doorRepository.save(door);
     }
 
+    /**
+     * Gets windows for user.
+     *
+     * @return the windows for user
+     */
     public List<Window> getWindowsForUser() {
         Simulation simulation = simulationRepository.findById((long) 1);
         Home home = simulation.getHome();
@@ -103,6 +161,9 @@ public class RepositoryService {
         }
     }
 
+    /**
+     * Save windows.
+     */
     public void saveWindows() {
         Home home = simulationRepository.findById((long) 1).getHome();
         List<Room> rooms = home.getRooms();
@@ -116,6 +177,11 @@ public class RepositoryService {
         windowList.forEach(windowRepository::save);
     }
 
+    /**
+     * Gets doors for user.
+     *
+     * @return the doors for user
+     */
     public List<Door> getDoorsForUser() {
         Simulation simulation = simulationRepository.findById((long) 1);
         Home home = simulation.getHome();
@@ -137,6 +203,9 @@ public class RepositoryService {
         }
     }
 
+    /**
+     * Save doors.
+     */
     public void saveDoors() {
         Home home = simulationRepository.findById((long) 1).getHome();
         List<Room> rooms = home.getRooms();
@@ -152,6 +221,12 @@ public class RepositoryService {
         doors.forEach(doorRepository::save);
     }
 
+    /**
+     * Add user.
+     *
+     * @param roomID the room id
+     * @param user   the user
+     */
     public void addUser(Long roomID, SimulationUser user) {
         Simulation simulation = simulationRepository.findById((long) 1);
         //Remove from simulaiton
@@ -175,6 +250,12 @@ public class RepositoryService {
         }
     }
 
+    /**
+     * Remove user.
+     *
+     * @param roomID the room id
+     * @param user   the user
+     */
     public void removeUser(Long roomID, SimulationUser user) {
         Simulation simulation = simulationRepository.findById((long) 1);
         //find the user
@@ -197,10 +278,14 @@ public class RepositoryService {
             simulation.getSimulationUsers().add(simulationUser);
     }
 
+    /**
+     * Get list of lights by ID of AwayMode light.
+     *
+     * @param id the AwayMode light id
+     * @return the list
+     */
     public List<Light> getLightsById(long[] id){
         List<Light> lightList = new LinkedList<>();
-//        System.out.println(lightRepository);
-//        System.out.println(id);
         for (long i: id
              ) {
             Light light = lightRepository.findById(i);

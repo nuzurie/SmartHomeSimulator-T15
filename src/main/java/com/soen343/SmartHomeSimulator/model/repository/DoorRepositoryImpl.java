@@ -2,20 +2,25 @@ package com.soen343.SmartHomeSimulator.model.repository;
 
 import com.soen343.SmartHomeSimulator.model.Door;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The Implementation of the Door repository.
+ */
 @Repository
 public class DoorRepositoryImpl implements DoorRepository{
 
-    List<Door> linkedList = new LinkedList<>();
+    /**
+     * The List of doors.
+     */
+    List<Door> doorList = new LinkedList<>();
 
     @Override
     public Door findById(Long id) {
         for (Door door:
-                this.linkedList) {
+                this.doorList) {
             if (door.getId()==id)
                 return door;
         }
@@ -30,19 +35,19 @@ public class DoorRepositoryImpl implements DoorRepository{
             already_exists.setOpen(door.isOpen());
         }
         else{
-            linkedList.add(door);
+            doorList.add(door);
         }
         return this.findById(door.getId());
     }
 
     @Override
     public List<Door> findAll() {
-        return linkedList;
+        return doorList;
     }
 
     @Override
     public Door remove(Door door) {
-        Boolean removed = this.linkedList.remove(door);
+        Boolean removed = this.doorList.remove(door);
         if (removed)
             return door;
         else

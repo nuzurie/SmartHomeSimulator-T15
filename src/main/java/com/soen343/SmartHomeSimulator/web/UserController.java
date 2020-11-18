@@ -16,14 +16,28 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * User Controller.
+ */
 @RestController
 public class UserController {
     private ClientRegistration registration;
 
+    /**
+     * Instantiates a new User Controller.
+     *
+     * @param registrations the registrations
+     */
     public UserController(ClientRegistrationRepository registrations) {
         this.registration = registrations.findByRegistrationId("okta");
     }
 
+    /**
+     * Gets user.
+     *
+     * @param user the user
+     * @return the user
+     */
     @GetMapping("/api/user")
     public ResponseEntity<?> getUser(@AuthenticationPrincipal OAuth2User user) {
         if (user == null) {
@@ -33,6 +47,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Logout response entity.
+     *
+     * @param request the request
+     * @param idToken the id token
+     * @return the response entity
+     */
     @PostMapping("/api/logout")
     public ResponseEntity<?> logout(HttpServletRequest request,
                                     @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {

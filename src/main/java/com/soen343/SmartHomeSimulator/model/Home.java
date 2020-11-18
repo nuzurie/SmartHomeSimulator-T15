@@ -8,6 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The Home object.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,10 +33,18 @@ public class Home{
     @Builder.Default
     private Door entranceDoor = Door.builder().name("Entrance").build();
 
+    /**
+     * Sets id of the Home.
+     */
     public void setId() {
         this.id = ++classId;
     }
 
+    /**
+     * Delete user.
+     *
+     * @param simulationUser the simulation user
+     */
     public void deleteUser(SimulationUser simulationUser) {
         List<Room> rooms = this.getRooms();
         for (Room room :

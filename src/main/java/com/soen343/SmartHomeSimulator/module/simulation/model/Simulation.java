@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Simulation object.
+ */
 @Data
 @NoArgsConstructor
 @Getter
@@ -42,6 +45,26 @@ public class Simulation implements Subject {
     private LocalTime lightsTimeEnd;
     private List<Light> chosenAwayModeLights;
 
+    /**
+     * Instantiates a new Simulation.
+     *
+     * @param name                 the name
+     * @param temperature          the temperature
+     * @param lightsAutoMode       the lights auto mode
+     * @param date                 the date
+     * @param time                 the time
+     * @param home                 the home
+     * @param simulationUsers      the simulation users
+     * @param loggedInUser         the logged in user
+     * @param awayMode             the away mode
+     * @param observer             the observer
+     * @param callAuthoritiesTimer the call authorities timer
+     * @param timeMultiplier       the time multiplier
+     * @param dateTime             the date time
+     * @param lightsTimeStart      the lights time start
+     * @param lightsTimeEnd        the lights time end
+     * @param lights               the lights
+     */
     @Autowired
     public Simulation(Long name, double temperature, boolean lightsAutoMode, String date, String time, Home home, Set<SimulationUser> simulationUsers, SimulationUser loggedInUser, boolean awayMode, Observer observer, double callAuthoritiesTimer, double timeMultiplier, LocalDateTime dateTime, LocalTime lightsTimeStart, LocalTime lightsTimeEnd, List<Light> lights) {
         this.name = name;
@@ -62,15 +85,28 @@ public class Simulation implements Subject {
         this.chosenAwayModeLights = lights;
     }
 
+    /**
+     * Gets Simulation Id.
+     *
+     * @return the id
+     */
     public long getId() {
         return this.getName();
     }
 
+    /**
+     * Delete User.
+     *
+     * @param simulationUser the simulation user
+     */
     public void deleteUser(SimulationUser simulationUser) {
         this.getSimulationUsers().remove(simulationUser);
         this.getHome().deleteUser(simulationUser);
     }
 
+    /**
+     * Sets auto mode.
+     */
     public void setAutoMode() {
         if (lightsAutoMode) {
             List<Room> rooms = this.home.getRooms();
@@ -86,11 +122,21 @@ public class Simulation implements Subject {
         }
     }
 
+    /**
+     * Gets observer.
+     *
+     * @return the observer
+     */
     @JsonIgnore
     public Observer getObserver() {
         return this.observer;
     }
 
+    /**
+     * Gets date time.
+     *
+     * @return the date time
+     */
     @JsonIgnore
     public LocalDateTime getDateTime() {
         return dateTime;
@@ -104,6 +150,11 @@ public class Simulation implements Subject {
         return observer.update(this.home.getRooms());
     }
 
+    /**
+     * Toggle away mode.
+     *
+     * @return the int
+     */
     public int toggleAwayMode() {
         if (this.awayMode) {
             this.awayMode = false;
@@ -118,12 +169,18 @@ public class Simulation implements Subject {
         return 0;
     }
 
+    /**
+     * Parse date.
+     */
     public void parseDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String dateTimeString = this.date + " " + this.time;
         this.dateTime = LocalDateTime.parse(dateTimeString, formatter);
     }
 
+    /**
+     * Increase time.
+     */
     public void increaseTime() {
         while (true) {
             long s = Math.round(15 * this.timeMultiplier);
@@ -138,6 +195,9 @@ public class Simulation implements Subject {
         }
     }
 
+    /**
+     * Update date time strings.
+     */
     public void updateDateTimeStrings() {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         this.date = this.dateTime.format(formatter);
@@ -145,6 +205,12 @@ public class Simulation implements Subject {
         this.time = this.dateTime.format(formatter);
     }
 
+    /**
+     * Lights time parse.
+     *
+     * @param timeStart the time start
+     * @param timeEnd   the time end
+     */
     public void lightsTimeParse(String timeStart, String timeEnd) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         this.lightsTimeStart = LocalTime.parse(timeStart, formatter);
@@ -153,7 +219,9 @@ public class Simulation implements Subject {
         setTimerLights();
     }
 
-    //List<Light> lights
+    /**
+     * Sets timer lights.
+     */
     public void setTimerLights() {
         Light a = this.home.getBackyardLight();
         if (this.awayMode) {

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The Implementation of the Room repository.
+ */
 @Service
 public class RoomRepositoryImpl implements RoomRepository {
     @Override

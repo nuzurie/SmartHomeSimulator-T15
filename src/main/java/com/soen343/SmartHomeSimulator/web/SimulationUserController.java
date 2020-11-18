@@ -17,6 +17,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The Controller for a Simulation User.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -24,16 +27,33 @@ public class SimulationUserController {
     private SimulationUserRepository simulationUserRepository;
     private SimulationRepository simulationRepository;
 
+    /**
+     * Instantiates a new SimulationUserController.
+     *
+     * @param simulationUserRepository the simulation user repository
+     * @param simulationRepository     the simulation repository
+     */
     public SimulationUserController(SimulationUserRepository simulationUserRepository, SimulationRepository simulationRepository) {
         this.simulationUserRepository = simulationUserRepository;
         this.simulationRepository = simulationRepository;
     }
 
+    /**
+     * Gets users.
+     *
+     * @return the users
+     */
     @GetMapping("/users")
     public Collection<SimulationUser> getUsers() {
         return simulationUserRepository.findAll();
     }
 
+    /**
+     * Gets user.
+     *
+     * @param id the id
+     * @return the user
+     */
     @GetMapping("/user/{id}")
     public ResponseEntity getUser(@PathVariable Long id) {
         SimulationUser user = simulationUserRepository.findById(id);
@@ -49,6 +69,13 @@ public class SimulationUserController {
 //                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * Create user response entity.
+     *
+     * @param user the user
+     * @return the response entity
+     * @throws URISyntaxException the uri syntax exception
+     */
     @PostMapping("/user")
     public ResponseEntity<SimulationUser> createUser(@Valid @RequestBody SimulationUser user) throws URISyntaxException {
         log.info("Request to create user: {}", user);
@@ -60,6 +87,13 @@ public class SimulationUserController {
         return ResponseEntity.ok().body(created_user);
     }
 
+    /**
+     * Update user response entity.
+     *
+     * @param user the user
+     * @param id   the id
+     * @return the response entity
+     */
     @PutMapping("/user/{id}")
     ResponseEntity<SimulationUser> updateUser(@Valid @RequestBody SimulationUser user, @PathVariable Long id) {
         log.info("Request to update user: {}", user);
@@ -72,6 +106,12 @@ public class SimulationUserController {
 
     }
 
+    /**
+     * Delete user response entity.
+     *
+     * @param id the id
+     * @return the response entity
+     */
     @DeleteMapping("/user/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         log.info("Request to delete User with id: {}", id);
@@ -83,6 +123,11 @@ public class SimulationUserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Save users response entity.
+     *
+     * @return the response entity
+     */
     @GetMapping("/users/save")
     public ResponseEntity saveUsers() {
         Set<SimulationUser> simulationUsers = simulationUserRepository.findAll();
@@ -103,6 +148,11 @@ public class SimulationUserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Load users response entity.
+     *
+     * @return the response entity
+     */
     @GetMapping("/users/load")
     public ResponseEntity loadUsers() {
         ObjectInputStream ois = null;
@@ -132,6 +182,4 @@ public class SimulationUserController {
 
         return ResponseEntity.ok(users);
     }
-
-
 }
