@@ -41,3 +41,9 @@ With more functionalities to come in future releases.
 <h2> Installation demo Video Link:</h2>
 
 https://youtu.be/59Wfw1dyniw
+
+<h2> Delivery 2 Video </h2>
+
+https://youtu.be/VEY3TagPd10
+
+Note: Please watch beginning of delivery 1 video for installation instructions.

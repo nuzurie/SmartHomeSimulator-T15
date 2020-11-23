@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+/**
+ * Initializes the entire Application.
+ */
 @Component
 class Initializer implements CommandLineRunner {
 
@@ -20,6 +23,15 @@ class Initializer implements CommandLineRunner {
     private final RepositoryService repositoryService;
     private final RoomRepository roomRepository;
 
+    /**
+     * Instantiates a new Initializer.
+     *
+     * @param repository               the repository
+     * @param simulationUserRepository the simulation user repository
+     * @param simulationRepository     the simulation repository
+     * @param repositoryService        the repository service
+     * @param roomRepository           the room repository
+     */
     @Autowired
     public Initializer(HomeRepository repository, SimulationUserRepositoryImpl simulationUserRepository, SimulationRepository simulationRepository, RepositoryService repositoryService, RoomRepository roomRepository) {
         this.repository = repository;

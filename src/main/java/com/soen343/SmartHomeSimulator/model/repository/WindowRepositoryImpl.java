@@ -6,9 +6,15 @@ import org.springframework.stereotype.Repository;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The Implementation of the Window Repository.
+ */
 @Repository
 public class WindowRepositoryImpl implements WindowRepository{
 
+    /**
+     * The List of Windows.
+     */
     List<Window> windowList = new LinkedList<>();
 
     @Override

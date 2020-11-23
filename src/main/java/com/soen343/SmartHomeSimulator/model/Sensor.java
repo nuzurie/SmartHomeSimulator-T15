@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * The Sensor object.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
