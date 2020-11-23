@@ -4,6 +4,7 @@ import 'reactjs-popup/dist/index.css';
 import ExecuteService from "../../api/ExecuteServices";
 import AwayModeLightsTimerForm from "../Forms/AwayModeLightsTimerForm";
 import LightsAwayMode from "../Forms/LightsAwayMode";
+import CallAuthoritiesForm from "../Forms/CallAuthoritiesForm";
 
 export default class AwayMode extends Component {
 
@@ -52,6 +53,9 @@ export default class AwayMode extends Component {
                     : <div></div>}
                 {this.state.simulation.loggedInUser ? (this.state.simulation.loggedInUser.privilege == 'Parent' || this.state.simulation.loggedInUser.privilege == 'parent') &&
                     <LightsAwayMode/>
+                    : <div></div>}
+                {this.state.simulation.loggedInUser ? (this.state.simulation.loggedInUser.privilege == 'Parent' || this.state.simulation.loggedInUser.privilege == 'parent') &&
+                    <CallAuthoritiesForm/>
                     : <div></div>}
             </>
         )

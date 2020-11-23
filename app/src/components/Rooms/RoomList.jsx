@@ -15,7 +15,6 @@ export default class RoomList extends Component {
 
         this.refreshSimulation = this.refreshSimulation.bind(this)
         this.userDifference = this.userDifference.bind(this)
-        this.addUser = this.addUser.bind(this)
         this.removeUser = this.removeUser.bind(this)
         this.toggleAutoMode = this.toggleAutoMode.bind(this)
         this.callAuthorities = this.callAuthorities.bind(this)
@@ -39,22 +38,6 @@ export default class RoomList extends Component {
         return simulationUsers.filter(comparer(roomUsers))
     }
 
-
-    addUser(roomIndex, user) {
-        let userIndex = this.state.simulation.simulationUsers.indexOf(user)
-        this.state.simulation.simulationUsers.splice(userIndex, 1)
-        this.state.simulation.home.rooms[roomIndex].simulationUsers.push(user)
-
-        ExecuteService.updateSimulationDetails(this.state.simulation)
-            .then(() => {
-                this.refreshSimulation()
-            })
-            .catch(response=> {
-                alert("Intruder Alert!");
-                this.callAuthorities()
-                this.refreshSimulation();
-            })
-    }
 
     callAuthorities(){
         ExecuteService.callAuthorities()
@@ -99,6 +82,7 @@ export default class RoomList extends Component {
             .then(() => this.refreshSimulation())
             .catch(() => {
                 alert("Intruder Alert!")
+                this.callAuthorities()
                 this.refreshSimulation()
             })
     }

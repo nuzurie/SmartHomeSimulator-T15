@@ -41,16 +41,32 @@ export default class DoorFrame extends Component {
         return (
             <div className={"container"}>
                 <h3>Doors</h3>
-                {this.state.doors.map(door =>
-                    <div className={"container"}><span className={"mr-5"}>Door {door.id.toString()} in {door.name} is currently {door.open ? "open" : "closed"} and {door.locked ? "locked." : "unlocked."}</span>
-                        <button className={door.open ? "btn btn-outline-danger btn-sm mr-5 " : "btn btn-outline-success btn-sm mr-5"} onClick={()=>this.toggleDoor(door, "open")}>
-                            {door.open ? "Close" : "Open"}
-                        </button>
-                        <button className={"btn btn btn-outline-dark btn-sm mr-5 "} onClick={()=>this.toggleDoor(door, "lock")}>
-                            {door.locked ? "Unlock" : "Lock"}
-                        </button>
-                    </div>
-                )}
+                <table className={"table table-borderless"}>
+                    <thead>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    </thead>
+                    <tbody>
+                    {this.state.doors.map(door =>
+                        <tr>
+                            <td>
+                                <span className={"mr-5"}>Door {door.id.toString()} in {door.name} is currently {door.open ? "open" : "closed"} and {door.locked ? "locked." : "unlocked."}</span>
+                            </td>
+                            <td>
+                                <button className={door.open ? "btn btn-outline-danger btn-sm mr-5 " : "btn btn-outline-success btn-sm mr-5"} onClick={()=>this.toggleDoor(door, "open")}>
+                                    {door.open ? "Close" : "Open"}
+                                </button>
+                            </td>
+                            <td>
+                                <button className={"btn btn btn-outline-dark btn-sm mr-5 "} onClick={()=>this.toggleDoor(door, "lock")}>
+                                    {door.locked ? "Unlock" : "Lock"}
+                                </button>
+                            </td>
+                        </tr>
+                    )}
+                    </tbody>
+                </table>
             </div>
         )
     }

@@ -66,6 +66,8 @@ public class CoreController {
     public ResponseEntity<?> toggleAutoMode() {
 
         Simulation simulation = simulationRepository.findById((long) 1);
+        if (simulation.getLoggedInUser().getPrivilege().equalsIgnoreCase("stranger"))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         simulation.setLightsAutoMode(!simulation.isLightsAutoMode());
         simulation.setAutoMode();
 
@@ -83,6 +85,8 @@ public class CoreController {
         double multiplier = Double.valueOf(multipliers);
 
         Simulation simulation = simulationRepository.findById((long) 1);
+        if (simulation.getLoggedInUser().getPrivilege().equalsIgnoreCase("stranger"))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         System.out.println("In core:" + simulation);
         simulation.setTimeMultiplier(multiplier);
 

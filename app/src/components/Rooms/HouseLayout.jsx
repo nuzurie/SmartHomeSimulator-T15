@@ -177,7 +177,7 @@ export default class HouseLayoutUI extends Component {
                                     <th scope={"col"}></th>
                                     <td scope={"col"}></td>
                                     <td scope={"col"}>
-                                        {this.state.simulation.home.entranceDoor.locked ? <span className={"mr-2"}><FontAwesomeIcon  icon={faDoorOpen}></FontAwesomeIcon></span> : <span className={"mr-2"}><FontAwesomeIcon icon={faDoorClosed}></FontAwesomeIcon></span>}
+                                        {this.state.simulation.home.entranceDoor.open ? <span className={"mr-2"}><FontAwesomeIcon  icon={faDoorOpen}></FontAwesomeIcon></span> : <span className={"mr-2"}><FontAwesomeIcon icon={faDoorClosed}></FontAwesomeIcon></span>}
                                     </td>
                                     <td scope={"col"}>
                                         {this.state.simulation.home.entranceLight.turnedOn ? <span><FontAwesomeIcon  icon={faLightbulb}></FontAwesomeIcon></span> : <span className={"mr-2"}><FontAwesomeIcon icon={faMoon}></FontAwesomeIcon></span>}
@@ -190,7 +190,7 @@ export default class HouseLayoutUI extends Component {
                                     <td scope={"col"}></td>
                                     <td scope={"col"}>
                                             <div className={"menu-item"}>
-                                                {this.state.simulation.home.backyardDoor.locked ? <span className={"mr-2"}><FontAwesomeIcon  icon={faDoorOpen}></FontAwesomeIcon></span> : <span className={"mr-2"}><FontAwesomeIcon icon={faDoorClosed}></FontAwesomeIcon></span>}
+                                                {this.state.simulation.home.backyardDoor.open ? <span className={"mr-2"}><FontAwesomeIcon  icon={faDoorOpen}></FontAwesomeIcon></span> : <span className={"mr-2"}><FontAwesomeIcon icon={faDoorClosed}></FontAwesomeIcon></span>}
                                             </div>
                                     </td>
                                     <td scope={"col"}>

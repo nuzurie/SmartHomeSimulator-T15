@@ -62,10 +62,8 @@ public class SecurityController {
         if (success==-1)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("House isn't empty.");
         else{
-            System.out.println("got 2");
             messages = security.awayModeProtocol(currentSimulation.getHome());
         }
-        System.out.println("got 1");
         return ResponseEntity.ok().body(messages);
     }
 
@@ -93,16 +91,19 @@ public class SecurityController {
     @GetMapping("simulation/callAuthorities")
     public DeferredResult<ResponseEntity<?>> callAuthorities() {
         final DeferredResult <ResponseEntity < ? >> out = new DeferredResult <>((long)100000);
-
+        log.info("Coming to callAUTH");
         ForkJoinPool.commonPool().submit(() -> {
             Simulation simulation = simulationRepository.findById((long) 1);
             double timer = simulation.getCallAuthoritiesTimer();
             double multiplier = simulation.getTimeMultiplier();
             timer = timer*60*1000/multiplier;
+            System.out.println("timer" + timer);
             try {
+                System.out.println("sleeping" + Math.round(timer));
                 Thread.sleep(Math.round(timer));
             } catch (InterruptedException e) {
             }
+            System.out.println("done sleeping");
             out.setResult(ResponseEntity.ok().build());
         });
 
