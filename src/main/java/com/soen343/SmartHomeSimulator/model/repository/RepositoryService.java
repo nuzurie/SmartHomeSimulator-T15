@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ *
+ */
 @Getter
 @Setter
 @Service
@@ -25,6 +27,13 @@ public class RepositoryService {
     DoorRepository doorRepository;
     RoomRepository roomRepository;
 
+    /**
+     * @param simulationRepository
+     * @param lightRepository
+     * @param windowRepository
+     * @param doorRepository
+     * @param roomRepository
+     */
     @Autowired
     public RepositoryService(SimulationRepository simulationRepository, LightRepository lightRepository, WindowRepository windowRepository, DoorRepository doorRepository, RoomRepository roomRepository) {
         this.simulationRepository = simulationRepository;
@@ -70,18 +79,37 @@ public class RepositoryService {
         lights.forEach(lightRepository::save);
     }
 
+    /**
+     *
+     * @param light
+     * @return
+     */
     public Light saveLight(Light light) {
         return this.lightRepository.save(light);
     }
 
+    /**
+     *
+     * @param window
+     * @return
+     */
     public Window saveWindow(Window window) {
         return this.windowRepository.save(window);
     }
 
+    /**
+     *
+     * @param door
+     * @return Door
+     */
     public Door saveDoor(Door door) {
         return this.doorRepository.save(door);
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Window> getWindowsForUser() {
         Simulation simulation = simulationRepository.findById((long) 1);
         Home home = simulation.getHome();
@@ -199,8 +227,6 @@ public class RepositoryService {
 
     public List<Light> getLightsById(long[] id){
         List<Light> lightList = new LinkedList<>();
-//        System.out.println(lightRepository);
-//        System.out.println(id);
         for (long i: id
              ) {
             Light light = lightRepository.findById(i);

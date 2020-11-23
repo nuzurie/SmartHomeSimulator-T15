@@ -41,7 +41,6 @@ public class Security implements Observer {
         home.getEntranceDoor().setLocked(true);
 
         ArrayList<Long> blockedWindows = new ArrayList<>();
-
         home.getRooms().forEach(room -> {
             room.getDoors().forEach(door -> {
                 door.lockDoor();

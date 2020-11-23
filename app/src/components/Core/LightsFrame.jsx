@@ -17,10 +17,10 @@ export default class LightsFrame extends Component {
     }
 
     componentDidMount() {
-       this.refresh()
+        this.refresh()
     }
 
-    toggleLight(light){
+    toggleLight(light) {
         ExecuteServices.toggleLight(light)
             .then(() => this.refresh())
             .catch(error => console.log(error))
@@ -31,10 +31,10 @@ export default class LightsFrame extends Component {
             .then(() => {
                 this.refresh()
             })
-            .catch(error => console.log(error))
+            .catch(() => alert("You don't have the privileges to perform this action."))
     }
 
-    refresh(){
+    refresh() {
         this.props.controlParent(Math.random())
         ExecuteServices.getLightsForUsers()
             .then(response => {
@@ -55,13 +55,30 @@ export default class LightsFrame extends Component {
         return (
             <div className={"container"}>
                 <h3>Lights</h3>
-                {this.state.lights.map(light =>
-                    <div className={"container"}><span className={"mr-5"}>Light {light.id.toString()} in {light.name} is currently {light.turnedOn ? "on." : "off."}</span>
-                        <button className={light.turnedOn ? "btn btn-outline-danger btn-sm mr-5 " : "btn btn-outline-success btn-sm mr-5"} onClick={()=>this.toggleLight(light)}>
-                            {light.turnedOn ? "Turn off" : "Turn on"}
-                        </button>
-                    </div>
-                )}
+                <table className={"table table-borderless"}>
+                    <thead>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    </thead>
+                    <tbody>
+                    {this.state.lights.map(light =>
+                        <tr>
+                            <td><span
+                                className={"mr-5"}>Light {light.id.toString()} in {light.name} is currently {light.turnedOn ? "on." : "off."}</span>
+                            </td>
+                            <td>
+                                <button
+                                    className={light.turnedOn ? "btn btn-outline-danger btn-sm mr-5 " : "btn btn-outline-success btn-sm mr-5"}
+                                    onClick={() => this.toggleLight(light)}>
+                                    {light.turnedOn ? "Turn off" : "Turn on"}
+                                </button>
+                            </td>
+                            <td> </td>
+                        </tr>
+                    )}
+                    </tbody>
+                </table>
                 <button className={"btn btn-sm btn-primary"}
                         onClick={this.toggleAutoMode}>{this.state.autoMode ? "Turn auto-mode off" : "Turn auto-mode on"}</button>
             </div>

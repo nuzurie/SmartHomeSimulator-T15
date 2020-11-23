@@ -59,13 +59,11 @@ class TimeMultiplierForm extends Component {
     }
 
     onSubmit(event) {
-        this.setState({
-            success: `The time now runs at ${event.multiplier}x speed.`,
-        })
-
         ExecuteServices.setTimeMultiplier(event.multiplier)
-            .then(response => console.log(response))
-            .catch(error => console.log(error))
+            .then(()=> this.setState({
+                success: `The time now runs at ${event.multiplier}x speed.`,
+            }))
+            .catch(()=> alert("You don't have the privileges to perform this action."))
     }
 
 }

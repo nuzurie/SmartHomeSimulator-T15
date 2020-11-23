@@ -41,16 +41,32 @@ export default class WindowsFrame extends Component {
         return (
             <div className={"container"}>
                 <h3>Windows</h3>
-                {this.state.windows.map(window =>
-                    <div className={"container"}><span className={"mr-5"}>Window {window.id} in {window.name} is currently {window.open ? "open" : "closed"} and {window.blocked ? "blocked." : "unblocked."}</span>
-                        <button className={window.open ? "btn btn-outline-danger btn-sm mr-5 " : "btn btn-outline-success btn-sm mr-5"} onClick={()=>this.toggleWindow(window, "open")}>
-                            {window.open ? "Close" : "Open"}
-                        </button>
-                        <button className={"btn btn-outline-dark btn-sm mr-5 "} onClick={()=>this.toggleWindow(window, "block")}>
-                            {window.blocked ? "Unblock" : "Block"}
-                        </button>
-                    </div>
-                )}
+                <table className={"table table-borderless"}>
+                    <thead>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    </thead>
+                    <tbody>
+                    {this.state.windows.map(window =>
+                        <tr>
+                            <td>
+                                <span className={"mr-5"}>Window {window.id} in {window.name} is currently {window.open ? "open" : "closed"} and {window.blocked ? "blocked." : "unblocked."}</span>
+                            </td>
+                            <td>
+                                <button className={window.open ? "btn btn-outline-danger btn-sm mr-5 " : "btn btn-outline-success btn-sm mr-5"} onClick={()=>this.toggleWindow(window, "open")}>
+                                    {window.open ? "Close" : "Open"}
+                                </button>
+                            </td>
+                            <td>
+                                <button className={"btn btn-outline-dark btn-sm mr-5 "} onClick={()=>this.toggleWindow(window, "block")}>
+                                    {window.blocked ? "Unblock" : "Block"}
+                                </button>
+                            </td>
+                        </tr>
+                    )}
+                    </tbody>
+                </table>
             </div>
         )
     }
