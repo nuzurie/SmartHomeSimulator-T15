@@ -1,13 +1,9 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {Component} from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import ExecuteServices from "../../api/ExecuteServices";
 import Divider from "@material-ui/core/Divider";
@@ -22,16 +18,20 @@ export default class SecondaryListItems extends Component {
     }
 
     componentDidMount() {
-        console.log(this.state.simulation)
-        ExecuteServices.getSimulation()
+        this.interval = setInterval(() => ExecuteServices.getSimulation()
             .then(response => {
-                console.log(response, "1")
                 this.setState({
                     simulation: response.data,
                 })
             })
-            .catch(error => console.log(error))
+            .catch(error => console.log(error)), 1000);
+
     }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
 
     render() {
         return (
@@ -73,42 +73,3 @@ export default class SecondaryListItems extends Component {
         );
     }
 }
-
-//
-// export function SecondaryListItems() {
-//     let simulation1 = null;
-//     ExecuteServices.getSimulation()
-//         .then(response => simulation1 = (response.data))
-//             .catch(response => console.log(response))
-//
-//     const [simulation, setSumulation] = React.useState(simulation1);
-//     // useEffect( ()=>{
-//     //     ExecuteServices.getSimulation()
-//     //         .then(response => simulation1 = (response.data))
-//     //         .catch(response => console.log(response))
-//     //     }
-//     // )
-//     return (
-//         <div>
-//             <ListSubheader inset>Simulation conditions!</ListSubheader>
-//             <ListItem button>
-//                 <ListItemIcon>
-//                     <AssignmentIcon/>
-//                 </ListItemIcon>
-//                 <ListItemText primary={`Temperature: ${simulation.temperature}`}/>
-//             </ListItem>
-//             <ListItem button>
-//                 <ListItemIcon>
-//                     <AssignmentIcon/>
-//                 </ListItemIcon>
-//                 <ListItemText primary={`Time: ${simulation.time}`}/>
-//             </ListItem>
-//             <ListItem button>
-//                 <ListItemIcon>
-//                     <AssignmentIcon/>
-//                 </ListItemIcon>
-//                 <ListItemText primary={`Date: ${simulation.date}`}/>
-//             </ListItem>
-//         </div>
-//     );
-// }

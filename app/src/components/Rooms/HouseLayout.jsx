@@ -27,7 +27,11 @@ export default class HouseLayoutUI extends Component {
     }
 
     componentDidMount() {
-        this.refreshSimulation()
+        this.interval = setInterval(() => this.refreshSimulation(), 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     userDifference(roomUsers) {
