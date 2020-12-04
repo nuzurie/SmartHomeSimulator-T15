@@ -278,7 +278,7 @@ export class RoomTemps extends Component {
                                     {this.state.rooms.map(room =>
                                         <tr>
                                             <td>{room.name}</td>
-                                            <td>{room.temperature}</td>
+                                            <td>{room.temperature.toFixed(1)}</td>
                                         </tr>
                                     )}
                                     </tbody>
@@ -290,4 +290,132 @@ export class RoomTemps extends Component {
         )
     }
 }
+
+export class OverrideRooms extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            success: '',
+            rooms: [],
+        }
+
+        this.onSubmit = this.onSubmit.bind(this)
+        this.refresh = this.refresh.bind(this)
+    }
+
+    componentDidMount() {
+        this.refresh()
+        // this.interval = setInterval(() => {
+        //     ExecuteServices.getHeating()
+        //         .then(response => {
+        //             if (response.data.zoneAndTimeNumbers.numberZones !== this.state.numberZones)
+        //                 this.setState({
+        //                     numberZones: response.data.zoneAndTimeNumbers.numberZones,
+        //                     numberIntervals: response.data.zoneAndTimeNumbers.numberIntervals,
+        //                 })
+        //         })
+        //         .catch(error => console.log(error))
+        // }, 1000)
+        // console.log(this.state)
+    }
+
+    // componentWillUnmount(): void {
+    //     clearInterval(this.interval)
+    // }
+
+    refresh() {
+        ExecuteServices.getRoomsForUsers()
+            .then(response => {
+                this.setState({
+                        rooms: response.data
+                    }
+                )
+            })
+            .catch(error => console.log(error))
+
+        console.log(this.state)
+    }
+
+
+    render() {
+        let id = []
+        return (
+            <div className={"container"}>
+                <h3>Rooms for Zones</h3>
+                <div className="container">
+                    <Formik
+                        initialValues={id}
+                        onSubmit={this.onSubmit}
+                        validateOnChange={false}
+                        validateOnBlur={false}
+                        enableReinitialize={true}
+                    >
+                        {
+                            (props) => (
+                                <Popup
+                                    trigger={<button className="button btn-primary"> Select Rooms for Zones </button>}
+                                    modal
+                                >
+                                    {close => (<div className="modal">
+                                        <button className="close" onClick={close}>          &times;        </button>
+                                        <div className="header"> Modal Title</div>
+                                        <div className="content">
+                                        </div>
+                                    </div>)}
+                                    < Form>
+                                        {
+                                            this.state.success &&
+                                            <div
+                                                className={"alert alert-success dismissable"}>{this.state.success}</div>
+                                        }
+                                        <ErrorMessage name="name" component="div"
+                                                      className="alert alert-warning"/>
+                                        <div id="checkbox-group"><h5>Select Rooms For Zone 1</h5></div>
+                                        <div role="group" aria-labelledby="checkbox-group">
+                                            {this.state.rooms.map((room) =>
+                                                <div>
+                                                    <fieldset className="form-group">
+                                                        <label>
+                                                            <Field type="checkbox" key={room.id} name={"rooms"}
+                                                                   value={room.id.toString()}/>
+                                                            {room.name}
+                                                        </label>
+                                                    </fieldset>
+                                                    {/*<fieldset className="form-group">*/}
+                                                    {/*    <label>Temperature for the room</label>*/}
+                                                    {/*    <Field type={"number"} name={room.id}></Field>*/}
+                                                    {/*</fieldset>*/}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <button className="btn btn-primary" type="submit">Update</button>
+                                    </Form>
+                                </Popup>
+                            )
+                        }
+                    </Formik>
+
+                </div>
+            </div>
+        )
+    }
+
+    handleChange(event) {
+        this.setState({[event.target.name]: event.target.value})
+    }
+
+    onSubmit(event) {
+        this.setState({
+            success: `Rooms updated`,
+        })
+        console.log("The event is:", event)
+        // ExecuteServices.setZoneRoomsAndTemp(event)
+        //     .then(response => console.log(response))
+        //     //CATCH EXCEPTION HERE
+        //     .catch(error => console.log(error.message))
+    }
+}
+
 

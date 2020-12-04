@@ -137,7 +137,7 @@ export default class RoomList extends Component {
                                 {this.state.rooms.map((room, roomIndex) =>
                                     <tr>
                                         <th scope={"col"}>{room.name}</th>
-                                        <td>{room.temperature}</td>
+                                        <td>{room.temperature.toFixed(1)}</td>
                                         <td>{(room.simulationUsers.some(user => user.id === (this.state.simulation.loggedInUser.id)) || this.state.simulation.loggedInUser.privilege === 'Parent') ?
                                             <Popup
                                                 trigger={(<button

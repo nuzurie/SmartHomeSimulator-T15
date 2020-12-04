@@ -1,7 +1,9 @@
 package com.soen343.SmartHomeSimulator.module.simulation.controller;
 
+import com.soen343.SmartHomeSimulator.config.SpringContext;
 import com.soen343.SmartHomeSimulator.model.repository.HomeRepository;
 import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
+import com.soen343.SmartHomeSimulator.module.heating.model.HVAC;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +64,8 @@ public class SimuationController {
         currentSimulation.setDate(simulation.getDate());
         currentSimulation.setTime(simulation.getTime());
         currentSimulation.setTemperature(simulation.getTemperature());
-
+        HVAC hvac = SpringContext.getBean(HVAC.class);
+        hvac.operate();
         return ResponseEntity.ok().body(currentSimulation);
     }
 
@@ -77,22 +80,7 @@ public class SimuationController {
         if (simulation == null){
             simulation = simulationRepository.findById((long)1);
         }
-        log.info("After getting the simulation is {}", simulationRepository.findAll());
-        System.out.println(simulation);
         return ResponseEntity.ok().body(simulation);
-    }
-
-    /**
-     * Delete simulation response entity.
-     *
-     * @param simulation the simulation
-     * @return the response entity
-     */
-    @DeleteMapping("/simulation")
-    public ResponseEntity deleteSimulation(Simulation simulation) {
-        simulationRepository.deleteById(simulation.getId());
-        System.out.println(simulationRepository.findAll());
-        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 }

@@ -27,10 +27,11 @@ import TimeMultiplierForm from "../Forms/TimeMultiplier";
 import CoreControlFrames from "../Core/Frames";
 import HouseLayoutUI from "../Rooms/HouseLayout";
 import UserPermission from "../Users/UserPermissions";
-import Heating from "../Heating";
+import Heating, {HVAC} from "../Heating";
 import TimeZones from "../Heating/ZoneTimes";
-import ZoneRooms, {RoomTemps} from "../Heating/ZoneRooms";
+import ZoneRooms, {OverrideRooms, RoomTemps} from "../Heating/ZoneRooms";
 import {ZoneTimeNumbers} from "../Heating/ZoneTimes";
+import SeasonMonths from "../Forms/SeasonMonths";
 
 
 function Copyright() {
@@ -243,6 +244,7 @@ export default function Dashboard() {
                                 {contentDiv === 'SHS' &&
                                 <div className={"container"}>
                                     <SimulationForm/>
+                                    <SeasonMonths/>
                                     <UserPermission/>
                                 </div>}
                                 {contentDiv === 'SHC' &&
@@ -259,6 +261,8 @@ export default function Dashboard() {
                                     <TimeZones/>
                                     <ZoneRooms/>
                                     <RoomTemps/>
+                                    <OverrideRooms/>
+                                    <HVAC/>
                                 </div>}
                             </Paper>
                         </Grid>

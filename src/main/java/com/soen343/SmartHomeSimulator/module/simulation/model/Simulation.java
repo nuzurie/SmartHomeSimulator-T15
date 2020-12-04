@@ -45,6 +45,7 @@ public class Simulation implements Subject {
     private LocalTime lightsTimeEnd;
     private List<Light> chosenAwayModeLights;
 
+
     /**
      * Instantiates a new Simulation.
      *
@@ -183,9 +184,9 @@ public class Simulation implements Subject {
      */
     public void increaseTime() {
         while (true) {
-            long s = Math.round(15 * this.timeMultiplier);
+            long s = Math.round(this.timeMultiplier);
             try {
-                TimeUnit.SECONDS.sleep(15);
+                TimeUnit.SECONDS.sleep(1);
             } catch (Exception e) {
             }
             parseDate();

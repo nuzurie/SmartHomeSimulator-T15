@@ -1,7 +1,5 @@
 package com.soen343.SmartHomeSimulator.module.security.controller;
 
-import com.soen343.SmartHomeSimulator.model.Light;
-import com.soen343.SmartHomeSimulator.module.security.model.AwayModeLights;
 import com.soen343.SmartHomeSimulator.module.security.model.AwayModeTime;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
@@ -12,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
 /**
