@@ -73,6 +73,7 @@ class SimulationForm extends Component {
     }
 
     onSubmit(event) {
+        console.log(event)
         ExecuteService.updateSimulationContext(event)
             .then(response => console.log(response))
             .catch(error => console.log(error))

@@ -27,6 +27,11 @@ import TimeMultiplierForm from "../Forms/TimeMultiplier";
 import CoreControlFrames from "../Core/Frames";
 import HouseLayoutUI from "../Rooms/HouseLayout";
 import UserPermission from "../Users/UserPermissions";
+import Heating, {HVAC} from "../Heating";
+import TimeZones from "../Heating/ZoneTimes";
+import ZoneRooms, {OverrideRooms, RoomTemps} from "../Heating/ZoneRooms";
+import {ZoneTimeNumbers} from "../Heating/ZoneTimes";
+import SeasonMonths from "../Forms/SeasonMonths";
 
 
 function Copyright() {
@@ -157,6 +162,9 @@ export default function Dashboard() {
     const showSHP = () => {
         setContentDiv('SHP')
     }
+    const showSHH = () => {
+        setContentDiv('SHH')
+    }
     const test = () => {
         ExecuteServices.toggleAwayMode()
             .then(response => console.log(response))
@@ -188,6 +196,7 @@ export default function Dashboard() {
                         <button className={"ml-4 btn btn-outline-info btn-sm"} onClick={showSHS}>SHS</button>
                         <button className={"btn btn-outline-info btn-sm"} onClick={showSHC}>SHC</button>
                         <button className={"btn btn-outline-info btn-sm"} onClick={showSHP}>SHP</button>
+                        <button className={"btn btn-outline-info btn-sm"} onClick={showSHH}>SHH</button>
                         <button className={"ml-4 btn btn-success btn-sm"} onClick={handleUpdateUser}>Update Sidebar!
                         </button>
                     </Typography>
@@ -235,6 +244,7 @@ export default function Dashboard() {
                                 {contentDiv === 'SHS' &&
                                 <div className={"container"}>
                                     <SimulationForm/>
+                                    <SeasonMonths/>
                                     <UserPermission/>
                                 </div>}
                                 {contentDiv === 'SHC' &&
@@ -245,6 +255,14 @@ export default function Dashboard() {
                                 </div>}
                                 {contentDiv === 'SHP' && <div>
                                     <AwayModeButton/>
+                                </div>}
+                                {contentDiv === 'SHH' && <div>
+                                    <ZoneTimeNumbers/>
+                                    <TimeZones/>
+                                    <ZoneRooms/>
+                                    <RoomTemps/>
+                                    <OverrideRooms/>
+                                    <HVAC/>
                                 </div>}
                             </Paper>
                         </Grid>

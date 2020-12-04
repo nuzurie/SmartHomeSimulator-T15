@@ -1,8 +1,10 @@
 package com.soen343.SmartHomeSimulator.module.core.controller;
 
+import com.soen343.SmartHomeSimulator.config.SpringContext;
 import com.soen343.SmartHomeSimulator.model.*;
 import com.soen343.SmartHomeSimulator.model.repository.RepositoryService;
 import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
+import com.soen343.SmartHomeSimulator.module.heating.model.HVAC;
 import com.soen343.SmartHomeSimulator.module.security.model.AwayModeLights;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
@@ -87,9 +89,9 @@ public class CoreController {
         Simulation simulation = simulationRepository.findById((long) 1);
         if (simulation.getLoggedInUser().getPrivilege().equalsIgnoreCase("stranger"))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        System.out.println("In core:" + simulation);
         simulation.setTimeMultiplier(multiplier);
-
+        HVAC hvac = SpringContext.getBean(HVAC.class);
+        hvac.operate();
         return ResponseEntity.ok().build();
     }
 
@@ -98,7 +100,7 @@ public class CoreController {
      *
      * @return the response entity
      */
-    @GetMapping("simulation/rooms-for-user")
+    @GetMapping("simulation/lights-for-user")
     public ResponseEntity<?> getLightsForUser(){
         return ResponseEntity.ok().body(repositoryService.getLightsForUser());
     }
@@ -111,6 +113,15 @@ public class CoreController {
     @GetMapping("simulation/windows-for-user")
     public ResponseEntity<?> getWindowsForUser(){
         return ResponseEntity.ok().body(repositoryService.getWindowsForUser());
+    }
+
+    /**
+     * Get the rooms for user response entity.
+     * @return the response entity
+     */
+    @GetMapping("simulation/rooms-for-user")
+    public ResponseEntity<?> getRoomsForUser(){
+        return ResponseEntity.ok().body(repositoryService.getRoomsForUser());
     }
 
     /**
@@ -225,5 +236,11 @@ public class CoreController {
         List<Light> lightList = repositoryService.getLightsById(lights.getChecked());
         simulation.setChosenAwayModeLights(lightList);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("simulation/all-rooms")
+    public ResponseEntity<?> allRooms(){
+        List<Room> rooms = repositoryService.getAllRooms();
+        return ResponseEntity.ok().body(rooms);
     }
 }

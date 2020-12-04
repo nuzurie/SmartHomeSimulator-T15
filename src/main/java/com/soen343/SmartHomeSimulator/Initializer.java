@@ -1,7 +1,11 @@
 package com.soen343.SmartHomeSimulator;
 
+import com.soen343.SmartHomeSimulator.config.SpringContext;
 import com.soen343.SmartHomeSimulator.model.*;
 import com.soen343.SmartHomeSimulator.model.repository.*;
+import com.soen343.SmartHomeSimulator.module.heating.model.Heating;
+import com.soen343.SmartHomeSimulator.module.heating.model.Zone;
+import com.soen343.SmartHomeSimulator.module.heating.repository.HeatingRepository;
 import com.soen343.SmartHomeSimulator.module.security.controller.Security;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
@@ -86,7 +90,7 @@ class Initializer implements CommandLineRunner {
         List<Door> door2 = new LinkedList<>();
         door2.add(Door.builder().open(true).locked(false).build());
 
-        Room livingRoom2 = Room.builder().name("Bed Room")
+        Room livingRoom2 = Room.builder().name("Bed Room 1")
                 .size("12x18")
                 .simulationUsers(simulationUsers)
                 .build();
@@ -100,7 +104,7 @@ class Initializer implements CommandLineRunner {
         List<Door> door3 = new LinkedList<>();
         door3.add(Door.builder().open(false).locked(false).build());
 
-        Room room3 = Room.builder().name("Bed Room")
+        Room room3 = Room.builder().name("Bed Room 2")
                 .size("12x18")
                 .build();
 
@@ -119,14 +123,33 @@ class Initializer implements CommandLineRunner {
         room4.add(Light.builder().turnedOn(false).build());
         room4.add(Door.builder().open(false).locked(false).build());
 
+        Room room5 = Room.builder().name("Guest Room")
+                .size("12x18")
+                .build();
+
+        room5.add(Door.builder().open(false).locked(false).build());
+        room5.add(Window.builder().open(false).blocked(false).build());
+        room5.add(Light.builder().turnedOn(false).build());
+        room5.add(Door.builder().open(false).locked(false).build());
+
+        Room room6 = Room.builder().name("Study Room")
+                .size("12x18")
+                .build();
+
+        room6.add(Door.builder().open(false).locked(false).build());
+        room6.add(Window.builder().open(false).blocked(false).build());
+        room6.add(Light.builder().turnedOn(false).build());
+        room6.add(Door.builder().open(false).locked(false).build());
+
         List<Room> rooms = new LinkedList<>();
         rooms.add(livingRoom);
         rooms.add(livingRoom2);
         rooms.add(room3);
         rooms.add(room4);
+        rooms.add(room5);
+        rooms.add(room6);
 
         mainHome.setRooms(rooms);
-
 
         repository.save(mainHome);
 
@@ -152,6 +175,13 @@ class Initializer implements CommandLineRunner {
 
         rooms.forEach(roomRepository::save);
 
+        Heating heating = Heating.builder().id(1).build();
+        Zone zone = Zone.builder().rooms(Set.copyOf(rooms)).build();
+        heating.setZones(List.of(zone));
+        HeatingRepository heatingRepository = SpringContext.getBean(HeatingRepository.class);
+        heatingRepository.save(heating);
+
+        simulation.setTimeMultiplier(100);
         simulation.increaseTime();
     }
 }
