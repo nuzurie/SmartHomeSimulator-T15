@@ -64,8 +64,6 @@ public class SimuationController {
         currentSimulation.setDate(simulation.getDate());
         currentSimulation.setTime(simulation.getTime());
         currentSimulation.setTemperature(simulation.getTemperature());
-        HVAC hvac = SpringContext.getBean(HVAC.class);
-        hvac.operate();
         return ResponseEntity.ok().body(currentSimulation);
     }
 

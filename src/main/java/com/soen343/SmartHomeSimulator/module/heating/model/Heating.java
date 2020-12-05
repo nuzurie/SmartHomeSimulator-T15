@@ -31,6 +31,8 @@ public class Heating {
     private Set<Room> overriddenRooms = new HashSet<>();
     private MONTHS[] summer;
     private MONTHS[] winter;
+    private double summerTemperature = 22;
+    private double winterTemperature = 14;
     private boolean HVACon;
 
     private enum MONTHS {

@@ -232,6 +232,7 @@ export class RoomTemps extends Component {
 
         this.state = {
             rooms: [],
+            message: null
         }
     }
 
@@ -247,6 +248,26 @@ export class RoomTemps extends Component {
                         this.setState({
                             rooms: response.data
                         })
+                    // this.state.rooms.map(room => {
+                    //     if (room.temperature <= 0.1)
+                    //         this.setState({
+                    //             message: "Warning. Pipes may burst!"
+                    //         })
+                    //     else {
+                    //         this.setState({
+                    //             message: null
+                    //         })
+                    //     }
+                    // })
+                    if (this.state.rooms.some(room => room.temperature <= 0.1))
+                        this.setState({
+                            message: "Warning. Pipes may burst!"
+                        })
+                    else {
+                        this.setState({
+                            message: null
+                        })
+                    }
                 })
                 .catch(err => console.log(err)), 1000
         )
@@ -267,6 +288,10 @@ export class RoomTemps extends Component {
                     >
                         {close =>
                             <div className={"container table"}>
+                                {this.state.message &&
+                                <div className="alert alert-danger" role="alert">
+                                    "The pipes may burst. Temperature below 0˚C"
+                                </div>}
                                 <table>
                                     <thead>
                                     <tr>

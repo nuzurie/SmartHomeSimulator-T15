@@ -43,7 +43,6 @@ public class HeatingController {
         catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
         }
-        System.out.println("THIS IS ZONE INTERVAL:" + zoneIntervals);
         Heating heating = heatingRepository.findById(1);
         List<IntervalTemp> intervalTempList = zoneIntervals.getListIntervalTimes();
         List<Zone> zoneSet = heating.getZones();
@@ -111,7 +110,8 @@ public class HeatingController {
         Heating currentHeating = heatingRepository.findById(1);
         currentHeating.setSummer(heating.getSummer());
         currentHeating.setWinter(heating.getWinter());
-
+        currentHeating.setSummerTemperature(24);
+        currentHeating.setWinterTemperature(19);
         return ResponseEntity.ok().build();
     }
 
@@ -119,8 +119,6 @@ public class HeatingController {
     public ResponseEntity<?> toggleHVAC(){
         Heating heating = heatingRepository.findById(1);
         heating.setHVACon(!heating.isHVACon());
-        HVAC hvac = SpringContext.getBean(HVAC.class);
-        hvac.operate();
         return ResponseEntity.ok().build();
     }
 }

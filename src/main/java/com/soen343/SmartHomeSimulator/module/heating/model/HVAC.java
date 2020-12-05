@@ -89,7 +89,7 @@ public class HVAC {
                     if (room.getTemperature() > finalTargetTemp + 0.25 || room.getTemperature() < finalTargetTemp - 0.25) {
                         System.out.println(room.getName() + room.getTemperature() + "" + finalTargetTemp);
                         if (!room.isHvacStatus())
-                            changeTemp(room, finalTargetTemp, zone.getIntervals());
+                            changeTemp(room, zone.getIntervals());
                     }
                 }
             };
@@ -100,16 +100,11 @@ public class HVAC {
         }
     }
 
-    private void changeTemp(Room room, double targetTemp, List<IntervalTemp> intervalTemps) {
+    private void changeTemp(Room room, List<IntervalTemp> intervalTemps) {
         Simulation simulation = SpringContext.getBean(SimulationRepository.class).findById((long) 1);
         Heating heating = SpringContext.getBean(HeatingRepository.class).findById(1);
+        double targetTemp = 25;
         while (true) {
-            double multiplier = simulation.getTimeMultiplier();
-            for (IntervalTemp intervalTemp : intervalTemps
-            ) {
-                if (checkInterval(intervalTemp))
-                    targetTemp = intervalTemp.getTemperature();
-            }
             boolean summer = false;
             for (Object month : heating.getSummer()
             ) {
@@ -119,13 +114,12 @@ public class HVAC {
                 } else
                     summer = false;
             }
-            //if not summer or
-            // the outside temp is greater than room or
-            // the current room temperautre is more than the required temp
-            // then open windows and hvacON or OFF
-            if (!summer || simulation.getTemperature() > room.getTemperature() ||
-                    (room.getTemperature() > targetTemp && room.getTemperature() <= (0.1 + simulation.getTemperature()))) {
-                System.out.println("room" + room.getId());
+            targetTemp = getTargetTemp(intervalTemps, simulation, heating, summer);
+            boolean outsideTempGreaterThanRoom = simulation.getTemperature() > room.getTemperature();
+            boolean roomTempHigherThanRequired = room.getTemperature() > targetTemp;
+            boolean roomTempLessThanOutside = room.getTemperature() <= (0.1 + simulation.getTemperature());
+            if (!summer || outsideTempGreaterThanRoom ||
+                    (roomTempHigherThanRequired && roomTempLessThanOutside)) {
                 room.getWindows().forEach(window -> {
                     if (!window.isBlocked())
                         window.setOpen(false);
@@ -134,10 +128,10 @@ public class HVAC {
                 });
 
                 if (heating.isHVACon()) {
-                    HVACon(room, targetTemp, multiplier);
+                    HVACon(room, intervalTemps, simulation, summer);
                     room.setHvacStatus(false);
                 } else {
-                    HVACoff(room, simulation, multiplier);
+                    HVACoff(room, simulation);
                 }
                 try {
                     Thread.sleep(1000);
@@ -145,15 +139,15 @@ public class HVAC {
                     System.out.println(e.getMessage());
                 }
             } else {
-                if (room.getTemperature() > simulation.getTemperature()) {
+                if (room.getTemperature() > simulation.getTemperature() + 0.1) {
                     room.getWindows().forEach(window -> {
                         if (!window.isBlocked() && !simulation.isAwayMode())
                             window.setOpen(true);
-                        else
+                        else if (window.isBlocked())
                             System.out.println("The window " + window.getName() + " is blocked and can't be opened.");
                     });
                 }
-                HVACoff(room, simulation, multiplier);
+                HVACoff(room, simulation);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -163,8 +157,28 @@ public class HVAC {
         }
     }
 
-    private void HVACoff(Room room, Simulation simulation, double multiplier) {
+    private double getTargetTemp(List<IntervalTemp> intervalTemps, Simulation simulation, Heating heating, boolean summer) {
+        for (IntervalTemp intervalTemp : intervalTemps
+        ) {
+            if (simulation.isAwayMode()) {
+                if (summer) {
+                    System.out.println(heating.getSummerTemperature());
+                    return heating.getSummerTemperature();
+                } else {
+                    System.out.println(heating.getWinterTemperature());
+                    return heating.getWinterTemperature();
+                }
+            }
+            if (checkInterval(intervalTemp))
+                return intervalTemp.getTemperature();
+        }
+        return 25;
+    }
+
+    private void HVACoff(Room room, Simulation simulation) {
+        double multiplier;
         while (Math.abs(room.getTemperature() - simulation.getTemperature()) > 0.05) {
+            multiplier = simulation.getTimeMultiplier();
             if (simulation.getTemperature() > room.getTemperature())
                 room.setTemperature(room.getTemperature() + 0.05);
             else
@@ -177,8 +191,16 @@ public class HVAC {
         }
     }
 
-    private void HVACon(Room room, double targetTemp, double multiplier) {
+    private void HVACon(Room room, List<IntervalTemp> intervalTemps, Simulation simulation, boolean summer) {
+        double multiplier;
+        double targetTemp = getTargetTemp(intervalTemps, simulation, heatingRepository.findById(1), summer);
         while (Math.abs(room.getTemperature() - targetTemp) > 0.05) {
+            targetTemp = getTargetTemp(intervalTemps, simulation, heatingRepository.findById(1), summer);
+            if (!heatingRepository.findById(1).isHVACon())
+                break;
+            if (summer && room.getTemperature() > simulation.getTemperature())
+                break;
+            multiplier = simulation.getTimeMultiplier();
             room.setHvacStatus(true);
             if (targetTemp > room.getTemperature())
                 room.setTemperature(room.getTemperature() + 0.1);
