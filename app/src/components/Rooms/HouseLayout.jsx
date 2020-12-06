@@ -85,14 +85,6 @@ export default class HouseLayoutUI extends Component {
             .catch(error => console.log(error))
     }
 
-    switchRoomLight(light) {
-        ExecuteService.toggleLight(light)
-            .then(() => {
-                this.refreshSimulation()
-            })
-            .catch(error => console.log(error))
-    }
-
     toggleAutoMode() {
         ExecuteService.toggleAutoMode()
             .then(() => {

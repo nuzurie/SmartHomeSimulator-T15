@@ -131,7 +131,7 @@ public class HVAC {
                     HVACon(room, intervalTemps, simulation, summer);
                     room.setHvacStatus(false);
                 } else {
-                    HVACoff(room, simulation);
+                    HVACoff(room, simulation, summer);
                 }
                 try {
                     Thread.sleep(1000);
@@ -147,7 +147,7 @@ public class HVAC {
                             System.out.println("The window " + window.getName() + " is blocked and can't be opened.");
                     });
                 }
-                HVACoff(room, simulation);
+                HVACoff(room, simulation, summer);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -175,9 +175,12 @@ public class HVAC {
         return 25;
     }
 
-    private void HVACoff(Room room, Simulation simulation) {
+    private void HVACoff(Room room, Simulation simulation, boolean summer) {
         double multiplier;
+        Heating heating = heatingRepository.findById(1);
         while (Math.abs(room.getTemperature() - simulation.getTemperature()) > 0.05) {
+            if (!summer && heating.isHVACon())
+                break;
             multiplier = simulation.getTimeMultiplier();
             if (simulation.getTemperature() > room.getTemperature())
                 room.setTemperature(room.getTemperature() + 0.05);
@@ -197,8 +200,6 @@ public class HVAC {
         while (Math.abs(room.getTemperature() - targetTemp) > 0.05) {
             targetTemp = getTargetTemp(intervalTemps, simulation, heatingRepository.findById(1), summer);
             if (!heatingRepository.findById(1).isHVACon())
-                break;
-            if (summer && room.getTemperature() > simulation.getTemperature())
                 break;
             multiplier = simulation.getTimeMultiplier();
             room.setHvacStatus(true);

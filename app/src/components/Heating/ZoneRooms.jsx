@@ -204,7 +204,7 @@ export default class ZoneRooms extends Component {
 
     onSubmit(event) {
         this.setState({
-            success: `Rooms updated`,
+            success: ``,
             zone1: event.zone1,
             zone2: event.zone2,
             zone3: event.zone3,
@@ -220,9 +220,11 @@ export default class ZoneRooms extends Component {
         })
         console.log(this.state)
         ExecuteServices.setZoneRoomsAndTemp(event)
-            .then(response => console.log(response))
+            .then(response => this.setState({
+                success: "Rooms updated"
+            }))
             //CATCH EXCEPTION HERE
-            .catch(error => console.log(error.message))
+            .catch(error => alert(error.response.data))
     }
 }
 
@@ -331,23 +333,8 @@ export class OverrideRooms extends Component {
 
     componentDidMount() {
         this.refresh()
-        // this.interval = setInterval(() => {
-        //     ExecuteServices.getHeating()
-        //         .then(response => {
-        //             if (response.data.zoneAndTimeNumbers.numberZones !== this.state.numberZones)
-        //                 this.setState({
-        //                     numberZones: response.data.zoneAndTimeNumbers.numberZones,
-        //                     numberIntervals: response.data.zoneAndTimeNumbers.numberIntervals,
-        //                 })
-        //         })
-        //         .catch(error => console.log(error))
-        // }, 1000)
-        // console.log(this.state)
-    }
 
-    // componentWillUnmount(): void {
-    //     clearInterval(this.interval)
-    // }
+    }
 
     refresh() {
         ExecuteServices.getRoomsForUsers()
@@ -367,7 +354,7 @@ export class OverrideRooms extends Component {
         let id = []
         return (
             <div className={"container"}>
-                <h3>Rooms for Zones</h3>
+                <h3>Rooms for Overriding</h3>
                 <div className="container">
                     <Formik
                         initialValues={id}
@@ -379,7 +366,7 @@ export class OverrideRooms extends Component {
                         {
                             (props) => (
                                 <Popup
-                                    trigger={<button className="button btn-primary"> Select Rooms for Zones </button>}
+                                    trigger={<button className="button btn-primary"> Select Rooms for Overriding </button>}
                                     modal
                                 >
                                     {close => (<div className="modal">
