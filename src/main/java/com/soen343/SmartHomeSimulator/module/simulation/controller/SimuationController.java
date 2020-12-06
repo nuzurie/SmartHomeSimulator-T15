@@ -6,7 +6,9 @@ import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
 import com.soen343.SmartHomeSimulator.module.heating.model.HVAC;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
+import com.soen343.SmartHomeSimulator.service.SimulationService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.net.jsse.JSSEImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,30 +25,18 @@ import javax.validation.Valid;
 public class SimuationController {
 
     /**
-     * The Home repository.
+     * The Simulation service.
      */
-    public HomeRepository homeRepository;
-    /**
-     * The Simulation repository.
-     */
-    public SimulationRepository simulationRepository;
-    /**
-     * The Simulation user repository.
-     */
-    public SimulationUserRepository simulationUserRepository;
+    private SimulationService simulationService;
 
     /**
      * Instantiates a new Simuation controller.
      *
-     * @param homeRepository           the home repository
-     * @param simulationRepository     the simulation repository
-     * @param simulationUserRepository the simulation user repository
+     * @param simulationService           The Simulation service.
      */
     @Autowired
-    public SimuationController(HomeRepository homeRepository, SimulationRepository simulationRepository, SimulationUserRepository simulationUserRepository) {
-        this.homeRepository = homeRepository;
-        this.simulationRepository = simulationRepository;
-        this.simulationUserRepository = simulationUserRepository;
+    public SimuationController(SimulationService simulationService) {
+        this.simulationService = simulationService;
     }
 
     /**
@@ -59,13 +49,7 @@ public class SimuationController {
     @PutMapping("/simulation")
     public ResponseEntity<Simulation> updateSimulation(@Valid @RequestBody Simulation simulation){
         log.info("Create this simulation {}", simulation);
-
-        Simulation currentSimulation = simulationRepository.findById((long)1);
-        currentSimulation.setDate(simulation.getDate());
-        currentSimulation.setTime(simulation.getTime());
-        currentSimulation.setTemperature(simulation.getTemperature());
-        HVAC hvac = SpringContext.getBean(HVAC.class);
-        hvac.operate();
+        Simulation currentSimulation = simulationService.updateSimulation(simulation);
         return ResponseEntity.ok().body(currentSimulation);
     }
 
@@ -76,11 +60,20 @@ public class SimuationController {
      */
     @GetMapping("/simulation")
     public ResponseEntity<Simulation> getSimulation() {
-        Simulation simulation = simulationRepository.findById((long)1);
-        if (simulation == null){
-            simulation = simulationRepository.findById((long)1);
-        }
+        Simulation simulation = simulationService.getSimulation();
         return ResponseEntity.ok().body(simulation);
+    }
+
+    /**
+     * Delete simulation response entity.
+     *
+     * @param simulation the simulation
+     * @return the response entity
+     */
+    @DeleteMapping("/simulation")
+    public ResponseEntity deleteSimulation(Simulation simulation) {
+        simulationService.deleteSimulation(simulation);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 }

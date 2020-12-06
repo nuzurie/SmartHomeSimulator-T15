@@ -9,6 +9,7 @@ import com.soen343.SmartHomeSimulator.module.security.model.AwayModeLights;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
 
+import com.soen343.SmartHomeSimulator.service.CoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,22 +27,20 @@ import java.util.List;
 @RequestMapping("/api")
 public class CoreController {
 
-    private SimulationRepository simulationRepository;
-    private SimulationUserRepository simulationUserRepository;
+    private CoreService coreService;
     private RepositoryService repositoryService;
+    private SimulationRepository simulationRepository;
 
     /**
      * Instantiates a new Core controller.
      *
-     * @param simulationRepository     the simulation repository
-     * @param simulationUserRepository the simulation user repository
-     * @param repositoryService        the repository service
+     * @param coreService     the core service
      */
     @Autowired
-    public CoreController(SimulationRepository simulationRepository, SimulationUserRepository simulationUserRepository, RepositoryService repositoryService) {
-        this.simulationRepository = simulationRepository;
-        this.simulationUserRepository = simulationUserRepository;
+    public CoreController(CoreService coreService, RepositoryService repositoryService, SimulationRepository simulationRepository) {
+        this.coreService = coreService;
         this.repositoryService = repositoryService;
+        this.simulationRepository = simulationRepository;
     }
 
     /**
@@ -52,10 +51,7 @@ public class CoreController {
      */
     @PutMapping("simulation/loginUser/{id}")
     public ResponseEntity<SimulationUser> updateLoginUser(@PathVariable long id) {
-        SimulationUser newLoginUser = simulationUserRepository.findById(id);
-        Simulation simulation = simulationRepository.findById((long) 1);
-        simulation.setLoggedInUser(newLoginUser);
-
+        SimulationUser newLoginUser = coreService.updateUserLogin(id);
         return ResponseEntity.ok().body(newLoginUser);
     }
 
@@ -142,9 +138,7 @@ public class CoreController {
      */
     @PutMapping("simulation/toggleLight")
     public ResponseEntity<?> toggleLight(@Valid @RequestBody Light light){
-        light.setTurnedOn(!light.isTurnedOn());
-        Light newLight = this.repositoryService.saveLight(light);
-
+        Light newLight = coreService.toggleLights(light);
         return ResponseEntity.ok().body(newLight);
     }
 
@@ -217,9 +211,7 @@ public class CoreController {
      */
     @PutMapping("simulation/removeUsersFromRoom/{roomID}")
     public ResponseEntity<?> removeUser(@PathVariable Long roomID, @RequestBody SimulationUser simulationUser){
-        Simulation currentSimulation = simulationRepository.findById((long) 1);
-        repositoryService.removeUser(roomID, simulationUser);
-        currentSimulation.setAutoMode();
+        coreService.removeUser(roomID, simulationUser);
         return ResponseEntity.ok().build();
     }
 
@@ -231,10 +223,7 @@ public class CoreController {
      */
     @PostMapping("simulation/awaymode-lights")
     public ResponseEntity<?> awayModeLights(@RequestBody AwayModeLights lights){
-        System.out.println(lights);
-        Simulation simulation = simulationRepository.findById((long) 1);
-        List<Light> lightList = repositoryService.getLightsById(lights.getChecked());
-        simulation.setChosenAwayModeLights(lightList);
+        coreService.setAwayModeLights(lights);
         return ResponseEntity.ok().build();
     }
 

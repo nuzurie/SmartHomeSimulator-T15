@@ -4,6 +4,7 @@ import com.soen343.SmartHomeSimulator.model.SimulationUser;
 import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
+import com.soen343.SmartHomeSimulator.service.SimulationUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,18 +25,19 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api")
 public class SimulationUserController {
+
     private SimulationUserRepository simulationUserRepository;
-    private SimulationRepository simulationRepository;
+    private SimulationUserService simulationUserService;
 
     /**
      * Instantiates a new SimulationUserController.
      *
      * @param simulationUserRepository the simulation user repository
-     * @param simulationRepository     the simulation repository
+     * @param simulationUserService     the simulation user service
      */
-    public SimulationUserController(SimulationUserRepository simulationUserRepository, SimulationRepository simulationRepository) {
+    public SimulationUserController(SimulationUserRepository simulationUserRepository, SimulationUserService simulationUserService) {
         this.simulationUserRepository = simulationUserRepository;
-        this.simulationRepository = simulationRepository;
+        this.simulationUserService = simulationUserService;
     }
 
     /**
@@ -64,9 +66,6 @@ public class SimulationUserController {
             return ResponseEntity.ok().body(user);
         } else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-//        return user.map(response -> ResponseEntity.ok().body(response))
-//                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     /**
@@ -79,11 +78,7 @@ public class SimulationUserController {
     @PostMapping("/user")
     public ResponseEntity<SimulationUser> createUser(@Valid @RequestBody SimulationUser user) throws URISyntaxException {
         log.info("Request to create user: {}", user);
-
-        user.setId();
-        SimulationUser created_user = simulationUserRepository.save(user);
-        simulationRepository.findById(Long.valueOf(1)).getSimulationUsers().add(created_user);
-
+        SimulationUser created_user = simulationUserService.createNewUser(user);
         return ResponseEntity.ok().body(created_user);
     }
 
@@ -97,11 +92,7 @@ public class SimulationUserController {
     @PutMapping("/user/{id}")
     ResponseEntity<SimulationUser> updateUser(@Valid @RequestBody SimulationUser user, @PathVariable Long id) {
         log.info("Request to update user: {}", user);
-        SimulationUser simulationUser = simulationUserRepository.findById(id);
-
-        simulationUser.setName(user.getName());
-        simulationUser.setPrivilege(user.getPrivilege());
-
+        SimulationUser simulationUser = simulationUserService.updateUser(user, id);
         return ResponseEntity.ok().body(simulationUser);
 
     }
@@ -115,11 +106,7 @@ public class SimulationUserController {
     @DeleteMapping("/user/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         log.info("Request to delete User with id: {}", id);
-        SimulationUser simulationUser = simulationUserRepository.findById(id);
-        simulationUserRepository.deleteById(id);
-        Simulation simulation = simulationRepository.findById(Long.valueOf(1));
-        simulation.deleteUser(simulationUser);
-
+        simulationUserService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
 
@@ -130,21 +117,7 @@ public class SimulationUserController {
      */
     @GetMapping("/users/save")
     public ResponseEntity saveUsers() {
-        Set<SimulationUser> simulationUsers = simulationUserRepository.findAll();
-        ObjectOutputStream oos = null;
-        try {
-            oos = new ObjectOutputStream(new FileOutputStream("users.txt"));
-            for (SimulationUser user : simulationUsers
-            ) {
-                oos.writeObject(user);
-            }
-            oos.close();
-        } catch (IOException e) {
-            log.info(e.getMessage());
-        }
-
-        loadUsers();
-
+        simulationUserService.saveUsers();
         return ResponseEntity.ok().build();
     }
 
@@ -155,31 +128,7 @@ public class SimulationUserController {
      */
     @GetMapping("/users/load")
     public ResponseEntity loadUsers() {
-        ObjectInputStream ois = null;
-        Set<SimulationUser> users = new HashSet<>();
-        SimulationUser a = SimulationUser.builder().name("Sunny").privilege("Parent").build();
-        try {
-            ois = new ObjectInputStream(new FileInputStream("users.txt"));
-            while (true){
-                SimulationUser user = (SimulationUser) ois.readObject();
-                users.add(user);
-            }
-        }
-        catch (EOFException e){
-            log.info("Reached end of file.");
-        }
-        catch (IOException e){
-            log.info(e.getMessage());
-        }
-        catch (ClassNotFoundException e){
-            log.info(e.getMessage());
-        }
-
-        users.forEach(user -> {
-            SimulationUser created_user = simulationUserRepository.save(user);
-            simulationRepository.findById(Long.valueOf(1)).getSimulationUsers().add(created_user);
-        });
-
+        Set<SimulationUser> users = simulationUserService.loadUsers();
         return ResponseEntity.ok(users);
     }
 }

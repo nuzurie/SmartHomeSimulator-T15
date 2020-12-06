@@ -3,6 +3,7 @@ package com.soen343.SmartHomeSimulator.module.security.controller;
 import com.soen343.SmartHomeSimulator.module.security.model.AwayModeTime;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
+import com.soen343.SmartHomeSimulator.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,10 @@ public class SecurityController {
      */
     Security security;
 
+    /**
+     * The Security service.
+     */
+     SecurityService securityService;
 
     /**
      * Instantiates a new Security controller.
@@ -38,9 +43,10 @@ public class SecurityController {
      * @param security             the security
      */
     @Autowired
-    public SecurityController(SimulationRepository simulationRepository, Security security) {
+    public SecurityController(SimulationRepository simulationRepository, Security security, SecurityService securityService) {
         this.simulationRepository = simulationRepository;
         this.security = security;
+        this.securityService = securityService;
     }
 
     /**
@@ -71,11 +77,7 @@ public class SecurityController {
      */
     @PutMapping("simulation/call-timer/{timer}")
     public ResponseEntity callAuthoritiesTimer(@PathVariable String timer) {
-        System.out.println(timer);
-        double callTimer = Double.valueOf(timer);
-        Simulation simulation = simulationRepository.findById((long) 1);
-        simulation.setCallAuthoritiesTimer(callTimer);
-
+        securityService.callAuthoritiesTimer(timer);
         return ResponseEntity.ok().build();
     }
 
@@ -114,9 +116,7 @@ public class SecurityController {
      */
     @PostMapping("simulation/awaymode-lights-time")
     public ResponseEntity<?> awayModeLightsTimes(@RequestBody AwayModeTime object){
-        System.out.println(object);
-        Simulation simulation = simulationRepository.findById((long) 1);
-        simulation.lightsTimeParse(object.getTime1(), object.getTime2());
+        securityService.awayModeLightsTimes(object);
         return ResponseEntity.ok().build();
     }
 }

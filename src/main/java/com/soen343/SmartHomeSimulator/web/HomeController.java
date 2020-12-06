@@ -30,7 +30,6 @@ class HomeController {
 
     private final Logger log = LoggerFactory.getLogger(HomeController.class);
     private HomeRepository homeRepository;
-    //private UserRepository userRepository;
 
 
     /**
@@ -40,7 +39,6 @@ class HomeController {
      */
     public HomeController(HomeRepository homeRepository) {
         this.homeRepository = homeRepository;
-        //this.userRepository = userRepository;
     }
 
     /**
@@ -68,7 +66,6 @@ class HomeController {
         }
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     /**
@@ -85,10 +82,6 @@ class HomeController {
         log.info("Request to create home: {}", home);
         Map<String, Object> details = principal.getAttributes();
         String userId = details.get("sub").toString();
-
-        // check to see if user already exists
-//        Optional<User> user = userRepository.findById(userId);
-//        home.setUser(user.orElse(new User(userId, details.get("name").toString())));
 
         Home result = homeRepository.save(home);
         return ResponseEntity.created(new URI("/api/home/" + result.getId()))
