@@ -4,6 +4,8 @@ import com.soen343.SmartHomeSimulator.config.SpringContext;
 import com.soen343.SmartHomeSimulator.model.Room;
 import com.soen343.SmartHomeSimulator.module.heating.model.*;
 import com.soen343.SmartHomeSimulator.module.heating.repository.HeatingRepository;
+import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
+import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,6 @@ public class HeatingController {
         catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
         }
-        System.out.println("THIS IS ZONE INTERVAL:" + zoneIntervals);
         Heating heating = heatingRepository.findById(1);
         List<IntervalTemp> intervalTempList = zoneIntervals.getListIntervalTimes();
         List<Zone> zoneSet = heating.getZones();
@@ -83,8 +84,11 @@ public class HeatingController {
         try {
             zonesRooms.validate();
         }
-        catch (Exception e){
-            System.out.println(e.getMessage());
+        catch (RoomsNotInZoneException e){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
+        }
+        catch (RoomInMultipleZonesException e){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
         System.out.println(zonesRooms);
         List<Set<Room>> setOfRooms = zonesRooms.getRoomsForZones();
@@ -109,9 +113,17 @@ public class HeatingController {
     @PostMapping("/heating/months")
     public ResponseEntity<?> setMonths(@RequestBody Heating heating){
         Heating currentHeating = heatingRepository.findById(1);
+        try{
+            heating.validateMonth();
+        } catch (MonthsNotInSeasonException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (SameMonthInBothSeasonException e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
+        }
         currentHeating.setSummer(heating.getSummer());
         currentHeating.setWinter(heating.getWinter());
-
+        currentHeating.setSummerTemperature(heating.getSummerTemperature());
+        currentHeating.setWinterTemperature(heating.getWinterTemperature());
         return ResponseEntity.ok().build();
     }
 
@@ -119,8 +131,6 @@ public class HeatingController {
     public ResponseEntity<?> toggleHVAC(){
         Heating heating = heatingRepository.findById(1);
         heating.setHVACon(!heating.isHVACon());
-        HVAC hvac = SpringContext.getBean(HVAC.class);
-        hvac.operate();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(heating.isHVACon());
     }
 }

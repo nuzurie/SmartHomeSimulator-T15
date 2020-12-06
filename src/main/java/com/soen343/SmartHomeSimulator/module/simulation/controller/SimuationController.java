@@ -1,6 +1,8 @@
 package com.soen343.SmartHomeSimulator.module.simulation.controller;
 
 import com.soen343.SmartHomeSimulator.config.SpringContext;
+import com.soen343.SmartHomeSimulator.model.Home;
+import com.soen343.SmartHomeSimulator.model.HouseLayoutFormatException;
 import com.soen343.SmartHomeSimulator.model.repository.HomeRepository;
 import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
 import com.soen343.SmartHomeSimulator.module.heating.model.HVAC;
@@ -64,16 +66,19 @@ public class SimuationController {
         return ResponseEntity.ok().body(simulation);
     }
 
-    /**
-     * Delete simulation response entity.
-     *
-     * @param simulation the simulation
-     * @return the response entity
-     */
-    @DeleteMapping("/simulation")
-    public ResponseEntity deleteSimulation(Simulation simulation) {
-        simulationService.deleteSimulation(simulation);
-        return ResponseEntity.ok(HttpStatus.OK);
+
+    @PostMapping
+    public ResponseEntity<Simulation> createHouse(@RequestBody Object object) {
+        Simulation simulation = simulationRepository.findById((long) 1);
+        Home home;
+        try{
+            home = (Home) object;
+        }
+        catch (HouseLayoutFormatException e){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
+        simulation.setHome(home);
+        return ResponseEntity.ok().body(simulation);
     }
 
 }

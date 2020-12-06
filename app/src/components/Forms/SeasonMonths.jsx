@@ -13,6 +13,9 @@ export default class SeasonMonths extends Component {
             months: [],
             summer: [],
             winter: [],
+            summerTemperature: 24,
+            winterTemperature: 19,
+            message: '',
         }
 
         this.onSubmit = this.onSubmit.bind(this)
@@ -34,14 +37,15 @@ export default class SeasonMonths extends Component {
 
 
     render() {
-        let {summer, winter} = [this.state.summer, this.state.winter]
+        let {summer, winter, summerTemperature, winterTemperature}
+        = [this.state.summer, this.state.winter, this.state.summerTemperature, this.state.winterTemperature]
 
         return (
             <div className={"container"}>
                 <h3>Months for Summer/Winter</h3>
                 <div className="container">
                     <Formik
-                        initialValues={{summer, winter}}
+                        initialValues={{summer, winter, summerTemperature, winterTemperature}}
                         onSubmit={this.onSubmit}
                         validateOnChange={false}
                         validateOnBlur={false}
@@ -82,6 +86,11 @@ export default class SeasonMonths extends Component {
                                                 </div>
                                             )}
                                         </div>
+                                        <div id="checkbox-group"><h5>Select Default Temperature for Summer</h5></div>
+                                        <fieldset className="form-group">
+                                            <label></label>
+                                            <Field type="number" name={"summerTemperature"}/>
+                                        </fieldset>
                                         <div id="checkbox-group"><h5>Select Months for Winter</h5></div>
                                         <div role="group" aria-labelledby="checkbox-group">
                                             {this.state.months.map((month) =>
@@ -96,6 +105,11 @@ export default class SeasonMonths extends Component {
                                                 </div>
                                             )}
                                         </div>
+                                        <div id="checkbox-group"><h5>Select Default Temperature for Winter</h5></div>
+                                        <fieldset className="form-group">
+                                            <label></label>
+                                            <Field type="number" name={"winterTemperature"}/>
+                                        </fieldset>
                                         <button className="btn btn-primary" type="submit">Update</button>
                                     </Form>
                                 </Popup>
@@ -113,13 +127,12 @@ export default class SeasonMonths extends Component {
     }
     //TODO: VALIDATE THE MONTHS
     onSubmit(event) {
-        this.setState({
-            success: `Rooms updated`
-        })
         console.log(event)
         ExecuteServices.setMonths(event)
-            .then(response => console.log(response))
+            .then(response => this.setState({
+                success: `Months updated`
+            }))
             //TODO Catch exception here
-            .catch(error => console.log(error.message))
+            .catch(error => alert(error.response.data, " Please try again."))
     }
 }

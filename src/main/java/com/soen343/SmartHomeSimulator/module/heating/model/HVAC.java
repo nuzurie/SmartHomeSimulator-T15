@@ -7,6 +7,7 @@ import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Data
 @NoArgsConstructor
 @Service
@@ -36,14 +38,11 @@ public class HVAC {
             Thread thread = threads.get(0);
             threads.remove(0);
             thread.interrupt();
-            System.out.println(thread.getState());
-            System.out.println("interrupting " + threads.size());
-            System.out.println("Is HVAC on:" + heating.isHVACon());
         }
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                hvacON(simulation, heating);
+                SHHmonitor(heating);
             }
         };
         Thread thread = new Thread(runnable);
@@ -51,7 +50,7 @@ public class HVAC {
         threads.add(thread);
     }
 
-    private void hvacON(Simulation simulation, Heating heating) {
+    private void SHHmonitor(Heating heating) {
 
         List<Zone> zones = heating.getZones();
 
@@ -90,7 +89,7 @@ public class HVAC {
                     if (room.getTemperature() > finalTargetTemp + 0.25 || room.getTemperature() < finalTargetTemp - 0.25) {
                         System.out.println(room.getName() + room.getTemperature() + "" + finalTargetTemp);
                         if (!room.isHvacStatus())
-                            changeTemp(room, finalTargetTemp, zone.getIntervals());
+                            changeTemp(room, zone.getIntervals());
                     }
                 }
             };
@@ -101,51 +100,119 @@ public class HVAC {
         }
     }
 
-    private void changeTemp(Room room, double targetTemp, List<IntervalTemp> intervalTemps) {
+    private void changeTemp(Room room, List<IntervalTemp> intervalTemps) {
         Simulation simulation = SpringContext.getBean(SimulationRepository.class).findById((long) 1);
         Heating heating = SpringContext.getBean(HeatingRepository.class).findById(1);
-        while (true){
-            double multiplier = simulation.getTimeMultiplier();
-            for (IntervalTemp intervalTemp : intervalTemps
+        double targetTemp;
+        while (true) {
+            boolean summer = false;
+            for (Object month : heating.getSummer()
             ) {
-                if (checkInterval(intervalTemp))
-                    targetTemp = intervalTemp.getTemperature();
+                if (month.toString() == simulation.getDateTime().getMonth().toString()) {
+                    summer = true;
+                    break;
+                } else
+                    summer = false;
             }
-            if (heating.isHVACon()) {
-                while (Math.abs(room.getTemperature() - targetTemp) > 0.05) {
-                    room.setHvacStatus(true);
-                    if (targetTemp > room.getTemperature())
-                        room.setTemperature(room.getTemperature() + 0.1);
+            targetTemp = getTargetTemp(intervalTemps, simulation, heating, summer);
+            boolean outsideTempGreaterThanRoom = simulation.getTemperature() > room.getTemperature();
+            boolean roomTempHigherThanRequired = room.getTemperature() > targetTemp;
+            boolean roomTempLessThanOutside = room.getTemperature() <= (0.1 + simulation.getTemperature());
+            if (!summer || outsideTempGreaterThanRoom ||
+                    (roomTempHigherThanRequired && roomTempLessThanOutside)) {
+                room.getWindows().forEach(window -> {
+                    if (!window.isBlocked())
+                        window.setOpen(false);
                     else
-                        room.setTemperature(room.getTemperature() - 0.1);
-                    try {
-                        Thread.sleep((long) (1000 / Math.ceil(multiplier)));
-                    } catch (InterruptedException e) {
-                        System.out.println(e.getMessage());
-                    }
+                        System.out.println("The window " + window.getName() + " is blocked and can't be closed.");
+                });
+
+                if (heating.isHVACon()) {
+                    HVACon(room, intervalTemps, simulation, summer);
+                    room.setHvacStatus(false);
+                } else {
+                    HVACoff(room, simulation, summer);
                 }
-                room.setHvacStatus(false);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
             } else {
-                while (Math.abs(room.getTemperature() - simulation.getTemperature()) > 0.05) {
-                    if (simulation.getTemperature() > room.getTemperature())
-                        room.setTemperature(room.getTemperature() + 0.05);
-                    else
-                        room.setTemperature(room.getTemperature() - 0.05);
-                    try {
-                        Thread.sleep((long) (1000 / Math.ceil(multiplier)));
-                    } catch (InterruptedException e) {
-                        System.out.println(e.getMessage());
-                    }
+                if (room.getTemperature() > simulation.getTemperature() + 0.1) {
+                    room.getWindows().forEach(window -> {
+                        if (!window.isBlocked() && !simulation.isAwayMode())
+                            window.setOpen(true);
+                        else if (window.isBlocked())
+                            System.out.println("The window " + window.getName() + " is blocked and can't be opened.");
+                    });
+                }
+                HVACoff(room, simulation, summer);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
                 }
             }
+        }
+    }
+
+    private double getTargetTemp(List<IntervalTemp> intervalTemps, Simulation simulation, Heating heating, boolean summer) {
+        for (IntervalTemp intervalTemp : intervalTemps
+        ) {
+            if (simulation.isAwayMode()) {
+                if (summer) {
+                    System.out.println(heating.getSummerTemperature());
+                    return heating.getSummerTemperature();
+                } else {
+                    System.out.println(heating.getWinterTemperature());
+                    return heating.getWinterTemperature();
+                }
+            }
+            if (checkInterval(intervalTemp))
+                return intervalTemp.getTemperature();
+        }
+        return 25;
+    }
+
+    private void HVACoff(Room room, Simulation simulation, boolean summer) {
+        double multiplier;
+        Heating heating = heatingRepository.findById(1);
+        while (Math.abs(room.getTemperature() - simulation.getTemperature()) > 0.05) {
+            if (!summer && heating.isHVACon())
+                break;
+            multiplier = simulation.getTimeMultiplier();
+            if (simulation.getTemperature() > room.getTemperature())
+                room.setTemperature(room.getTemperature() + 0.05);
+            else
+                room.setTemperature(room.getTemperature() - 0.05);
             try {
-                Thread.sleep(1000);
+                Thread.sleep((long) (1000 / Math.ceil(multiplier)));
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
             }
         }
+    }
 
-
+    private void HVACon(Room room, List<IntervalTemp> intervalTemps, Simulation simulation, boolean summer) {
+        double multiplier;
+        double targetTemp = getTargetTemp(intervalTemps, simulation, heatingRepository.findById(1), summer);
+        while (Math.abs(room.getTemperature() - targetTemp) > 0.05) {
+            targetTemp = getTargetTemp(intervalTemps, simulation, heatingRepository.findById(1), summer);
+            if (!heatingRepository.findById(1).isHVACon())
+                break;
+            multiplier = simulation.getTimeMultiplier();
+            room.setHvacStatus(true);
+            if (targetTemp > room.getTemperature())
+                room.setTemperature(room.getTemperature() + 0.1);
+            else
+                room.setTemperature(room.getTemperature() - 0.1);
+            try {
+                Thread.sleep((long) (1000 / Math.ceil(multiplier)));
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     public boolean checkInterval(IntervalTemp intervalTemp) {

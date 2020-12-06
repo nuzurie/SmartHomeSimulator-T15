@@ -85,14 +85,6 @@ export default class HouseLayoutUI extends Component {
             .catch(error => console.log(error))
     }
 
-    switchRoomLight(light) {
-        ExecuteService.toggleLight(light)
-            .then(() => {
-                this.refreshSimulation()
-            })
-            .catch(error => console.log(error))
-    }
-
     toggleAutoMode() {
         ExecuteService.toggleAutoMode()
             .then(() => {
@@ -146,6 +138,7 @@ export default class HouseLayoutUI extends Component {
                                     <th scope={"col"}>Window</th>
                                     <th scope={"col"}>Door</th>
                                     <th scope={"col"}>Lights</th>
+                                    <th scope={"col"}>HVAC</th>
                                     <th scope={"col"}>Users</th>
                                     {/*<th scope={"col"}>Sensors</th>*/}
                                 </tr>
@@ -168,6 +161,7 @@ export default class HouseLayoutUI extends Component {
                                         <td>
                                             {room.lights[0].turnedOn ? <span><FontAwesomeIcon  icon={faLightbulb}></FontAwesomeIcon></span> : <span className={"mr-2"}><FontAwesomeIcon icon={faMoon}></FontAwesomeIcon></span>}
                                         </td>
+                                        <td>{room.hvacStatus ? "On" : "Off"}</td>
                                         <td>
                                             {room.simulationUsers.map(() =>
                                                 <span className={"mr-2"}><FontAwesomeIcon  icon={faUser}></FontAwesomeIcon></span>

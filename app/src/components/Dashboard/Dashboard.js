@@ -130,22 +130,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
     const classes = useStyles();
-    const [on, handleOnOff] = React.useState(false);
     const [open, setOpen] = React.useState(true);
     const [contentDiv, setContentDiv] = React.useState('SHS')
     const [childRefresh, setChildRefresh] = React.useState(Math.random())
-    const [changeLogin, setLogin] = React.useState([
-        sessionStorage.getItem('authenticatedName'),
-    ])
     const changeParent = (number) => {
         setChildRefresh(number)
     }
+    const [user, updateUser] = React.useState(0)
 
-    const handleUpdateUser = () => {
-        setLogin([
-            sessionStorage.getItem('authenticatedName'),
-        ])
-    }
+    const updateUserFunction = () => {
+        ExecuteServices.getSimulation()
+            .then(response => updateUser(response.data.loggedInUser.privilege))
+    };
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -179,6 +175,8 @@ export default function Dashboard() {
     };
     return (
         <div className={classes.root}>
+            {updateUserFunction()}
+            {console.log(user)}
             <CssBaseline/>
             <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
                 <Toolbar className={classes.toolbar}>
@@ -197,8 +195,7 @@ export default function Dashboard() {
                         <button className={"btn btn-outline-info btn-sm"} onClick={showSHC}>SHC</button>
                         <button className={"btn btn-outline-info btn-sm"} onClick={showSHP}>SHP</button>
                         <button className={"btn btn-outline-info btn-sm"} onClick={showSHH}>SHH</button>
-                        <button className={"ml-4 btn btn-success btn-sm"} onClick={handleUpdateUser}>Update Sidebar!
-                        </button>
+                        <HVAC/>
                     </Typography>
                     <RouterLink to={'/'}>
                         <IconButton color="inherit">
@@ -257,12 +254,16 @@ export default function Dashboard() {
                                     <AwayModeButton/>
                                 </div>}
                                 {contentDiv === 'SHH' && <div>
-                                    <ZoneTimeNumbers/>
-                                    <TimeZones/>
-                                    <ZoneRooms/>
-                                    <RoomTemps/>
-                                    <OverrideRooms/>
-                                    <HVAC/>
+                                    {user === "Parent" &&
+                                    <ZoneTimeNumbers/>}
+                                    {user === "Parent" &&
+                                    <TimeZones/>}
+                                    {user === "Parent" &&
+                                    <ZoneRooms/>}
+                                    {user === "Parent" &&
+                                    <RoomTemps/>}
+                                    {user !== "Child" &&
+                                    <OverrideRooms/>}
                                 </div>}
                             </Paper>
                         </Grid>

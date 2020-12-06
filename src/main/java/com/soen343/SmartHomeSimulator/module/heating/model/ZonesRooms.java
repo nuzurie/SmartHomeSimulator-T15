@@ -41,7 +41,7 @@ public class ZonesRooms {
             zone3 = new Long[0];
     }
 
-    public void validate() throws Exception{
+    public void validate() throws RoomsNotInZoneException, RoomInMultipleZonesException{
         initiate();
 
         Long[] allRoomsInZones = ArrayUtils.concat(zone1, zone2, zone3);
@@ -51,9 +51,9 @@ public class ZonesRooms {
         RoomRepository roomRepository = SpringContext.getBean(RoomRepository.class);
         List<Room> allRooms = roomRepository.findAll();
         if (allRoomsInZones.length != allRoomsSet.size())
-            throw new Exception("Same room in different zones");
+            throw new RoomInMultipleZonesException("Same room in different zones");
         else if (allRooms.size() != allRoomsSet.size())
-            throw new Exception("Not all rooms in zones");
+            throw new RoomsNotInZoneException("Not all rooms in zones");
     }
 
     public List<Set<Room>> getRoomsForZones(){

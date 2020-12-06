@@ -86,8 +86,6 @@ public class CoreController {
         if (simulation.getLoggedInUser().getPrivilege().equalsIgnoreCase("stranger"))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         simulation.setTimeMultiplier(multiplier);
-        HVAC hvac = SpringContext.getBean(HVAC.class);
-        hvac.operate();
         return ResponseEntity.ok().build();
     }
 
