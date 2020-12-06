@@ -4,6 +4,8 @@ import com.soen343.SmartHomeSimulator.config.SpringContext;
 import com.soen343.SmartHomeSimulator.model.Room;
 import com.soen343.SmartHomeSimulator.module.heating.model.*;
 import com.soen343.SmartHomeSimulator.module.heating.repository.HeatingRepository;
+import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
+import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,6 +121,6 @@ public class HeatingController {
     public ResponseEntity<?> toggleHVAC(){
         Heating heating = heatingRepository.findById(1);
         heating.setHVACon(!heating.isHVACon());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(heating.isHVACon());
     }
 }

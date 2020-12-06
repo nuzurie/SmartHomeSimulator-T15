@@ -197,8 +197,7 @@ export default function Dashboard() {
                         <button className={"btn btn-outline-info btn-sm"} onClick={showSHC}>SHC</button>
                         <button className={"btn btn-outline-info btn-sm"} onClick={showSHP}>SHP</button>
                         <button className={"btn btn-outline-info btn-sm"} onClick={showSHH}>SHH</button>
-                        <button className={"ml-4 btn btn-success btn-sm"} onClick={handleUpdateUser}>Update Sidebar!
-                        </button>
+                        <HVAC/>
                     </Typography>
                     <RouterLink to={'/'}>
                         <IconButton color="inherit">
@@ -262,7 +261,6 @@ export default function Dashboard() {
                                     <ZoneRooms/>
                                     <RoomTemps/>
                                     <OverrideRooms/>
-                                    <HVAC/>
                                 </div>}
                             </Paper>
                         </Grid>

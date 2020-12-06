@@ -103,7 +103,7 @@ public class HVAC {
     private void changeTemp(Room room, List<IntervalTemp> intervalTemps) {
         Simulation simulation = SpringContext.getBean(SimulationRepository.class).findById((long) 1);
         Heating heating = SpringContext.getBean(HeatingRepository.class).findById(1);
-        double targetTemp = 25;
+        double targetTemp;
         while (true) {
             boolean summer = false;
             for (Object month : heating.getSummer()

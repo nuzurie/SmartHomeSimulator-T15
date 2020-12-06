@@ -275,18 +275,21 @@ export class HVAC extends Component{
         super();
         this.hvac = this.hvac.bind(this)
 
+        this.state = {
+            on: false,
+        }
     }
     render() {
         return (
-            <button className={"btn btn-primary"} onClick={this.hvac}>Turn on HVAC</button>
+            <button className={this.state.on ? "ml-5 btn btn-success" : "ml-5 btn btn-danger"} onClick={this.hvac}>Turn {this.state.on ? "off" : "on"} HVAC</button>
         )
     }
 
     hvac(){
         ExecuteServices.onHVAC()
-            .then(response => console.log(response))
+            .then(response => this.setState({
+                on: response.data
+            }))
             .catch(response => console.log(response))
-
-
     }
 }
