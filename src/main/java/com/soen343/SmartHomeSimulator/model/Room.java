@@ -1,5 +1,6 @@
 package com.soen343.SmartHomeSimulator.model;
 
+import com.soen343.SmartHomeSimulator.config.SpringContext;
 import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,7 @@ public class Room {
     private List<Light> lights = new LinkedList<>();
     @Builder.Default
     private List<SimulationUser> simulationUsers = new LinkedList<>();
-    @Autowired
-    private SimulationUserRepository simulationUserRepository;
+    private boolean hvacStatus;
 
     /**
      * Delete user.
@@ -55,11 +55,10 @@ public class Room {
      * @param doors                    the doors
      * @param lights                   the lights
      * @param simulationUsers          the simulation users
-     * @param simulationUserRepository the simulation user repository
      */
     @Autowired
-    public Room(Long id, String name, String size, double temperature, List<Window> windows, List<Door> doors, List<Light> lights, List<SimulationUser> simulationUsers, SimulationUserRepository simulationUserRepository) {
-        this.id = ++classId;
+    public Room(Long id, String name, String size, double temperature, List<Window> windows, List<Door> doors, List<Light> lights, List<SimulationUser> simulationUsers, boolean hvacStatus) {
+        this.id = id;
         this.name = name;
         this.size = size;
         this.temperature = temperature;
@@ -67,7 +66,7 @@ public class Room {
         this.doors = doors;
         this.lights = lights;
         this.simulationUsers = simulationUsers;
-        this.simulationUserRepository = simulationUserRepository;
+        this.hvacStatus = hvacStatus;
     }
 
     // == METHODS ==
@@ -89,6 +88,7 @@ public class Room {
             list = this.lights;
         else if (t instanceof SimulationUser) {
             list = this.simulationUsers;
+            SimulationUserRepository simulationUserRepository = SpringContext.getBean(SimulationUserRepository.class);
             simulationUserRepository.save((SimulationUser) t);
         }
 

@@ -1,7 +1,9 @@
 package com.soen343.SmartHomeSimulator.module.simulation.controller;
 
+import com.soen343.SmartHomeSimulator.config.SpringContext;
 import com.soen343.SmartHomeSimulator.model.repository.HomeRepository;
 import com.soen343.SmartHomeSimulator.model.repository.SimulationUserRepository;
+import com.soen343.SmartHomeSimulator.module.heating.model.HVAC;
 import com.soen343.SmartHomeSimulator.module.simulation.model.Simulation;
 import com.soen343.SmartHomeSimulator.module.simulation.repository.SimulationRepository;
 import com.soen343.SmartHomeSimulator.service.SimulationService;

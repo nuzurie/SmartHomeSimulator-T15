@@ -68,7 +68,7 @@ class ExecuteService {
     }
 
     getLightsForUsers(){
-        return axios.get('/api/simulation/rooms-for-user')
+        return axios.get('/api/simulation/lights-for-user')
     }
 
     getWindowsForUsers(){
@@ -125,6 +125,22 @@ class ExecuteService {
 
     setZoneRoomsAndTemp(zonesRooms){
         return axios.post('/api/heating/zone-rooms', zonesRooms)
+    }
+
+    getMonths(){
+        return axios.get('/api/heating/months')
+    }
+
+    setMonths(months){
+        return axios.post('/api/heating/months', months)
+    }
+
+    getRoomsForUsers(){
+        return axios.get('/api/simulation/rooms-for-user')
+    }
+
+    onHVAC() {
+        return axios.get('/api/heating/hvac')
     }
 }
 

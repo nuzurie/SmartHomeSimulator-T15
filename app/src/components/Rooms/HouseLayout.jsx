@@ -154,7 +154,7 @@ export default class HouseLayoutUI extends Component {
                                 {this.state.rooms.map((room, roomIndex) =>
                                     <tr>
                                         <th scope={"col"}>{room.name}</th>
-                                        <td>{room.temperature}</td>
+                                        <td>{room.temperature.toFixed(1)}</td>
                                         <td>
                                             {room.windows.map((window) =>
                                                     window.open ? <span className={"mr-2"}><FontAwesomeIcon  icon={faWindowMaximize}></FontAwesomeIcon></span> : <span className={"mr-2"}><FontAwesomeIcon icon={faWindowClose}></FontAwesomeIcon></span>

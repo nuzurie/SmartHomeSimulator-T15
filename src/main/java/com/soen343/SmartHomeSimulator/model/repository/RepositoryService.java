@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
-
  *
  * The Repository service Object.
  */
@@ -163,6 +162,31 @@ public class RepositoryService {
     }
 
     /**
+     *
+     * @return the rooms for user
+     */
+    public List<Room> getRoomsForUser() {
+        Simulation simulation = simulationRepository.findById((long) 1);
+        Home home = simulation.getHome();
+        SimulationUser user = simulation.getLoggedInUser();
+        if (user.getPrivilege().equalsIgnoreCase("stranger") || user.getPrivilege().equalsIgnoreCase("child"))
+            return new LinkedList<>();
+        List<Room> rooms = home.getRooms();
+
+        if (user.getPrivilege().equalsIgnoreCase("parent")) {
+            return rooms;
+        } else {
+            List<Room> roomsList = new LinkedList<>();
+            rooms.forEach(room -> {
+                if (room.getSimulationUsers().contains(user)) {
+                    roomsList.add(room);
+                }
+            });
+            return roomsList;
+        }
+    }
+
+    /**
      * Save windows.
      */
     public void saveWindows() {
@@ -294,7 +318,10 @@ public class RepositoryService {
                 lightList.add(light);
             }
         }
-
         return lightList;
+    }
+
+    public List<Room> getAllRooms(){
+        return roomRepository.findAll();
     }
 }

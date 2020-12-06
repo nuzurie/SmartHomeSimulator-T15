@@ -269,3 +269,24 @@ export default class Heating extends Component {
     }
 
 }
+
+export class HVAC extends Component{
+    constructor() {
+        super();
+        this.hvac = this.hvac.bind(this)
+
+    }
+    render() {
+        return (
+            <button className={"btn btn-primary"} onClick={this.hvac}>Turn on HVAC</button>
+        )
+    }
+
+    hvac(){
+        ExecuteServices.onHVAC()
+            .then(response => console.log(response))
+            .catch(response => console.log(response))
+
+
+    }
+}
