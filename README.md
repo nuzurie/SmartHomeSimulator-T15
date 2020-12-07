@@ -34,8 +34,7 @@ With more functionalities to come in future releases.
  <li>Change directory to SmartHomeSimulatorReact_team15/app</li>
  <li>using a terminal run the following command npm install</li>
  <li>using the terminal run the following command npm start</li>
- <li> For Okta login information please email Volodymyr Nekrashevych via nvlad717@gmail.com or Mostafa El Boustani via <m_elbous@encs.concordia.ca </li>
-
+ <li> Okta login information: ID: dev@soen343.com password: Abc12345678 </li>
 
 
 <h2> Installation demo Video Link:</h2>
@@ -45,5 +44,19 @@ https://youtu.be/59Wfw1dyniw
 <h2> Delivery 2 Video </h2>
 
 https://youtu.be/VEY3TagPd10
+
+Note: Please watch beginning of delivery 1 video for installation instructions.
+
+<h2> Delivery 3 Video </h2>
+
+https://youtu.be/IU6I6CjIv8M
+
+<h3>Short supplementary video showing multiple zones</h3>
+ 
+ https://youtu.be/sIFXj4BxoFU
+ 
+ <h3>Exception classes explanation video</h3>
+ 
+ https://youtu.be/JYVXJsUlIAg
 
 Note: Please watch beginning of delivery 1 video for installation instructions.
